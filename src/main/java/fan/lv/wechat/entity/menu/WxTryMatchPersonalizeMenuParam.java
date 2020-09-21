@@ -1,10 +1,10 @@
-package fan.lv.wechat.entity.menu.param;
+package fan.lv.wechat.entity.menu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * @author lixinguo
+ * @author lv_fan2008
  */
 @Data
 public class WxTryMatchPersonalizeMenuParam {

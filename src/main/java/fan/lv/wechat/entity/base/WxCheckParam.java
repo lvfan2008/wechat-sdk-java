@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.base.param;
+package fan.lv.wechat.entity.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 网络检测参数
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 @Data
 @AllArgsConstructor

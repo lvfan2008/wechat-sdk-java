@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 /**
  * 实现默认的基于文件的cache
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 public class DefaultCacheImpl implements Cache {
 

@@ -1,14 +1,13 @@
-package fan.lv.wechat.entity.menu.param;
+package fan.lv.wechat.entity.menu;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fan.lv.wechat.entity.menu.param.WxMenuParam;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * 个性化菜单参数
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

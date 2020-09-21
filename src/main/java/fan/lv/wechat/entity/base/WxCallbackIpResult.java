@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.base.result;
+package fan.lv.wechat.entity.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fan.lv.wechat.entity.result.WxResult;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 微信回调IP地址
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

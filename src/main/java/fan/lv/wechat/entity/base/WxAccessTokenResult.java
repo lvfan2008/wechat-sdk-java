@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.base.result;
+package fan.lv.wechat.entity.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fan.lv.wechat.entity.result.WxResult;
@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 调用凭据
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

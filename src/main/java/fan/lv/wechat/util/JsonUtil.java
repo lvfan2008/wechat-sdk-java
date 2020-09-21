@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Json工具
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 public class JsonUtil {
 

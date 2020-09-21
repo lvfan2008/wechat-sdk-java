@@ -1,14 +1,14 @@
 package fan.lv.wechat.api.official.base;
 
-import fan.lv.wechat.entity.base.param.WxCheckParam;
-import fan.lv.wechat.entity.base.result.WxApiIpResult;
-import fan.lv.wechat.entity.base.result.WxCallbackIpResult;
-import fan.lv.wechat.entity.base.result.WxCheckResult;
+import fan.lv.wechat.entity.base.WxCheckParam;
+import fan.lv.wechat.entity.base.WxApiIpResult;
+import fan.lv.wechat.entity.base.WxCallbackIpResult;
+import fan.lv.wechat.entity.base.WxCheckResult;
 
 /**
  * 基础Api
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 public interface BaseService {
 

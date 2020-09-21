@@ -1,6 +1,6 @@
-package fan.lv.wechat.entity.menu.result;
+package fan.lv.wechat.entity.menu;
 
-import fan.lv.wechat.entity.menu.param.WxMenuParam;
+import fan.lv.wechat.entity.menu.WxMenuParam;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 测试个性化菜单匹配结果
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 public class WxTryMatchPersonalizeMenuResult extends WxResult {
     /**

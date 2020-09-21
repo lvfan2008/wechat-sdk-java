@@ -1,19 +1,19 @@
 package fan.lv.wechat.api.official.menu;
 
-import fan.lv.wechat.entity.menu.param.WxDeletePersonalizeMenuParam;
-import fan.lv.wechat.entity.menu.param.WxMenuParam;
-import fan.lv.wechat.entity.menu.param.WxPersonalizeMenuParam;
-import fan.lv.wechat.entity.menu.param.WxTryMatchPersonalizeMenuParam;
-import fan.lv.wechat.entity.menu.result.WxCreatePersonalizeMenuResult;
-import fan.lv.wechat.entity.menu.result.WxGetMenuResult;
-import fan.lv.wechat.entity.menu.result.WxQueryMenuResult;
-import fan.lv.wechat.entity.menu.result.WxTryMatchPersonalizeMenuResult;
+import fan.lv.wechat.entity.menu.WxDeletePersonalizeMenuParam;
+import fan.lv.wechat.entity.menu.WxMenuParam;
+import fan.lv.wechat.entity.menu.WxPersonalizeMenuParam;
+import fan.lv.wechat.entity.menu.WxTryMatchPersonalizeMenuParam;
+import fan.lv.wechat.entity.menu.WxCreatePersonalizeMenuResult;
+import fan.lv.wechat.entity.menu.WxGetMenuResult;
+import fan.lv.wechat.entity.menu.WxQueryMenuResult;
+import fan.lv.wechat.entity.menu.WxTryMatchPersonalizeMenuResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
  * 菜单Api
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 public interface MenuService {
 

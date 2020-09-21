@@ -5,17 +5,19 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fan.lv.wechat.api.official.kernel.Cache;
 import fan.lv.wechat.api.official.kernel.Client;
-import fan.lv.wechat.entity.base.result.WxAccessTokenResult;
+import fan.lv.wechat.entity.base.WxAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.HttpUtils;
 import fan.lv.wechat.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.entity.ContentType;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
- * @author lixinguo
+ * @author lv_fan2008
  */
 @Slf4j
 public class ClientImpl implements Client {
@@ -79,7 +81,32 @@ public class ClientImpl implements Client {
      */
     @Override
     public <T extends WxResult> T post(String uri, Object object, Class<T> resultType) {
-        return this.request(uri, object, resultType);
+        return this.request(uri, new HttpUtils.HttpOptions(JsonUtil.toJson(object), ContentType.APPLICATION_JSON), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T uploadFile(String uri, Map<String, String> formData,
+                                             Map<String, String> filePathMap, Class<T> resultType) {
+        return this.request(uri, new HttpUtils.HttpOptions(formData, filePathMap), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T get(String uri, Class<T> resultType, Map<String, String> queryMap) {
+        return this.request(uri, new HttpUtils.HttpOptions(queryMap), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T post(String uri, Object object, Class<T> resultType, Map<String, String> queryMap) {
+        return this.request(uri, new HttpUtils.HttpOptions(queryMap, JsonUtil.toJson(object), ContentType.APPLICATION_JSON), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T uploadFile(String uri,
+                                             Map<String, String> queryMap,
+                                             Map<String, String> formData,
+                                             Map<String, String> filePathMap,
+                                             Class<T> resultType) {
+        return this.request(uri, new HttpUtils.HttpOptions(queryMap, formData, filePathMap), resultType);
     }
 
     /**
@@ -132,16 +159,21 @@ public class ClientImpl implements Client {
         return accessTokenResult;
     }
 
+    private <T extends WxResult> T request(String uri, Object object, Class<T> resultType) {
+        return request(uri,
+                new HttpUtils.HttpOptions(JsonUtil.toJson(object), ContentType.APPLICATION_JSON),
+                resultType);
+    }
+
 
     /**
      * post请求
      *
-     * @param uri        uri地址
-     * @param object     json参数对象
-     * @param resultType 返回类型
+     * @param uri         uri地址
+     * @param httpOptions http参数
      * @return 返回结果
      */
-    private <T extends WxResult> T request(String uri, Object object, Class<T> resultType) {
+    private <T extends WxResult> T request(String uri, HttpUtils.HttpOptions httpOptions, Class<T> resultType) {
         try {
             String url = BASE_URL + uri;
             if (!isGetAccessTokenUrl(uri)) {
@@ -154,15 +186,17 @@ public class ClientImpl implements Client {
                 }
                 url += (url.contains("?") ? "&" : "?") + "access_token=" + getCacheToken();
             }
-            String result = object == null ? HttpUtils.get(url) : HttpUtils.postJson(url, object);
-            log.debug("uri: {}, object: {}, result: {}", url, object != null ? JsonUtil.toJson(object) : "null", result);
+
+            String result = HttpUtils.httpRequest(uri, httpOptions);
+
+            log.debug("uri: {}, httpOptions: {}, result: {}", url, httpOptions.toString(), result);
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             T wxResult = mapper.readValue(result, resultType);
             if (wxResult.getErrorCode() == ERROR_CODE_ACCESS_TOKEN_TIMEOUT) {
                 WxAccessTokenResult accessTokenResult = this.getAccessToken();
                 if (accessTokenResult.success()) {
-                    return this.request(uri, object, resultType);
+                    return this.request(uri, httpOptions, resultType);
                 }
             }
             return wxResult;

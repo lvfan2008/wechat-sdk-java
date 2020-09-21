@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.base.result;
+package fan.lv.wechat.entity.base;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 /**
  * 微信API接口 IP地址
  *
- * @author lixinguo
+ * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

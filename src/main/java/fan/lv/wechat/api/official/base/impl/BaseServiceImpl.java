@@ -2,13 +2,13 @@ package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.official.base.BaseService;
 import fan.lv.wechat.api.official.kernel.Client;
-import fan.lv.wechat.entity.base.param.WxCheckParam;
-import fan.lv.wechat.entity.base.result.WxApiIpResult;
-import fan.lv.wechat.entity.base.result.WxCallbackIpResult;
-import fan.lv.wechat.entity.base.result.WxCheckResult;
+import fan.lv.wechat.entity.base.WxCheckParam;
+import fan.lv.wechat.entity.base.WxApiIpResult;
+import fan.lv.wechat.entity.base.WxCallbackIpResult;
+import fan.lv.wechat.entity.base.WxCheckResult;
 
 /**
- * @author lixinguo
+ * @author lv_fan2008
  */
 public class BaseServiceImpl implements BaseService {
     /**

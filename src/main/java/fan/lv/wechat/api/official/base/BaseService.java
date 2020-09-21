@@ -6,11 +6,11 @@ import fan.lv.wechat.entity.base.result.WxCallbackIpResult;
 import fan.lv.wechat.entity.base.result.WxCheckResult;
 
 /**
- * base api
+ * 基础Api
  *
  * @author lixinguo
  */
-public interface Base {
+public interface BaseService {
 
     /**
      * 获取微信callback IP地址

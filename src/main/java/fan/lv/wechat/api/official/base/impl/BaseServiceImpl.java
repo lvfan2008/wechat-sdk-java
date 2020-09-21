@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.base.impl;
 
-import fan.lv.wechat.api.official.base.Base;
+import fan.lv.wechat.api.official.base.BaseService;
 import fan.lv.wechat.api.official.kernel.Client;
 import fan.lv.wechat.entity.base.param.WxCheckParam;
 import fan.lv.wechat.entity.base.result.WxApiIpResult;
@@ -10,18 +10,16 @@ import fan.lv.wechat.entity.base.result.WxCheckResult;
 /**
  * @author lixinguo
  */
-public class BaseImpl implements Base {
-
+public class BaseServiceImpl implements BaseService {
     /**
      * 请求客户端
      */
     protected Client client;
 
     /**
-     *
      * @param client 请求客户端
      */
-    public BaseImpl(Client client) {
+    public BaseServiceImpl(Client client) {
         this.client = client;
     }
 

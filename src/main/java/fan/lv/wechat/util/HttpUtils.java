@@ -6,6 +6,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -16,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.apache.http.entity.ContentType.APPLICATION_JSON;
 
 /**
  * @author lixinguo
@@ -30,7 +33,7 @@ public class HttpUtils {
      * @throws IOException 异常
      */
     public static String get(String url) throws IOException {
-        return httpRequest(url, HttpGet.METHOD_NAME, null, null);
+        return httpRequest(url, HttpGet.METHOD_NAME, null, null, null);
     }
 
     /**
@@ -43,10 +46,10 @@ public class HttpUtils {
      */
     public static String postJson(String url, Object object) throws IOException {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
+        headers.put("Content-Type", "application/json; encoding=utf-8");
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(object);
-        return httpRequest(url, HttpPost.METHOD_NAME, json, headers);
+        return httpRequest(url, HttpPost.METHOD_NAME, json, ContentType.APPLICATION_JSON, headers);
     }
 
 
@@ -60,7 +63,7 @@ public class HttpUtils {
      * @return HttpResponse
      * @throws IOException 例外
      */
-    public static String httpRequest(String url, String method, String body, Map<String, String> headers) throws IOException {
+    public static String httpRequest(String url, String method, String body, ContentType contentType, Map<String, String> headers) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         HttpUriRequest httpUriRequest = (method.equals(HttpGet.METHOD_NAME)) ? new HttpGet(url) : new HttpPost(url);
         if (headers != null) {
@@ -69,7 +72,7 @@ public class HttpUtils {
             }
         }
         if (method.equals(HttpPost.METHOD_NAME) && !body.isEmpty()) {
-            ((HttpPost) httpUriRequest).setEntity(new StringEntity(body));
+            ((HttpPost) httpUriRequest).setEntity(new StringEntity(body, contentType));
         }
         HttpResponse httpResponse = httpClient.execute(httpUriRequest);
         return EntityUtils.toString(httpResponse.getEntity());

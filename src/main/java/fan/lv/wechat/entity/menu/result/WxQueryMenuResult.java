@@ -33,7 +33,7 @@ public class WxQueryMenuResult extends WxResult {
         /**
          * 按钮菜单
          */
-        Button button;
+        List<Button> button;
     }
 
 

@@ -8,6 +8,7 @@ import fan.lv.wechat.api.official.kernel.Client;
 import fan.lv.wechat.entity.base.result.WxAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.HttpUtils;
+import fan.lv.wechat.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -154,7 +155,7 @@ public class ClientImpl implements Client {
                 url += (url.contains("?") ? "&" : "?") + "access_token=" + getCacheToken();
             }
             String result = object == null ? HttpUtils.get(url) : HttpUtils.postJson(url, object);
-            log.debug("uri: {}, object: {}, result: {}", url, object != null ? object.toString() : "null", result);
+            log.debug("uri: {}, object: {}, result: {}", url, object != null ? JsonUtil.toJson(object) : "null", result);
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             T wxResult = mapper.readValue(result, resultType);

@@ -21,9 +21,10 @@ public class Util {
      * 客户端
      */
     private static Client client;
+    private static Properties properties;
 
     static {
-        Properties properties = new Properties();
+        properties = new Properties();
         InputStream inputStream = Util.class.getClassLoader().getResourceAsStream("application.properties");
         try {
             assert inputStream != null;
@@ -55,5 +56,15 @@ public class Util {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 得到配置属性
+     *
+     * @param key 键值
+     * @return 键对应值
+     */
+    public static String getProperty(String key) {
+        return properties.getProperty(key);
     }
 }

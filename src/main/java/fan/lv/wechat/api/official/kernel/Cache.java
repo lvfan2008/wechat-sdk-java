@@ -1,6 +1,8 @@
 package fan.lv.wechat.api.official.kernel;
 
 /**
+ * 缓存接口，用于缓存微信接口凭证等
+ *
  * @author lixinguo
  */
 public interface Cache {

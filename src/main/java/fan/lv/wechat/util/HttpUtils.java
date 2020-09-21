@@ -56,10 +56,11 @@ public class HttpUtils {
     /**
      * http请求类
      *
-     * @param url     url地址
-     * @param method  方法，支持POST和GET
-     * @param body    post请求body实体
-     * @param headers 方法头
+     * @param url         url地址
+     * @param method      方法，支持POST和GET
+     * @param body        post请求body实体
+     * @param contentType 文档类型
+     * @param headers     方法头
      * @return HttpResponse
      * @throws IOException 例外
      */

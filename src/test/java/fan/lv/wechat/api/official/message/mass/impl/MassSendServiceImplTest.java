@@ -2,9 +2,8 @@ package fan.lv.wechat.api.official.message.mass.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.message.mass.MassSendService;
-import fan.lv.wechat.entity.message.mass.Articles;
-import fan.lv.wechat.entity.message.mass.WxUploadArticlesResult;
-import fan.lv.wechat.entity.message.mass.WxUploadMediaResult;
+import fan.lv.wechat.entity.message.mass.*;
+import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;
 
@@ -54,7 +53,73 @@ public class MassSendServiceImplTest extends TestCase {
                 "   ]\n" +
                 "}";
         Articles articles = JsonUtil.parseJson(json,Articles.class);
-        WxUploadArticlesResult wxUploadArticlesResult = massSendService.uploadNews(articles);
-        assertTrue(wxUploadArticlesResult.success());
+        WxUploadArticlesResult result = massSendService.uploadNews(articles);
+        assertTrue(result.getErrorCode() > 0);
+    }
+
+    public void testMassSendAll() {
+        String json = "{\n" +
+                "   \"filter\":{\n" +
+                "      \"is_to_all\":true\n" +
+                "   },\n" +
+                "   \"text\":{\n" +
+                "      \"content\":\"CONTENT\"\n" +
+                "   },\n" +
+                "    \"msgtype\":\"text\"\n" +
+                "}";
+
+        WxMassSendByTagParam param = JsonUtil.parseJson(json,WxMassSendByTagParam.class);
+        WxMassSendResult result = massSendService.massSendAll(param);
+        assertTrue(result.getErrorCode() > 0);
+    }
+
+    public void testMassSendToUser() {
+        String json = "{\n" +
+                "   \"touser\":[\n" +
+                "    \"oKCQet5s9pHv6MdylHQ9L_BX-n6E\",\n" +
+                "    \"oKCQet5s9pHv6MdylHQ9L_BX-n6E\"\n" +
+                "   ],\n" +
+                "    \"msgtype\": \"text\",\n" +
+                "    \"text\": { \"content\": \"hello from boxer.\"}\n" +
+                "}";
+
+        WxMassSendByOpenIdParam param = JsonUtil.parseJson(json,WxMassSendByOpenIdParam.class);
+        WxMassSendResult result = massSendService.massSendToUser(param);
+        assertTrue(result.getErrorCode() > 0);
+    }
+
+    public void testDeleteMassMessage() {
+        WxDeleteMassSendParam param = new WxDeleteMassSendParam();
+        param.setMsgId(323223);
+        WxResult result =  massSendService.deleteMassMessage(param);
+        assertTrue(result.getErrorCode() > 0);
+    }
+
+    public void testMassSendPreview() {
+        String json = "{     \n" +
+                "    \"touser\":\""+Util.getProperty("user_id")+"\",\n" +
+                "    \"text\":{           \n" +
+                "      \"content\":\"CONTENT\"            \n" +
+                "    },     \n" +
+                "    \"msgtype\":\"text\"\n" +
+                "}";
+
+        WxMassSendPreviewParam param = JsonUtil.parseJson(json,WxMassSendPreviewParam.class);
+        WxMassSendResult result = massSendService.massSendPreview(param);
+        assertTrue(result.success());
+    }
+
+    public void testQueryMassSendStatus() {
+        WxQueryMassSendParam param = new WxQueryMassSendParam();
+        param.setMsgId(323223);
+        WxQueryMassSendResult result = massSendService.queryMassSendStatus(param);
+        assertTrue(result.getErrorCode() > 0);
+    }
+
+    public void testSetMassSendSpeed() {
+        WxMassSendSpeedParam param = new WxMassSendSpeedParam();
+        param.setSpeed(1);
+        WxMassSendSpeedResult result = massSendService.setMassSendSpeed(param);
+        assertTrue(result.success());
     }
 }

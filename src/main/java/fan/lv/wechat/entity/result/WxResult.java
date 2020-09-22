@@ -29,6 +29,16 @@ public class WxResult {
     String errorMessage = "";
 
     /**
+     * 是否为原生串
+     */
+    Boolean isRawString = false;
+
+    /**
+     * 二进制流
+     */
+    String rawString;
+
+    /**
      * 结果是否成功
      *
      * @return 是否成功

@@ -1,8 +1,10 @@
-package fan.lv.wechat.api.official.kernel.impl;
+package fan.lv.wechat.api.kernel.impl;
 
-import fan.lv.wechat.api.official.kernel.Cache;
+import fan.lv.wechat.api.kernel.Cache;
+import fan.lv.wechat.util.JsonUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
@@ -29,7 +31,7 @@ public class DefaultCacheImpl implements Cache {
     public String get(String key) {
         try {
             return fileGetContent(key);
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
@@ -44,21 +46,37 @@ public class DefaultCacheImpl implements Cache {
             e.printStackTrace();
         }
         if (filePath != null) {
-            new File(filePath).delete();
+            if (!new File(filePath).delete()) {
+                new File(filePath).deleteOnExit();
+            }
         }
     }
 
+    /**
+     * 写入文件
+     *
+     * @param key     键值
+     * @param content 内容
+     * @param ttl     过期时间
+     * @throws IOException 异常
+     */
     private void filePutContent(String key, String content, int ttl) throws IOException {
         String filePath = getKeyFilePath(key, true);
-        OutputStream os = new FileOutputStream(filePath);
-        ObjectOutputStream oos = new ObjectOutputStream(os);
+        assert filePath != null;
+        BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
         CacheObject object = new CacheObject(content, (int) (System.currentTimeMillis() / 1000 + ttl));
-        oos.writeObject(object);
-        oos.flush();
-        oos.close();
-        os.close();
+        out.write(JsonUtil.toJson(object));
+        out.close();
     }
 
+    /**
+     * 获取键值对应文件路径
+     *
+     * @param key       键值
+     * @param createDir 是否创建目录
+     * @return 文件路径
+     * @throws IOException 异常
+     */
     private String getKeyFilePath(String key, boolean createDir) throws IOException {
         String tmpDir = System.getProperty("java.io.tmpdir");
         tmpDir = tmpDir + "wechat";
@@ -73,16 +91,31 @@ public class DefaultCacheImpl implements Cache {
     }
 
 
-    private String fileGetContent(String key) throws IOException, ClassNotFoundException {
+    /**
+     * 读取文件
+     *
+     * @param key 键值
+     * @return 字符串
+     * @throws IOException 异常
+     */
+    private String fileGetContent(String key) throws IOException {
         String filePath = getKeyFilePath(key, false);
         if (filePath == null) {
             return null;
         }
-        InputStream is = new FileInputStream(filePath);
-        ObjectInputStream ois = new ObjectInputStream(is);
-        CacheObject object = (CacheObject) ois.readObject();
-        ois.close();
-        is.close();
+        if (!new File(filePath).exists()) {
+            return null;
+        }
+
+        BufferedReader in = new BufferedReader(new FileReader(filePath));
+        StringBuffer buf = new StringBuffer();
+        String str;
+        while ((str = in.readLine()) != null) {
+            buf.append(str);
+        }
+
+        CacheObject object = JsonUtil.parseJson(buf.toString(), CacheObject.class);
+        assert object != null;
         if (object.expireTimestamp > System.currentTimeMillis() / 1000) {
             return object.content;
         }
@@ -92,6 +125,7 @@ public class DefaultCacheImpl implements Cache {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class CacheObject implements Serializable {
         public String content;
         public Integer expireTimestamp;

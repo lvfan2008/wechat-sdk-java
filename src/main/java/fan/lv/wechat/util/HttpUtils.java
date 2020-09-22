@@ -1,7 +1,5 @@
 package fan.lv.wechat.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -21,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -35,7 +32,7 @@ public class HttpUtils {
      * @return String
      * @throws IOException 例外
      */
-    public static String httpRequest(String url, HttpOptions httpOptions) throws IOException {
+    public static String httpRequest(String url, RequestOptions httpOptions) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         url = HttpUtils.buildUrlQuery(url, httpOptions.getQueryMap());
         HttpUriRequest httpUriRequest;
@@ -76,9 +73,8 @@ public class HttpUtils {
      * @param url    url地址
      * @param params 参数对
      * @return url
-     * @throws UnsupportedEncodingException 编码异常
      */
-    public static String buildUrlQuery(String url, Map<String, String> params) throws UnsupportedEncodingException {
+    public static String buildUrlQuery(String url, Map<String, String> params) {
         String query = buildQuery(params);
         return query.isEmpty() ? url : (url + (url.contains("?") ? "&" : "?") + query);
     }
@@ -88,87 +84,23 @@ public class HttpUtils {
      *
      * @param params 参数对
      * @return url参数串
-     * @throws UnsupportedEncodingException 编码异常
      */
-    public static String buildQuery(Map<String, String> params) throws UnsupportedEncodingException {
+    public static String buildQuery(Map<String, String> params) {
         if (params == null || params.size() == 0) {
             return "";
         }
         StringBuilder buffer = new StringBuilder();
         int i = 0;
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            buffer.append(String.format("%s=%s", entry.getKey(), URLEncoder.encode(entry.getValue(), CharEncoding.UTF_8)));
+            try {
+                buffer.append(String.format("%s=%s", entry.getKey(), URLEncoder.encode(entry.getValue(), CharEncoding.UTF_8)));
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e);
+            }
             if (i != params.size() - 1) {
                 buffer.append("&");
             }
         }
         return buffer.toString();
-    }
-
-    /**
-     * http选项
-     */
-    @Data
-    public static class HttpOptions {
-        /**
-         * 头信息
-         */
-        Map<String, String> headers = new HashMap<>();
-
-        /**
-         * get参数信息
-         */
-        Map<String, String> queryMap = new HashMap<>();
-
-        /**
-         * 表单信息
-         */
-        Map<String, String> formData = new HashMap<>();
-
-        /**
-         * 上传文件列表
-         */
-        Map<String, String> uploadFiles = new HashMap<>();
-
-        /**
-         * body填充
-         */
-        String body;
-
-        /**
-         * body内容类型
-         */
-        ContentType contentType;
-
-        public HttpOptions() {
-        }
-
-        public HttpOptions(Map<String, String> queryMap) {
-            this.queryMap = queryMap;
-        }
-
-        public HttpOptions(Map<String, String> queryMap, String body, ContentType contentType) {
-            this.queryMap = queryMap;
-            this.body = body;
-            this.contentType = contentType;
-        }
-
-        public HttpOptions(String body, ContentType contentType) {
-            this.body = body;
-            this.contentType = contentType;
-        }
-
-
-
-        public HttpOptions(Map<String, String> queryMap, Map<String, String> formData, Map<String, String> uploadFiles) {
-            this.queryMap = queryMap;
-            this.formData = formData;
-            this.uploadFiles = uploadFiles;
-        }
-
-        public HttpOptions(Map<String, String> formData, Map<String, String> uploadFiles) {
-            this.formData = formData;
-            this.uploadFiles = uploadFiles;
-        }
     }
 }

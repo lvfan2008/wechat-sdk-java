@@ -22,9 +22,8 @@ public class JsonUtil {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
-        return null;
     }
 
     /**

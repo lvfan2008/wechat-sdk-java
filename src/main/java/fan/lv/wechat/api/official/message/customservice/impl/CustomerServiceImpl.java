@@ -1,18 +1,17 @@
 package fan.lv.wechat.api.official.message.customservice.impl;
 
-import fan.lv.wechat.api.official.kernel.Client;
+import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.message.customservice.CustomerService;
 import fan.lv.wechat.entity.message.customservice.WxCustomerServiceAccountParam;
 import fan.lv.wechat.entity.message.customservice.WxDeleteCustomerServiceAccountParam;
 import fan.lv.wechat.entity.result.WxResult;
-import fan.lv.wechat.util.HttpUtils;
 
-import java.net.URLEncoder;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 客服服务接口
+ *
  * @author lv_fan2008
  */
 public class CustomerServiceImpl implements CustomerService {

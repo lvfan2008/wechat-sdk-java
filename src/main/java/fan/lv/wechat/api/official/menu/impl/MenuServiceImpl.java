@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.menu.impl;
 
-import fan.lv.wechat.api.official.kernel.Client;
+import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.menu.MenuService;
 import fan.lv.wechat.entity.menu.WxDeletePersonalizeMenuParam;
 import fan.lv.wechat.entity.menu.WxMenuParam;

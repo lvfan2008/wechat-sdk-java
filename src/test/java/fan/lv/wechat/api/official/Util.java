@@ -1,9 +1,9 @@
 package fan.lv.wechat.api.official;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import fan.lv.wechat.api.official.kernel.Client;
-import fan.lv.wechat.api.official.kernel.impl.ClientImpl;
-import fan.lv.wechat.api.official.kernel.impl.DefaultCacheImpl;
+import fan.lv.wechat.api.kernel.Client;
+import fan.lv.wechat.api.official.base.impl.ClientImpl;
+import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.io.IOException;

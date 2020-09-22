@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.official.kernel.impl;
+package fan.lv.wechat.api.kernel.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.base.WxCheckParam;

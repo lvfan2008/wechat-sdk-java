@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message;
+package fan.lv.wechat.entity.message.mass;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class WxDeleteMassSendParam {
      * 要删除的文章在图文消息中的位置，第一篇编号为1，该字段不填或填0会删除全部文章
      */
     @JsonProperty("article_idx")
-    Integer articleIdx = 0;
+    Integer articleIdx;
 }

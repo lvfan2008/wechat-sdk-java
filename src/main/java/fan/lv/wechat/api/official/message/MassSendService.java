@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.message;
 
-import fan.lv.wechat.entity.message.*;
+import fan.lv.wechat.entity.message.mass.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

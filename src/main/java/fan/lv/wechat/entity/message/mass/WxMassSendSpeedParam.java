@@ -1,11 +1,15 @@
-package fan.lv.wechat.entity.message;
+package fan.lv.wechat.entity.message.mass;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author lv_fan2008
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WxMassSendSpeedParam {
 
     /**

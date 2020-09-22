@@ -1,7 +1,9 @@
-package fan.lv.wechat.entity.message;
+package fan.lv.wechat.entity.message.mass;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 群发消息后返回的消息id
@@ -9,6 +11,8 @@ import lombok.Data;
  * @author lv_fan2008
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WxQueryMassSendParam {
 
     /**

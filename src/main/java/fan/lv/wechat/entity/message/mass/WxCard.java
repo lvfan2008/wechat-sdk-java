@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message;
+package fan.lv.wechat.entity.message.mass;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 视频消息
+ * 卡券消息
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MpVideo {
+public class WxCard {
     /**
-     * 视频媒体Id
+     * 卡券Id
      */
-    @JsonProperty("media_id")
-    String mediaId;
+    @JsonProperty("card_id")
+    String cardId;
 }

@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message;
+package fan.lv.wechat.entity.message.mass;
 
 import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;

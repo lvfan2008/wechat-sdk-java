@@ -56,15 +56,32 @@ public class TemplateServiceImplTest extends TestCase {
         param.setTemplateId(result.getTemplateId());
         param.setUrl("http://www.baidu.com");
 
-        Map<String, WxTemplateMessageParam.DataValue> data = new HashMap<>();
-        data.put("first", new WxTemplateMessageParam.DataValue("你好", "#00ff00"));
-        data.put("delivername", new WxTemplateMessageParam.DataValue("顺丰", "#00ffff"));
-        data.put("ordername", new WxTemplateMessageParam.DataValue("9834983489982398", "#ffff00"));
-        data.put("remark", new WxTemplateMessageParam.DataValue("祝你一路顺丰", "#ff00ff"));
+        Map<String, DataValue> data = new HashMap<>();
+        data.put("first", new DataValue("你好", "#00ff00"));
+        data.put("delivername", new DataValue("顺丰", "#00ffff"));
+        data.put("ordername", new DataValue("9834983489982398", "#ffff00"));
+        data.put("remark", new DataValue("祝你一路顺丰", "#ff00ff"));
         param.setData(data);
 
         WxSendTemplateMessageResult result2 = templateService.sendTemplateMessage(param);
         templateService.deleteTemplateId(result.getTemplateId());
         assertTrue(result2.success());
+    }
+
+    public void testSendSubscribeMessage() {
+        WxGetTemplateIdResult result = templateService.getTemplateId("TM00303");
+        WxSubscribeMessageParam param = new WxSubscribeMessageParam();
+        param.setToUser(Util.getProperty("user_id"));
+        param.setTemplateId(result.getTemplateId());
+        param.setUrl("http://www.baidu.com");
+
+        WxSubscribeMessageParam.DataContent dataContent = new WxSubscribeMessageParam.DataContent(
+                new DataValue("测试一次性订阅接口", "#00ff00")
+        );
+        param.setData(dataContent);
+
+        WxResult result2 = templateService.sendSubscribeMessage(param);
+        templateService.deleteTemplateId(result.getTemplateId());
+        assertTrue(result2.getErrorCode() > 0);
     }
 }

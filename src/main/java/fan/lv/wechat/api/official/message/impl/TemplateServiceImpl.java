@@ -50,4 +50,9 @@ public class TemplateServiceImpl implements TemplateService {
     public WxSendTemplateMessageResult sendTemplateMessage(WxTemplateMessageParam wxTemplateMessageParam) {
         return client.post("/cgi-bin/message/template/send", wxTemplateMessageParam, WxSendTemplateMessageResult.class);
     }
+
+    @Override
+    public WxResult sendSubscribeMessage(WxSubscribeMessageParam wxSubscribeMessageParam) {
+        return client.post("/cgi-bin/message/template/subscribe", wxSubscribeMessageParam, WxResult.class);
+    }
 }

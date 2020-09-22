@@ -58,4 +58,13 @@ public interface TemplateService {
      * @return 发送结果
      */
     WxSendTemplateMessageResult sendTemplateMessage(WxTemplateMessageParam wxTemplateMessageParam);
+
+    /**
+     * 推送订阅模板消息给到授权微信用户
+     *
+     * @param wxSubscribeMessageParam 推送订阅模板消息参数
+     * @return 推送结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Message_Management/One-time_subscription_info.html" target="_blank">微信官方接口文档</a>
+     */
+    WxResult sendSubscribeMessage(WxSubscribeMessageParam wxSubscribeMessageParam);
 }

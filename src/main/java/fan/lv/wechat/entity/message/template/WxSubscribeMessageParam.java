@@ -5,13 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Map;
-
 /**
  * @author lv_fan2008
  */
 @Data
-public class WxTemplateMessageParam {
+public class WxSubscribeMessageParam {
 
     /**
      * 接收者openid
@@ -31,18 +29,27 @@ public class WxTemplateMessageParam {
     String url;
 
     /**
+     * 订阅场景值
+     */
+    String scene;
+
+    /**
+     * 消息标题，15字以内
+     */
+    String title;
+
+    /**
      * 跳小程序所需数据，不需跳小程序可不用传该数据
      */
     @JsonProperty("miniprogram")
-    MiniProgram miniProgram;
+    WxTemplateMessageParam.MiniProgram miniProgram;
 
     /**
      * 模板data数据:
-     * {"first":{"value":"恭喜你购买成功！","color":"#173177"},"keyword1":{"value":"巧克力","color":"#173177"},
-     * "keyword2":{"value":"39.8元","color":"#173177"},"keyword3":{"value":"2014年9月22日","color":"#173177"},
-     * "remark":{"value":"欢迎再次购买！","color":"#173177"}}
+     * 消息正文，value为消息内容文本（200字以内），没有固定格式，可用\n换行，
+     * color为整段消息内容的字体颜色（目前仅支持整段消息为一种颜色）
      */
-    Map<String, DataValue> data;
+    DataContent data;
 
     @Data
     @AllArgsConstructor
@@ -61,6 +68,13 @@ public class WxTemplateMessageParam {
         String pagePath;
     }
 
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class DataContent {
+        /**
+         * 数据内容
+         */
+        DataValue content;
+    }
 }
-
-

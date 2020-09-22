@@ -2,10 +2,9 @@ package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.official.base.BaseService;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.entity.base.WxCheckParam;
-import fan.lv.wechat.entity.base.WxApiIpResult;
-import fan.lv.wechat.entity.base.WxCallbackIpResult;
-import fan.lv.wechat.entity.base.WxCheckResult;
+import fan.lv.wechat.entity.base.*;
+import fan.lv.wechat.entity.message.reply.WxAutoReplyRuleResult;
+import fan.lv.wechat.entity.result.WxResult;
 
 /**
  * @author lv_fan2008
@@ -36,5 +35,15 @@ public class BaseServiceImpl implements BaseService {
     @Override
     public WxCheckResult checkNetwork(WxCheckParam checkParam) {
         return client.post("/cgi-bin/callback/check", checkParam, WxCheckResult.class);
+    }
+
+    @Override
+    public WxResult clearQuota(String appId) {
+        return client.post("/cgi-bin/clear_quota", new WxClearQuotaParam(appId), WxResult.class);
+    }
+
+    @Override
+    public WxAutoReplyRuleResult getAutoReplyRule() {
+        return client.get("/cgi-bin/get_current_autoreply_info", WxAutoReplyRuleResult.class);
     }
 }

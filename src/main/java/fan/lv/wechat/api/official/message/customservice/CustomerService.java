@@ -5,11 +5,12 @@ import fan.lv.wechat.entity.message.customservice.WxDeleteCustomerServiceAccount
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
- * 客服接口
+ * 客服接口(老接口废弃)
  *
  * @author lv_fan2008
  * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Service_Center_messages.html" target="_blank">微信官方接口文档</a>
  */
+@Deprecated
 public interface CustomerService {
 
     /**

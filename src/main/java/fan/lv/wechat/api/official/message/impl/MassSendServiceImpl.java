@@ -1,8 +1,8 @@
-package fan.lv.wechat.api.official.message.mass.impl;
+package fan.lv.wechat.api.official.message.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.official.message.mass.MassSendService;
-import fan.lv.wechat.entity.message.mass.*;
+import fan.lv.wechat.api.official.message.MassSendService;
+import fan.lv.wechat.entity.message.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.util.Collections;

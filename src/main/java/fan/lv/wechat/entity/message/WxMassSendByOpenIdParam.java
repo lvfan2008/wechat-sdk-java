@@ -1,10 +1,8 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 

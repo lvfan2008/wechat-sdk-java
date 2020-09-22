@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.customservice;
+package fan.lv.wechat.entity.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * @author lv_fan2008
+ * 视频消息
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WxDeleteCustomerServiceAccountParam {
+public class MpVideo {
     /**
-     * 客服账号
+     * 视频媒体Id
      */
-    @JsonProperty("kf_account")
-    String account;
+    @JsonProperty("media_id")
+    String mediaId;
 }

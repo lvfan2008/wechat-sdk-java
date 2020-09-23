@@ -1,7 +1,7 @@
 package fan.lv.wechat.entity.asset;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fan.lv.wechat.entity.message.mass.base.WxNewsBase;
+import fan.lv.wechat.entity.message.mass.base.WxNews;
 import lombok.Data;
 
 /**
@@ -24,5 +24,5 @@ public class WxUpdateNewsParam {
     /**
      * 图文消息
      */
-    WxNewsBase articles;
+    WxNews articles;
 }

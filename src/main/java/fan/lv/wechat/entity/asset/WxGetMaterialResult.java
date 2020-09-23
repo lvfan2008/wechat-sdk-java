@@ -1,7 +1,7 @@
 package fan.lv.wechat.entity.asset;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fan.lv.wechat.entity.message.mass.base.WxNewsBase;
+import fan.lv.wechat.entity.message.mass.base.WxNews;
 import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +40,7 @@ public class WxGetMaterialResult extends WxResult {
 
     @EqualsAndHashCode(callSuper = true)
     @Data
-    public static class News extends WxNewsBase {
+    public static class News extends WxNews {
         /**
          * 图文页的URL
          */

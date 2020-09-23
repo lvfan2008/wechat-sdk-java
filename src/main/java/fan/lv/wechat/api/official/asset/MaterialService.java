@@ -20,7 +20,7 @@ public interface MaterialService {
      * @return 上传素材结果
      * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_materials.html" target="_blank">微信官方接口文档</a>
      */
-    WxAddMaterialResult addTemporaryMaterial(String type, String filePath);
+    WxAddTemporaryMaterialResult addTemporaryMaterial(String type, String filePath);
 
 
     /**

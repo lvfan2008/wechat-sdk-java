@@ -5,6 +5,7 @@ import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
 import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
 import fan.lv.wechat.entity.result.WxResult;
+import fan.lv.wechat.util.JsonUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,11 +52,7 @@ public class Util {
      * @param object result对象
      */
     public static void printJson(WxResult object) {
-        try {
-            System.out.println(object.toJson());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        System.out.println(JsonUtil.toJson(object));
     }
 
     /**

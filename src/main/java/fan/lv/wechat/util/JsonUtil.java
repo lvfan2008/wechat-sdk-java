@@ -27,7 +27,7 @@ public class JsonUtil {
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -45,9 +45,8 @@ public class JsonUtil {
         try {
             return mapper.readValue(json, resultType);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
 }

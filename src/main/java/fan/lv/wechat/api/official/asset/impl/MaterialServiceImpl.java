@@ -25,12 +25,12 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public WxAddMaterialResult addTemporaryMaterial(String type, String filePath) {
+    public WxAddTemporaryMaterialResult addTemporaryMaterial(String type, String filePath) {
         return client.uploadFile("/cgi-bin/media/upload",
                 Collections.singletonMap("type", type),
                 Collections.<String, String>emptyMap(),
                 Collections.singletonMap("media", filePath),
-                WxAddMaterialResult.class);
+                WxAddTemporaryMaterialResult.class);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class MaterialServiceImpl implements MaterialService {
     @Override
     public WxAddOtherMaterialResult addOtherMaterial(String type, String filePath, WxVideoMaterialParam wxVideoMaterialParam) {
         String video = "video";
-        return client.uploadFile("/cgi-bin/media/upload",
+        return client.uploadFile("/cgi-bin/material/add_material",
                 Collections.singletonMap("type", type),
                 video.equals(type) ? Collections.<String, String>emptyMap()
                         : Collections.singletonMap("description", JsonUtil.toJson(wxVideoMaterialParam)),

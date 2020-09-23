@@ -88,7 +88,8 @@ public class ClientImpl extends AbstractClient {
         if (StringUtils.isEmpty(json)) {
             return null;
         }
-        WxAccessTokenResult accessTokenResult = WxAccessTokenResult.parseJson(json, WxAccessTokenResult.class);
+        WxAccessTokenResult accessTokenResult = JsonUtil.parseJson(json, WxAccessTokenResult.class);
+        assert accessTokenResult != null;
         return accessTokenResult.getAccessToken();
     }
 

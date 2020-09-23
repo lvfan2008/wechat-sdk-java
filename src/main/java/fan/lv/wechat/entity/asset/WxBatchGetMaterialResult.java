@@ -27,6 +27,11 @@ public class WxBatchGetMaterialResult extends WxResult {
     @JsonProperty("item_count")
     Integer itemCount;
 
+    /**
+     * 素材数据
+     */
+    List<Item> item;
+
     @Data
     public static class Item {
         /**

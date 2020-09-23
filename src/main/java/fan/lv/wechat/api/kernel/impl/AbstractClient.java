@@ -9,6 +9,7 @@ import fan.lv.wechat.util.JsonUtil;
 import fan.lv.wechat.util.RequestOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
@@ -16,6 +17,8 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author lv_fan2008
@@ -23,6 +26,7 @@ import java.util.Map;
 @Slf4j
 abstract public class AbstractClient implements Client {
 
+    static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
 
     /**
      * @param uri        uri地址
@@ -145,56 +149,90 @@ abstract public class AbstractClient implements Client {
             log.debug("url: {}, httpOptions: {}", url, httpOptions.toString());
 
             HttpResponse httpResponse = HttpUtils.httpRequest(url, httpOptions);
+
+            log.debug("HttpResponse: {}", httpResponse.toString());
+
             int statusOk = 200;
             if (httpResponse.getStatusLine().getStatusCode() != statusOk) {
                 return errorResult(-4, httpResponse.getStatusLine().toString(), resultType);
             }
 
-            HttpEntity entity = httpResponse.getEntity();
-
             // 如果不是json类型，则为原始数据流
-            String jsonType = "application/json";
-            if (!entity.getContentType().getValue().contains(jsonType)) {
-                log.debug("rawResult length: {}", entity.getContentLength());
-                return rawResult(resultType, entity);
+            if (isRawStream(httpResponse)) {
+                T wxResult = rawResult(resultType, httpResponse);
+                log.debug("rawResult: {}", JsonUtil.toJson(wxResult));
+                return wxResult;
             }
 
-            String result = EntityUtils.toString(entity);
-            log.debug("result: {}", result);
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            T wxResult = mapper.readValue(result, resultType);
+            String result = EntityUtils.toString(httpResponse.getEntity());
+            log.debug("Origin result: {}", result);
+            T wxResult = JsonUtil.parseJson(result, resultType);
             if (isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();
                 if (accessTokenResult.success()) {
                     return this.request(uri, httpOptions, resultType);
                 }
             }
+            log.debug("wxResult: {}", JsonUtil.toJson(wxResult));
             return wxResult;
         } catch (IOException e) {
             return errorResult(-3, e.getMessage(), resultType);
         }
     }
 
+    private boolean isRawStream(HttpResponse httpResponse) {
+        if (getFileName(httpResponse) != null) {
+            return true;
+        }
+        Header header = httpResponse.getEntity().getContentType();
+        String contentType = header != null ? header.getValue() : null;
+        return contentType != null && !contentType.contains("application/json")
+                && !contentType.contains("text/plain");
+    }
+
     /**
      * 原生结果
      *
-     * @param resultType 结果类型
-     * @param httpEntity http实体
-     * @param <T>        模板类型
+     * @param resultType   结果类型
+     * @param httpResponse http相应
+     * @param <T>          模板类型
      * @return 原生结果
      */
-    protected <T extends WxResult> T rawResult(Class<T> resultType, HttpEntity httpEntity) {
+    protected <T extends WxResult> T rawResult(Class<T> resultType, HttpResponse httpResponse) {
         T result;
         try {
+            Header header = httpResponse.getEntity().getContentType();
             result = resultType.newInstance();
             result.setIsRawStream(true);
-            result.setContent(httpEntity.getContent());
-            result.setLength(httpEntity.getContentLength());
+            result.setFilename(getFileName(httpResponse));
+            result.setContentType(header != null ? header.getValue() : null);
+            result.setContent(httpResponse.getEntity().getContent());
+            result.setLength(httpResponse.getEntity().getContentLength());
             return result;
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());
         }
+    }
+
+    /**
+     * 获取http响应中的文件名字
+     *
+     * @param httpResponse http响应
+     * @return 文件名字
+     */
+    private String getFileName(HttpResponse httpResponse) {
+        Header[] headers = httpResponse.getHeaders("Content-disposition");
+        if (headers == null) {
+            return null;
+        }
+        for (Header header : headers) {
+            String value = header.getValue();
+            Matcher matcher = FILE_NAME_PATTERN.matcher(value);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+        return null;
     }
 
     /**

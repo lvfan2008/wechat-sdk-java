@@ -4,6 +4,7 @@ import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.asset.MaterialService;
 import fan.lv.wechat.entity.asset.*;
 import fan.lv.wechat.entity.message.mass.base.WxArticles;
+import fan.lv.wechat.entity.message.mass.base.WxNews;
 import fan.lv.wechat.entity.message.mass.base.WxNewsBase;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
@@ -135,7 +136,7 @@ public class MaterialServiceImplTest extends TestCase {
         WxUpdateNewsParam wxUpdateNewsParam = new WxUpdateNewsParam();
         wxUpdateNewsParam.setIndex(0);
         wxUpdateNewsParam.setMediaId(wxAddNewsResult.getMediaId());
-        wxUpdateNewsParam.setArticles(JsonUtil.parseJson(json2, WxNewsBase.class));
+        wxUpdateNewsParam.setArticles(JsonUtil.parseJson(json2, WxNews.class));
         WxResult result3 = materialService.updateNews(wxUpdateNewsParam);
         assertTrue(result3.success());
     }

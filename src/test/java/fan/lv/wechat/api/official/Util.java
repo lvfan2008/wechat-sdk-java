@@ -21,8 +21,8 @@ public class Util {
     /**
      * 客户端
      */
-    private static Client client;
-    private static Properties properties;
+    private static final Client client;
+    private static final Properties properties;
 
     static {
         properties = new Properties();

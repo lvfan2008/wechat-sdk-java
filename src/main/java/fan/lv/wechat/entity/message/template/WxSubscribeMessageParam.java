@@ -1,6 +1,7 @@
 package fan.lv.wechat.entity.message.template;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fan.lv.wechat.entity.message.template.base.WxDataValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -75,6 +76,6 @@ public class WxSubscribeMessageParam {
         /**
          * 数据内容
          */
-        DataValue content;
+        WxDataValue content;
     }
 }

@@ -3,6 +3,7 @@ package fan.lv.wechat.api.official.message.impl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.message.MassSendService;
 import fan.lv.wechat.entity.message.mass.*;
+import fan.lv.wechat.entity.message.mass.base.WxArticles;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;
@@ -52,8 +53,8 @@ public class MassSendServiceImplTest extends TestCase {
                 "        }\n" +
                 "   ]\n" +
                 "}";
-        Articles articles = JsonUtil.parseJson(json,Articles.class);
-        WxUploadArticlesResult result = massSendService.uploadNews(articles);
+        WxArticles wxArticles = JsonUtil.parseJson(json, WxArticles.class);
+        WxUploadArticlesResult result = massSendService.uploadNews(wxArticles);
         assertTrue(result.getErrorCode() > 0);
     }
 

@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MpNews {
+public class WxMpNews {
     /**
      * 用于群发的消息的media_id,注意此处media_id需通过素材管理->新增素材来得到
      */

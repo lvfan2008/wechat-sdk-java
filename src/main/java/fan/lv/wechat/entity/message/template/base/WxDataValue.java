@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.template;
+package fan.lv.wechat.entity.message.template.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataValue {
+public class WxDataValue {
     /**
      * 数据值
      */
@@ -23,7 +23,7 @@ public class DataValue {
      */
     String color;
 
-    public DataValue(String value) {
+    public WxDataValue(String value) {
         this.value = value;
     }
 }

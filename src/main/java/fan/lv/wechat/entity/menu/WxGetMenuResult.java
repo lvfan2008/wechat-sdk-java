@@ -14,6 +14,7 @@ import java.util.List;
  *
  * @author lv_fan2008
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class WxGetMenuResult extends WxResult {
 

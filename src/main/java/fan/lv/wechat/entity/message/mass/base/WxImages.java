@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Images {
+public class WxImages {
     /**
      * 图片媒体Id列表
      */

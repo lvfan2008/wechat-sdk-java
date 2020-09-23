@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Text {
+public class WxText {
     /**
      * 文本消息内容
      */

@@ -29,10 +29,10 @@ public class HttpUtils {
      * http请求类
      *
      * @param url url地址
-     * @return String
+     * @return HttpResponse
      * @throws IOException 例外
      */
-    public static String httpRequest(String url, RequestOptions httpOptions) throws IOException {
+    public static HttpResponse httpRequest(String url, RequestOptions httpOptions) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         url = HttpUtils.buildUrlQuery(url, httpOptions.getQueryMap());
         HttpUriRequest httpUriRequest;
@@ -62,8 +62,8 @@ public class HttpUtils {
             assert httpUriRequest instanceof HttpPost;
             ((HttpPost) httpUriRequest).setEntity(new StringEntity(httpOptions.body, httpOptions.contentType));
         }
-        HttpResponse httpResponse = httpClient.execute(httpUriRequest);
-        return EntityUtils.toString(httpResponse.getEntity());
+        return httpClient.execute(httpUriRequest);
+//        return EntityUtils.toString(httpResponse.getEntity());
     }
 
 

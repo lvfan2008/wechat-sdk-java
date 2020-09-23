@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MpVideo {
+public class WxMpVideo {
     /**
      * 视频媒体Id
      */

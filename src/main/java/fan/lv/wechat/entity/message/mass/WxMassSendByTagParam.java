@@ -1,6 +1,7 @@
 package fan.lv.wechat.entity.message.mass;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fan.lv.wechat.entity.message.mass.base.WxMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,6 +1,7 @@
 package fan.lv.wechat.entity.message.template;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fan.lv.wechat.entity.message.template.base.WxDataValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,7 @@ public class WxTemplateMessageParam {
      * "keyword2":{"value":"39.8元","color":"#173177"},"keyword3":{"value":"2014年9月22日","color":"#173177"},
      * "remark":{"value":"欢迎再次购买！","color":"#173177"}}
      */
-    Map<String, DataValue> data;
+    Map<String, WxDataValue> data;
 
     @Data
     @AllArgsConstructor

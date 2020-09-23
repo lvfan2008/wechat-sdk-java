@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -23,23 +23,23 @@ public class WxMessage {
      * 用于设定即将发送的图文消息
      */
     @JsonProperty("mpnews")
-    MpNews mpNews;
+    WxMpNews wxMpNews;
 
     /**
      * 文本消息
      */
-    Text text;
+    WxText wxText;
 
     /**
      * 声音消息
      */
-    Voice voice;
+    WxVoice wxVoice;
 
     /**
      * 视频消息
      */
     @JsonProperty("mpvideo")
-    MpVideo mpVideo;
+    WxMpVideo wxMpVideo;
 
 
     /**
@@ -51,7 +51,7 @@ public class WxMessage {
     /**
      * 图片消息
      */
-    Images images;
+    WxImages wxImages;
 
 
     /**
@@ -60,7 +60,7 @@ public class WxMessage {
      * @param mediaId 群发的消息的media_id
      */
     public void mpNews(String mediaId) {
-        setMpNews(new MpNews(mediaId));
+        setWxMpNews(new WxMpNews(mediaId));
         setMsgType("msgtype");
     }
 
@@ -70,7 +70,7 @@ public class WxMessage {
      * @param content 文本消息
      */
     public void text(String content) {
-        setText(new Text(content));
+        setWxText(new WxText(content));
         setMsgType("text");
     }
 
@@ -80,7 +80,7 @@ public class WxMessage {
      * @param mediaId 群发的消息的media_id
      */
     public void voice(String mediaId) {
-        setVoice(new Voice(mediaId));
+        setWxVoice(new WxVoice(mediaId));
         setMsgType("voice");
     }
 
@@ -90,7 +90,7 @@ public class WxMessage {
      * @param mediaId 群发的消息的media_id
      */
     public void mpVideo(String mediaId) {
-        setMpVideo(new MpVideo(mediaId));
+        setWxMpVideo(new WxMpVideo(mediaId));
         setMsgType("mpvideo");
     }
 
@@ -115,7 +115,7 @@ public class WxMessage {
      */
     public void images(List<String> mediaIds, String recommend,
                        Integer needOpenComment, Integer onlyFansCanComment) {
-        setImages(new Images(mediaIds, recommend, needOpenComment, onlyFansCanComment));
+        setWxImages(new WxImages(mediaIds, recommend, needOpenComment, onlyFansCanComment));
         setMsgType("image");
     }
 }

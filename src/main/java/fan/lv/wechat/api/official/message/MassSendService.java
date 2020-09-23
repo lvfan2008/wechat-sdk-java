@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.official.message;
 
 import fan.lv.wechat.entity.message.mass.*;
+import fan.lv.wechat.entity.message.mass.base.WxArticles;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
@@ -24,10 +25,10 @@ public interface MassSendService {
     /**
      * 上传图文消息素材
      *
-     * @param articles 图文消息
+     * @param wxArticles 图文消息
      * @return 上传结果
      */
-    WxUploadArticlesResult uploadNews(Articles articles);
+    WxUploadArticlesResult uploadNews(WxArticles wxArticles);
 
     /**
      * 根据标签群发消息

@@ -1,15 +1,15 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * 图文消息
+ * 基础图文消息
  *
  * @author lv_fan2008
  */
 @Data
-public class News {
+public class WxNewsBase {
     /**
      * 图文消息缩略图的media_id，可以在素材管理-新增素材中获得
      */
@@ -48,16 +48,4 @@ public class News {
      */
     @JsonProperty("show_cover_pic")
     Integer showCoverPic = 0;
-
-    /**
-     * Uint32 是否打开评论，0不打开，1打开
-     */
-    @JsonProperty("need_open_comment")
-    Integer needOpenComment = 0;
-
-    /**
-     * Uint32 是否粉丝才可评论，0所有人可评论，1粉丝才可评论
-     */
-    @JsonProperty("only_fans_can_comment")
-    Integer onlyFansCanComment = 0;
 }

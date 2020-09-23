@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.http.HttpEntity;
+
+import java.io.InputStream;
 
 /**
  * @author lv_fan2008
@@ -29,14 +32,19 @@ public class WxResult {
     String errorMessage = "";
 
     /**
-     * 是否为原生串
+     * 是否为原始流
      */
-    Boolean isRawString = false;
+    Boolean isRawStream = false;
 
     /**
-     * 二进制流
+     * 原始流
      */
-    String rawString;
+    InputStream content;
+
+    /**
+     * 原始流长度
+     */
+    Long length;
 
     /**
      * 结果是否成功

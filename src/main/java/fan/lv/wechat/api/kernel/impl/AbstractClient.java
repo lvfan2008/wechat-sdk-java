@@ -3,14 +3,16 @@ package fan.lv.wechat.api.kernel.impl;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.entity.base.WxAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.HttpUtils;
 import fan.lv.wechat.util.JsonUtil;
 import fan.lv.wechat.util.RequestOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.util.Map;
@@ -96,10 +98,9 @@ abstract public class AbstractClient implements Client {
     /**
      * 获取凭证Token,并缓存当前Token
      *
-     * @param <T> 模板类型
      * @return 凭证
      */
-    abstract protected <T extends WxResult> WxAccessTokenResult getAccessToken();
+    abstract protected WxResult getAccessToken();
 
     /**
      * 通过结果错误码，查看是否token过期
@@ -118,7 +119,6 @@ abstract public class AbstractClient implements Client {
      */
     abstract protected String buildAccessTokenUrl(String url, String accessToken);
 
-
     /**
      * Http请求
      *
@@ -129,21 +129,6 @@ abstract public class AbstractClient implements Client {
      * @return 请求结果
      */
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
-        return request(uri, httpOptions, resultType, false);
-    }
-
-
-    /**
-     * Http请求
-     *
-     * @param uri         uri地址
-     * @param httpOptions http选项
-     * @param resultType  结果类型
-     * @param requestRaw  是否请求原始数据
-     * @param <T>         类型变量
-     * @return 请求结果
-     */
-    public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType, Boolean requestRaw) {
         try {
             String url = getBaseUrl() + uri;
             if (!isGetAccessTokenUrl(uri)) {
@@ -159,12 +144,22 @@ abstract public class AbstractClient implements Client {
 
             log.debug("url: {}, httpOptions: {}", url, httpOptions.toString());
 
-            String result = HttpUtils.httpRequest(url, httpOptions);
-            String jsonPrefix = "{";
-            if (requestRaw && !result.startsWith(jsonPrefix)) {
-                log.debug("rawResult length: {}", result.length());
-                return rawResult(resultType, result);
+            HttpResponse httpResponse = HttpUtils.httpRequest(url, httpOptions);
+            int statusOk = 200;
+            if (httpResponse.getStatusLine().getStatusCode() != statusOk) {
+                return errorResult(-4, httpResponse.getStatusLine().toString(), resultType);
             }
+
+            HttpEntity entity = httpResponse.getEntity();
+
+            // 如果不是json类型，则为原始数据流
+            String jsonType = "application/json";
+            if (!entity.getContentType().getValue().contains(jsonType)) {
+                log.debug("rawResult length: {}", entity.getContentLength());
+                return rawResult(resultType, entity);
+            }
+
+            String result = EntityUtils.toString(entity);
             log.debug("result: {}", result);
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -172,7 +167,7 @@ abstract public class AbstractClient implements Client {
             if (isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();
                 if (accessTokenResult.success()) {
-                    return this.request(uri, httpOptions, resultType, requestRaw);
+                    return this.request(uri, httpOptions, resultType);
                 }
             }
             return wxResult;
@@ -185,16 +180,17 @@ abstract public class AbstractClient implements Client {
      * 原生结果
      *
      * @param resultType 结果类型
-     * @param str        原生串
+     * @param httpEntity http实体
      * @param <T>        模板类型
      * @return 原生结果
      */
-    protected <T extends WxResult> T rawResult(Class<T> resultType, String str) {
+    protected <T extends WxResult> T rawResult(Class<T> resultType, HttpEntity httpEntity) {
         T result;
         try {
             result = resultType.newInstance();
-            result.setIsRawString(true);
-            result.setRawString(str);
+            result.setIsRawStream(true);
+            result.setContent(httpEntity.getContent());
+            result.setLength(httpEntity.getContentLength());
             return result;
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());

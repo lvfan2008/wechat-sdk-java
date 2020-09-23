@@ -108,7 +108,7 @@ public class ClientImpl extends AbstractClient {
      * @return 接口调用凭据
      */
     @Override
-    protected WxAccessTokenResult getAccessToken() {
+    protected WxResult getAccessToken() {
         String url = String.format("/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", appId, appSecret);
         WxAccessTokenResult accessTokenResult = this.get(url, WxAccessTokenResult.class);
         if (accessTokenResult.success()) {

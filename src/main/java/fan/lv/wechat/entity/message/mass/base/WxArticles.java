@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.message.mass;
+package fan.lv.wechat.entity.message.mass.base;
 
 import lombok.Data;
 
@@ -10,9 +10,9 @@ import java.util.List;
  * @author lv_fan2008
  */
 @Data
-public class Articles {
+public class WxArticles {
     /**
      * 图文消息，一个图文消息支持1到8条图文
      */
-    List<News> articles;
+    List<WxNews> articles;
 }

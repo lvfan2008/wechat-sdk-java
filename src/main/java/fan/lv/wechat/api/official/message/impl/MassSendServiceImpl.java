@@ -3,6 +3,7 @@ package fan.lv.wechat.api.official.message.impl;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.message.MassSendService;
 import fan.lv.wechat.entity.message.mass.*;
+import fan.lv.wechat.entity.message.mass.base.WxArticles;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.util.Collections;
@@ -29,8 +30,8 @@ public class MassSendServiceImpl implements MassSendService {
     }
 
     @Override
-    public WxUploadArticlesResult uploadNews(Articles articles) {
-        return client.post("/cgi-bin/media/uploadnews", articles, WxUploadArticlesResult.class);
+    public WxUploadArticlesResult uploadNews(WxArticles wxArticles) {
+        return client.post("/cgi-bin/media/uploadnews", wxArticles, WxUploadArticlesResult.class);
     }
 
     @Override

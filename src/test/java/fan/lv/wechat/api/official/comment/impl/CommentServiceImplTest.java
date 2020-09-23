@@ -1,8 +1,6 @@
 package fan.lv.wechat.api.official.comment.impl;
 
 import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.official.asset.MaterialService;
-import fan.lv.wechat.api.official.asset.impl.MaterialServiceImpl;
 import fan.lv.wechat.api.official.comment.CommentService;
 import fan.lv.wechat.entity.comment.WxListCommentParam;
 import fan.lv.wechat.entity.comment.WxListCommentResult;
@@ -28,33 +26,33 @@ public class CommentServiceImplTest extends TestCase {
     }
 
     public void testListComment() {
-        WxListCommentParam param = new WxListCommentParam(123,0,0,10,0);
+        WxListCommentParam param = new WxListCommentParam(123, 0, 0, 10, 0);
         WxListCommentResult result = commentService.listComment(param);
         assertEquals(88001, (int) result.getErrorCode());
     }
 
     public void testMarkComment() {
-        WxResult result = commentService.markComment(123, 0,3);
+        WxResult result = commentService.markComment(123, 0, 3);
         assertEquals(88001, (int) result.getErrorCode());
     }
 
     public void testUnMarkComment() {
-        WxResult result = commentService.unMarkComment(123, 0,3);
+        WxResult result = commentService.unMarkComment(123, 0, 3);
         assertEquals(88001, (int) result.getErrorCode());
     }
 
     public void testDeleteComment() {
-        WxResult result = commentService.deleteComment(123, 0,3);
+        WxResult result = commentService.deleteComment(123, 0, 3);
         assertEquals(88001, (int) result.getErrorCode());
     }
 
     public void testReplyComment() {
-        WxResult result = commentService.replyComment(123, 0,3,"test");
+        WxResult result = commentService.replyComment(123, 0, 3, "test");
         assertEquals(88001, (int) result.getErrorCode());
     }
 
     public void testDeleteCommentReply() {
-        WxResult result = commentService.deleteCommentReply(123, 0,3);
+        WxResult result = commentService.deleteCommentReply(123, 0, 3);
         assertEquals(88001, (int) result.getErrorCode());
     }
 }

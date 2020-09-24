@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.user;
+package fan.lv.wechat.entity.user.tag;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

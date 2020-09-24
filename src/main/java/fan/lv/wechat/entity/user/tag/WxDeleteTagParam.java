@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.user;
+package fan.lv.wechat.entity.user.tag;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,13 +12,13 @@ public class WxDeleteTagParam {
     /**
      * 标签
      */
-    DeleteTag deleteTag;
+    DeleteTag tag;
 
     /**
      * @param id 标签id，由微信分配
      */
     public WxDeleteTagParam(Integer id) {
-        deleteTag = new DeleteTag(id);
+        tag = new DeleteTag(id);
     }
 
     @Data

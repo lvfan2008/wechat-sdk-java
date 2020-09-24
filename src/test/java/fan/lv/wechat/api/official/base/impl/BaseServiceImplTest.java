@@ -2,11 +2,11 @@ package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.base.BaseService;
-import fan.lv.wechat.entity.base.WxApiIpResult;
-import fan.lv.wechat.entity.base.WxCallbackIpResult;
-import fan.lv.wechat.entity.base.WxCheckParam;
-import fan.lv.wechat.entity.base.WxCheckResult;
-import fan.lv.wechat.entity.message.reply.WxAutoReplyRuleResult;
+import fan.lv.wechat.entity.official.base.WxApiIpResult;
+import fan.lv.wechat.entity.official.base.WxCallbackIpResult;
+import fan.lv.wechat.entity.official.base.WxCheckParam;
+import fan.lv.wechat.entity.official.base.WxCheckResult;
+import fan.lv.wechat.entity.official.message.reply.WxAutoReplyRuleResult;
 import fan.lv.wechat.entity.result.WxResult;
 import junit.framework.TestCase;
 

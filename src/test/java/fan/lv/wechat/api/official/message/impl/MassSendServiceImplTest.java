@@ -2,8 +2,8 @@ package fan.lv.wechat.api.official.message.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.message.MassSendService;
-import fan.lv.wechat.entity.message.mass.*;
-import fan.lv.wechat.entity.message.mass.base.WxArticles;
+import fan.lv.wechat.entity.official.message.mass.*;
+import fan.lv.wechat.entity.official.message.mass.base.WxArticles;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;

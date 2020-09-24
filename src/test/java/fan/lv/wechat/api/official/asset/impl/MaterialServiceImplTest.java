@@ -2,10 +2,9 @@ package fan.lv.wechat.api.official.asset.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.asset.MaterialService;
-import fan.lv.wechat.entity.asset.*;
-import fan.lv.wechat.entity.message.mass.base.WxArticles;
-import fan.lv.wechat.entity.message.mass.base.WxNews;
-import fan.lv.wechat.entity.message.mass.base.WxNewsBase;
+import fan.lv.wechat.entity.official.asset.*;
+import fan.lv.wechat.entity.official.message.mass.base.WxArticles;
+import fan.lv.wechat.entity.official.message.mass.base.WxNews;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;

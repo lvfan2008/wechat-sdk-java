@@ -2,8 +2,8 @@ package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.official.base.BaseService;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.entity.base.*;
-import fan.lv.wechat.entity.message.reply.WxAutoReplyRuleResult;
+import fan.lv.wechat.entity.official.base.*;
+import fan.lv.wechat.entity.official.message.reply.WxAutoReplyRuleResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

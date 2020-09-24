@@ -2,7 +2,7 @@ package fan.lv.wechat.api.official.comment.impl;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.comment.CommentService;
-import fan.lv.wechat.entity.comment.*;
+import fan.lv.wechat.entity.official.comment.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

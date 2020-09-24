@@ -1,8 +1,8 @@
 package fan.lv.wechat.api.official.asset;
 
-import fan.lv.wechat.entity.asset.*;
-import fan.lv.wechat.entity.message.mass.WxUploadMediaResult;
-import fan.lv.wechat.entity.message.mass.base.WxArticles;
+import fan.lv.wechat.entity.official.asset.*;
+import fan.lv.wechat.entity.official.message.mass.WxUploadMediaResult;
+import fan.lv.wechat.entity.official.message.mass.base.WxArticles;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

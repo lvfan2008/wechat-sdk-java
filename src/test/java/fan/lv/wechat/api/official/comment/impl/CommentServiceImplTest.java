@@ -2,8 +2,8 @@ package fan.lv.wechat.api.official.comment.impl;
 
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.comment.CommentService;
-import fan.lv.wechat.entity.comment.WxListCommentParam;
-import fan.lv.wechat.entity.comment.WxListCommentResult;
+import fan.lv.wechat.entity.official.comment.WxListCommentParam;
+import fan.lv.wechat.entity.official.comment.WxListCommentResult;
 import fan.lv.wechat.entity.result.WxResult;
 import junit.framework.TestCase;
 

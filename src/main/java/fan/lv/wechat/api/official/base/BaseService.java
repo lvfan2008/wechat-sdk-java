@@ -1,10 +1,10 @@
 package fan.lv.wechat.api.official.base;
 
-import fan.lv.wechat.entity.base.WxCheckParam;
-import fan.lv.wechat.entity.base.WxApiIpResult;
-import fan.lv.wechat.entity.base.WxCallbackIpResult;
-import fan.lv.wechat.entity.base.WxCheckResult;
-import fan.lv.wechat.entity.message.reply.WxAutoReplyRuleResult;
+import fan.lv.wechat.entity.official.base.WxCheckParam;
+import fan.lv.wechat.entity.official.base.WxApiIpResult;
+import fan.lv.wechat.entity.official.base.WxCallbackIpResult;
+import fan.lv.wechat.entity.official.base.WxCheckResult;
+import fan.lv.wechat.entity.official.message.reply.WxAutoReplyRuleResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

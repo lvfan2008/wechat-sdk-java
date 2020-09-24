@@ -2,8 +2,8 @@ package fan.lv.wechat.api.official.user.impl;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.user.UserTagService;
+import fan.lv.wechat.entity.official.user.*;
 import fan.lv.wechat.entity.result.WxResult;
-import fan.lv.wechat.entity.user.tag.*;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.kernel.impl.AbstractClient;
-import fan.lv.wechat.entity.base.WxAccessTokenResult;
+import fan.lv.wechat.entity.official.base.WxAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;

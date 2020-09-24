@@ -2,7 +2,7 @@ package fan.lv.wechat.api.official.message.impl;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.message.TemplateService;
-import fan.lv.wechat.entity.message.template.*;
+import fan.lv.wechat.entity.official.message.template.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

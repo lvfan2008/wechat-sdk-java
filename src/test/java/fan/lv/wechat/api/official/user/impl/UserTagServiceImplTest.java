@@ -3,10 +3,10 @@ package fan.lv.wechat.api.official.user.impl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.user.UserTagService;
 import fan.lv.wechat.entity.result.WxResult;
-import fan.lv.wechat.entity.user.tag.WxCreateTagResult;
-import fan.lv.wechat.entity.user.tag.WxGetTagUserResult;
-import fan.lv.wechat.entity.user.tag.WxGetTagsResult;
-import fan.lv.wechat.entity.user.tag.WxGetUserTagListResult;
+import fan.lv.wechat.entity.official.user.WxCreateTagResult;
+import fan.lv.wechat.entity.official.user.WxGetTagUserResult;
+import fan.lv.wechat.entity.official.user.WxGetTagsResult;
+import fan.lv.wechat.entity.official.user.WxGetUserTagListResult;
 import junit.framework.TestCase;
 
 import java.util.Collections;

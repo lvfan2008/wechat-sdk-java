@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-public class ArticleServiceImpl implements ArticleStaticService {
+public class ArticleStaticServiceImpl implements ArticleStaticService {
 
     /**
      * 请求客户端
@@ -20,7 +20,7 @@ public class ArticleServiceImpl implements ArticleStaticService {
     /**
      * @param client 请求客户端
      */
-    public ArticleServiceImpl(Client client) {
+    public ArticleStaticServiceImpl(Client client) {
         this.client = client;
     }
 

@@ -29,7 +29,7 @@ public interface UserStaticService {
      * @param endDate   获取数据的结束日期，end_date允许设置的最大值为昨日
      * @return 累计用户数据
      */
-    WxUserCumulateResult getUserComulateData(String beginDate, String endDate);
+    WxUserCumulateResult getUserCumulateData(String beginDate, String endDate);
 
 
 }

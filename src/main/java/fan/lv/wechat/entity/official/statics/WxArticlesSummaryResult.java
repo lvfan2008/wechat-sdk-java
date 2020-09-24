@@ -3,6 +3,7 @@ package fan.lv.wechat.entity.official.statics;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
  *
  * @author lv_fan2008
  */
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class WxArticlesSummaryResult extends WxResult {
     /**
      * 统计数据列表

@@ -31,7 +31,7 @@ public class UserStaticServiceImpl implements UserStaticService {
     }
 
     @Override
-    public WxUserCumulateResult getUserComulateData(String beginDate, String endDate) {
+    public WxUserCumulateResult getUserCumulateData(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
         return client.post("/datacube/getusercumulate", (Object) map, WxUserCumulateResult.class);
     }

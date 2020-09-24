@@ -164,6 +164,8 @@ abstract public class AbstractClient implements Client {
             }
 
             String result = EntityUtils.toString(httpResponse.getEntity());
+            log.debug("origin result: {}", result);
+
             T wxResult = JsonUtil.parseJson(result, resultType);
             if (isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();

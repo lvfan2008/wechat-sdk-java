@@ -34,6 +34,15 @@ public class WxResult {
     Boolean isRawStream = false;
 
     /**
+     * 是否为原始流
+     *
+     * @return 是否为原始流
+     */
+    Boolean getIsRawStream() {
+        return isRawStream != null || isRawStream;
+    }
+
+    /**
      * 原始流的内容类型：Content-Type
      */
     String contentType;

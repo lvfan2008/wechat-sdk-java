@@ -146,14 +146,13 @@ abstract public class AbstractClient implements Client {
                 url = this.buildAccessTokenUrl(url, getCacheToken());
             }
 
-            log.debug("url: {}, httpOptions: {}", url, httpOptions.toString());
+            log.debug("request: url: {}, httpOptions: {}", url, httpOptions.toString());
 
             HttpResponse httpResponse = HttpUtils.httpRequest(url, httpOptions);
 
-            log.debug("HttpResponse: {}", httpResponse.toString());
-
             int statusOk = 200;
             if (httpResponse.getStatusLine().getStatusCode() != statusOk) {
+                log.error("getStatusCode() != statusOk httpResponse: {}", httpResponse.toString());
                 return errorResult(-4, httpResponse.getStatusLine().toString(), resultType);
             }
 
@@ -165,7 +164,6 @@ abstract public class AbstractClient implements Client {
             }
 
             String result = EntityUtils.toString(httpResponse.getEntity());
-            log.debug("Origin result: {}", result);
             T wxResult = JsonUtil.parseJson(result, resultType);
             if (isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();
@@ -173,7 +171,7 @@ abstract public class AbstractClient implements Client {
                     return this.request(uri, httpOptions, resultType);
                 }
             }
-            log.debug("wxResult: {}", JsonUtil.toJson(wxResult));
+            log.debug("result: {}", JsonUtil.toJson(wxResult));
             return wxResult;
         } catch (IOException e) {
             return errorResult(-3, e.getMessage(), resultType);

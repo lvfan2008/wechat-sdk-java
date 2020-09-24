@@ -9,7 +9,10 @@ import fan.lv.wechat.entity.user.tag.WxGetUserTagListResult;
 import java.util.List;
 
 /**
+ * 用户标签管理接口
+ *
  * @author lv_fan2008
+ * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/User_Management/User_Tag_Management.html" target="_blank">微信官方接口文档</a>
  */
 public interface UserTagService {
 

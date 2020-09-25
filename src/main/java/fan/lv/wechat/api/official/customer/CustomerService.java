@@ -7,13 +7,14 @@ import fan.lv.wechat.entity.result.WxResult;
  * 客服接口
  *
  * @author lv_fan2008
- * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Analytics/Analytics_API.html" target="_blank">微信官方接口文档</a>
+ * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
  */
 public interface CustomerService {
     /**
      * 获取客服列表
      *
      * @return 客服列表
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxCustomerListResult getCustomerList();
 
@@ -21,6 +22,7 @@ public interface CustomerService {
      * 获取在线客服列表
      *
      * @return 客服列表
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxOnlineCustomerListResult getOnlineCustomerList();
 
@@ -31,6 +33,7 @@ public interface CustomerService {
      *                  后缀为公众号微信号，长度不超过30个字符
      * @param nickname  客服昵称，最长16个字
      * @return 添加结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxResult addCustomer(String kfAccount, String nickname);
 
@@ -40,6 +43,7 @@ public interface CustomerService {
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
      * @param inviteWx  客服昵称，最长16个字
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxResult inviteBindKfAccount(String kfAccount, String inviteWx);
 
@@ -49,6 +53,7 @@ public interface CustomerService {
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
      * @param nickname  客服昵称，最长16个字
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxResult setCustomer(String kfAccount, String nickname);
 
@@ -58,6 +63,7 @@ public interface CustomerService {
      * @param kfAccount  完整客服帐号，格式为：帐号前缀@公众号微信号
      * @param avatarPath 头像文件路径
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxResult setCustomerAvatar(String kfAccount, String avatarPath);
 
@@ -66,6 +72,7 @@ public interface CustomerService {
      *
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Customer_Service_Management.html" target="_blank">微信官方接口文档</a>
      */
     WxResult delCustomer(String kfAccount);
 
@@ -75,6 +82,7 @@ public interface CustomerService {
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
      * @param openId    粉丝的openid
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Session_control.html" target="_blank">微信官方接口文档</a>
      */
     WxResult createSession(String kfAccount, String openId);
 
@@ -84,6 +92,7 @@ public interface CustomerService {
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
      * @param openId    粉丝的openid
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Session_control.html" target="_blank">微信官方接口文档</a>
      */
     WxResult closeSession(String kfAccount, String openId);
 
@@ -92,6 +101,7 @@ public interface CustomerService {
      *
      * @param openId 粉丝的openid
      * @return 客户会话状态
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Session_control.html" target="_blank">微信官方接口文档</a>
      */
     WxSessionResult getSession(String openId);
 
@@ -99,7 +109,8 @@ public interface CustomerService {
      * 获取客服会话列表
      *
      * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
-     * @return 会话列表
+     * @return 会话列表、
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Session_control.html" target="_blank">微信官方接口文档</a>
      */
     WxSessionListResult getSessionList(String kfAccount);
 
@@ -107,6 +118,19 @@ public interface CustomerService {
      * 获取未接入会话列表
      *
      * @return 未接入会话列表
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Session_control.html" target="_blank">微信官方接口文档</a>
      */
     WxWaitSessionListResult getWaitSessionList();
+
+    /**
+     * 获取聊天记录
+     *
+     * @param startTime 起始时间，unix时间戳
+     * @param endTime   结束时间，unix时间戳，每次查询时段不能超过24小时
+     * @param msgId     消息id顺序从小到大，从1开始
+     * @param number    每次获取条数，最多10000条
+     * @return 聊天记录
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Obtain_chat_transcript.html" target="_blank">微信官方接口文档</a>
+     */
+    WxMsgRecordResult getMsgRecord(Integer startTime, Integer endTime, Integer msgId, Integer number);
 }

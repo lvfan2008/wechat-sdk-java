@@ -97,4 +97,13 @@ public class CustomerServiceImpl implements CustomerService {
     public WxWaitSessionListResult getWaitSessionList() {
         return client.get("/customservice/kfsession/getwaitcase", WxWaitSessionListResult.class);
     }
+
+    @Override
+    public WxMsgRecordResult getMsgRecord(Integer startTime, Integer endTime, Integer msgId, Integer number) {
+        Map<String, Integer> map = ImmutableMap.of(
+                "starttime", (startTime), "endtime", (endTime),
+                "msgid", (msgId), "number", (number)
+        );
+        return client.post("/customservice/kfsession/close", map, WxMsgRecordResult.class);
+    }
 }

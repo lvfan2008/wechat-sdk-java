@@ -107,4 +107,11 @@ public class CustomerServiceImplTest extends TestCase {
         WxResult result = customerService.getWaitSessionList();
         assertTrue(result.success() || result.getErrorCode() == 65400);
     }
+
+    public void testGetMsgRecord() {
+        int starTime = (int) (System.currentTimeMillis() / 1000 - 3600 * 24 * 60);
+        int endTime = starTime + 3600 * 2;
+        WxResult result = customerService.getMsgRecord(starTime, endTime, 1, 100);
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
 }

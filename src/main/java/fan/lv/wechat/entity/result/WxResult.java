@@ -69,7 +69,7 @@ public class WxResult {
      * @return 是否成功
      */
     public Boolean success() {
-        return errorCode == 0;
+        return getErrorCode() == 0;
     }
 
 }

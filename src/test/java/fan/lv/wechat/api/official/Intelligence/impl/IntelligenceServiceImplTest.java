@@ -83,4 +83,18 @@ public class IntelligenceServiceImplTest extends TestCase {
         assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
+    public void testOcrQrCode() {
+        WxOcrQrCodeResult result = intelligenceService.ocrQrCode(Util.getProperty("ocr.qrcode"), false);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
+    }
+
+    public void testImageSuperResolution() {
+        WxImageSuperResolutionResult result = intelligenceService.imageSuperResolution(Util.getProperty("ocr.qrcode"), false);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
+    }
+
+    public void testImageAiCrop() {
+        WxImageAiCropResult result = intelligenceService.imageAiCrop(Util.getProperty("ocr.qrcode"), false, "1,1.25");
+        assertTrue(result.success() || result.getErrorCode() == 48001);
+    }
 }

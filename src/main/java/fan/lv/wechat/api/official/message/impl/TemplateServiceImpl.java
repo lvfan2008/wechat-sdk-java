@@ -21,7 +21,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public WxResult setIndustry(Integer industryId1, Integer industryId2) {
-        return client.post("/cgi-bin/template/api_set_industry", new WxIndustryParam(industryId1, industryId2),
+        return client.postJson("/cgi-bin/template/api_set_industry", new WxIndustryParam(industryId1, industryId2),
                 WxResult.class);
     }
 
@@ -32,7 +32,7 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public WxGetTemplateIdResult getTemplateId(String templateIdShort) {
-        return client.post("/cgi-bin/template/api_add_template", new WxGetTemplateIdParam(templateIdShort),
+        return client.postJson("/cgi-bin/template/api_add_template", new WxGetTemplateIdParam(templateIdShort),
                 WxGetTemplateIdResult.class);
     }
 
@@ -43,16 +43,16 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Override
     public WxResult deleteTemplateId(String templateId) {
-        return client.post("/cgi-bin/template/api_add_template", new WxDeleteTemplateIdParam(templateId), WxResult.class);
+        return client.postJson("/cgi-bin/template/api_add_template", new WxDeleteTemplateIdParam(templateId), WxResult.class);
     }
 
     @Override
     public WxSendTemplateMessageResult sendTemplateMessage(WxTemplateMessageParam wxTemplateMessageParam) {
-        return client.post("/cgi-bin/message/template/send", wxTemplateMessageParam, WxSendTemplateMessageResult.class);
+        return client.postJson("/cgi-bin/message/template/send", wxTemplateMessageParam, WxSendTemplateMessageResult.class);
     }
 
     @Override
     public WxResult sendSubscribeMessage(WxSubscribeMessageParam wxSubscribeMessageParam) {
-        return client.post("/cgi-bin/message/template/subscribe", wxSubscribeMessageParam, WxResult.class);
+        return client.postJson("/cgi-bin/message/template/subscribe", wxSubscribeMessageParam, WxResult.class);
     }
 }

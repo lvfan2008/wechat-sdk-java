@@ -19,7 +19,7 @@ public class ClientImplTest extends TestCase {
      */
     public void ttestPost() {
         WxCheckParam param = new WxCheckParam("all", "DEFAULT");
-        WxCheckResult checkResult = Util.getClient().post("/cgi-bin/callback/check", param, WxCheckResult.class);
+        WxCheckResult checkResult = Util.getClient().postJson("/cgi-bin/callback/check", param, WxCheckResult.class);
         assertTrue(checkResult.success());
     }
 

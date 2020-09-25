@@ -28,7 +28,7 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public WxResult createMenu(WxMenuParam wxMenuParam) {
-        return client.post("/cgi-bin/menu/create", wxMenuParam, WxResult.class);
+        return client.postJson("/cgi-bin/menu/create", wxMenuParam, WxResult.class);
     }
 
     @Override
@@ -43,17 +43,17 @@ public class MenuServiceImpl implements MenuService {
 
     @Override
     public WxCreatePersonalizeMenuResult createPersonalizeMenu(WxPersonalizeMenuParam wxPersonalizeMenuParam) {
-        return client.post("/cgi-bin/menu/addconditional", wxPersonalizeMenuParam, WxCreatePersonalizeMenuResult.class);
+        return client.postJson("/cgi-bin/menu/addconditional", wxPersonalizeMenuParam, WxCreatePersonalizeMenuResult.class);
     }
 
     @Override
     public WxResult deletePersonalizeMenu(WxDeletePersonalizeMenuParam wxDeletePersonalizeMenuParam) {
-        return client.post("/cgi-bin/menu/delconditional", wxDeletePersonalizeMenuParam, WxResult.class);
+        return client.postJson("/cgi-bin/menu/delconditional", wxDeletePersonalizeMenuParam, WxResult.class);
     }
 
     @Override
     public WxTryMatchPersonalizeMenuResult tryMatchPersonalizeMenu(WxTryMatchPersonalizeMenuParam wxTryMatchPersonalizeMenuParam) {
-        return client.post("/cgi-bin/menu/trymatch", wxTryMatchPersonalizeMenuParam, WxTryMatchPersonalizeMenuResult.class);
+        return client.postJson("/cgi-bin/menu/trymatch", wxTryMatchPersonalizeMenuParam, WxTryMatchPersonalizeMenuResult.class);
     }
 
     @Override

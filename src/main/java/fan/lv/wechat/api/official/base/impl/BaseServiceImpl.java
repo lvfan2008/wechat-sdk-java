@@ -34,12 +34,12 @@ public class BaseServiceImpl implements BaseService {
 
     @Override
     public WxCheckResult checkNetwork(WxCheckParam checkParam) {
-        return client.post("/cgi-bin/callback/check", checkParam, WxCheckResult.class);
+        return client.postJson("/cgi-bin/callback/check", checkParam, WxCheckResult.class);
     }
 
     @Override
     public WxResult clearQuota(String appId) {
-        return client.post("/cgi-bin/clear_quota", new WxClearQuotaParam(appId), WxResult.class);
+        return client.postJson("/cgi-bin/clear_quota", new WxClearQuotaParam(appId), WxResult.class);
     }
 
     @Override

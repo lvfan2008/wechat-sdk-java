@@ -25,7 +25,7 @@ public class UserTagServiceImpl implements UserTagService {
 
     @Override
     public WxCreateTagResult createTag(String name) {
-        return client.post("/cgi-bin/tags/create", new WxCreateTagParam(name), WxCreateTagResult.class);
+        return client.postJson("/cgi-bin/tags/create", new WxCreateTagParam(name), WxCreateTagResult.class);
     }
 
     @Override
@@ -35,31 +35,31 @@ public class UserTagServiceImpl implements UserTagService {
 
     @Override
     public WxResult updateTag(Integer id, String name) {
-        return client.post("/cgi-bin/tags/update", new WxUpdateTagParam(id, name), WxResult.class);
+        return client.postJson("/cgi-bin/tags/update", new WxUpdateTagParam(id, name), WxResult.class);
     }
 
     @Override
     public WxResult deleteTag(Integer id) {
-        return client.post("/cgi-bin/tags/delete", new WxDeleteTagParam(id), WxResult.class);
+        return client.postJson("/cgi-bin/tags/delete", new WxDeleteTagParam(id), WxResult.class);
     }
 
     @Override
     public WxGetTagUserResult getTagUser(Integer tagId, String nextOpenId) {
-        return client.post("/cgi-bin/user/tag/get", new WxGetTagUserParam(tagId, nextOpenId), WxGetTagUserResult.class);
+        return client.postJson("/cgi-bin/user/tag/get", new WxGetTagUserParam(tagId, nextOpenId), WxGetTagUserResult.class);
     }
 
     @Override
     public WxResult batchTag(List<String> openIds, Integer tagId) {
-        return client.post("/cgi-bin/tags/members/batchtagging", new WxBatchTagParam(openIds, tagId), WxResult.class);
+        return client.postJson("/cgi-bin/tags/members/batchtagging", new WxBatchTagParam(openIds, tagId), WxResult.class);
     }
 
     @Override
     public WxResult batchCancelTag(List<String> openIds, Integer tagId) {
-        return client.post("/cgi-bin/tags/members/batchuntagging", new WxBatchTagParam(openIds, tagId), WxResult.class);
+        return client.postJson("/cgi-bin/tags/members/batchuntagging", new WxBatchTagParam(openIds, tagId), WxResult.class);
     }
 
     @Override
     public WxGetUserTagListResult getUserTagList(String openId) {
-        return client.post("/cgi-bin/tags/getidlist", new WxGetUserTagListParam(openId), WxGetUserTagListResult.class);
+        return client.postJson("/cgi-bin/tags/getidlist", new WxGetUserTagListParam(openId), WxGetUserTagListResult.class);
     }
 }

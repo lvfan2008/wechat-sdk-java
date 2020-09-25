@@ -27,12 +27,12 @@ public class UserStaticServiceImpl implements UserStaticService {
     @Override
     public WxUserSummaryResult getUserSummary(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getusersummary", (Object) map, WxUserSummaryResult.class);
+        return client.postJson("/datacube/getusersummary", (Object) map, WxUserSummaryResult.class);
     }
 
     @Override
     public WxUserCumulateResult getUserCumulateData(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getusercumulate", (Object) map, WxUserCumulateResult.class);
+        return client.postJson("/datacube/getusercumulate", (Object) map, WxUserCumulateResult.class);
     }
 }

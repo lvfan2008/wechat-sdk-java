@@ -27,37 +27,37 @@ public class ArticleStaticServiceImpl implements ArticleStaticService {
     @Override
     public WxArticlesSummaryResult getArticlesSummary(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getarticlesummary", map, WxArticlesSummaryResult.class);
+        return client.postJson("/datacube/getarticlesummary", map, WxArticlesSummaryResult.class);
     }
 
     @Override
     public WxArticleTotalResult getArticleTotal(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getarticletotal", map, WxArticleTotalResult.class);
+        return client.postJson("/datacube/getarticletotal", map, WxArticleTotalResult.class);
     }
 
     @Override
     public WxUserReadResult getUserRead(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getuserread", map, WxUserReadResult.class);
+        return client.postJson("/datacube/getuserread", map, WxUserReadResult.class);
     }
 
     @Override
     public WxUserReadHourResult getUserReadHour(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getuserreadhour", (Object) map, WxUserReadHourResult.class);
+        return client.postJson("/datacube/getuserreadhour", (Object) map, WxUserReadHourResult.class);
     }
 
     @Override
     public WxUserShareResult getUserShare(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getusershare", (Object) map, WxUserShareResult.class);
+        return client.postJson("/datacube/getusershare", (Object) map, WxUserShareResult.class);
     }
 
     @Override
     public WxUserShareHourResult getUserShareHour(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getusersharehour", (Object) map, WxUserShareHourResult.class);
+        return client.postJson("/datacube/getusersharehour", (Object) map, WxUserShareHourResult.class);
     }
 
 

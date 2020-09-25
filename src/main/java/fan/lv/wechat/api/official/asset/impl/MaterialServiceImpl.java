@@ -43,7 +43,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public WxAddNewsResult addNews(WxArticles articles) {
-        return client.post("/cgi-bin/material/add_news", articles, WxAddNewsResult.class);
+        return client.postJson("/cgi-bin/material/add_news", articles, WxAddNewsResult.class);
     }
 
 
@@ -69,17 +69,17 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public WxGetMaterialResult getMaterial(String mediaId) {
-        return client.post("/cgi-bin/material/get_material", new WxMaterialParam(mediaId), WxGetMaterialResult.class);
+        return client.postJson("/cgi-bin/material/get_material", new WxMaterialParam(mediaId), WxGetMaterialResult.class);
     }
 
     @Override
     public WxResult deleteMaterial(String mediaId) {
-        return client.post("/cgi-bin/material/del_material", new WxMaterialParam(mediaId), WxResult.class);
+        return client.postJson("/cgi-bin/material/del_material", new WxMaterialParam(mediaId), WxResult.class);
     }
 
     @Override
     public WxResult updateNews(WxUpdateNewsParam wxUpdateNewsParam) {
-        return client.post("/cgi-bin/material/update_news", wxUpdateNewsParam, WxResult.class);
+        return client.postJson("/cgi-bin/material/update_news", wxUpdateNewsParam, WxResult.class);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class MaterialServiceImpl implements MaterialService {
 
     @Override
     public WxBatchGetMaterialResult batchGetMaterial(String type, Integer offset, Integer count) {
-        return client.post("/cgi-bin/material/batchget_material",
+        return client.postJson("/cgi-bin/material/batchget_material",
                 new WxBatchGetMaterialParam(type, offset, count),
                 WxBatchGetMaterialResult.class);
     }

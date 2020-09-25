@@ -38,19 +38,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public WxResult addCustomer(String kfAccount, String nickname) {
         Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "nickname", nickname);
-        return client.post("/customservice/kfaccount/add", map, WxResult.class);
+        return client.postJson("/customservice/kfaccount/add", map, WxResult.class);
     }
 
     @Override
     public WxResult inviteBindKfAccount(String kfAccount, String inviteWx) {
         Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "invite_wx", inviteWx);
-        return client.post("/customservice/kfaccount/inviteworker", map, WxResult.class);
+        return client.postJson("/customservice/kfaccount/inviteworker", map, WxResult.class);
     }
 
     @Override
     public WxResult setCustomer(String kfAccount, String nickname) {
         Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "nickname", nickname);
-        return client.post("/customservice/kfaccount/update", map, WxResult.class);
+        return client.postJson("/customservice/kfaccount/update", map, WxResult.class);
     }
 
     @Override
@@ -72,13 +72,13 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public WxResult createSession(String kfAccount, String openId) {
         Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
-        return client.post("/customservice/kfsession/create", map, WxResult.class);
+        return client.postJson("/customservice/kfsession/create", map, WxResult.class);
     }
 
     @Override
     public WxResult closeSession(String kfAccount, String openId) {
         Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
-        return client.post("/customservice/kfsession/close", map, WxResult.class);
+        return client.postJson("/customservice/kfsession/close", map, WxResult.class);
     }
 
     @Override
@@ -104,6 +104,6 @@ public class CustomerServiceImpl implements CustomerService {
                 "starttime", (startTime), "endtime", (endTime),
                 "msgid", (msgId), "number", (number)
         );
-        return client.post("/customservice/kfsession/close", map, WxMsgRecordResult.class);
+        return client.postJson("/customservice/kfsession/close", map, WxMsgRecordResult.class);
     }
 }

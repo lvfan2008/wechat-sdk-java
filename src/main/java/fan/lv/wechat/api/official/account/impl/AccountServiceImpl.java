@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public WxCreateQrCodeResult createQrCode(Integer expireSeconds, String actionName, Integer sceneId, String sceneStr) {
-        return client.post("/cgi-bin/qrcode/create",
+        return client.postJson("/cgi-bin/qrcode/create",
                 new WxCreateQrCodeParam(expireSeconds, actionName, sceneId, sceneStr),
                 WxCreateQrCodeResult.class);
     }
@@ -37,6 +37,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public WxGetShortUrlResult getShortUrl(String longUrl) {
         Map<String, String> map = ImmutableMap.of("action", "long2short", "long_url", longUrl);
-        return client.post("/cgi-bin/shorturl", (Object) map, WxGetShortUrlResult.class);
+        return client.postJson("/cgi-bin/shorturl", (Object) map, WxGetShortUrlResult.class);
     }
 }

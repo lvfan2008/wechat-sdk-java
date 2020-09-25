@@ -1,7 +1,5 @@
 package fan.lv.wechat.api.kernel.impl;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.HttpUtils;
@@ -10,12 +8,12 @@ import fan.lv.wechat.util.RequestOptions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,27 +26,25 @@ abstract public class AbstractClient implements Client {
 
     static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
 
-    /**
-     * @param uri        uri地址
-     * @param resultType 返回类型
-     * @return 返回结果
-     */
     @Override
     public <T extends WxResult> T get(String uri, Class<T> resultType) {
         return this.request(uri, new RequestOptions(), resultType);
     }
 
-    /**
-     * post请求
-     *
-     * @param uri        uri地址
-     * @param object     json参数对象
-     * @param resultType 返回类型
-     * @return 返回结果
-     */
     @Override
-    public <T extends WxResult> T post(String uri, Object object, Class<T> resultType) {
+    public <T extends WxResult> T postJson(String uri, Object object, Class<T> resultType) {
         return this.request(uri, new RequestOptions(JsonUtil.toJson(object), ContentType.APPLICATION_JSON), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T postForm(String uri, Map<String, String> formData, Class<T> resultType) {
+        return this.request(uri, new RequestOptions(Collections.<String, String>emptyMap(), formData,
+                Collections.<String, String>emptyMap()), resultType);
+    }
+
+    @Override
+    public <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType) {
+        return this.request(uri, new RequestOptions(queryMap, formData, Collections.<String, String>emptyMap()), resultType);
     }
 
     @Override
@@ -63,7 +59,7 @@ abstract public class AbstractClient implements Client {
     }
 
     @Override
-    public <T extends WxResult> T post(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
+    public <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
         return this.request(uri, new RequestOptions(queryMap, JsonUtil.toJson(object), ContentType.APPLICATION_JSON), resultType);
     }
 
@@ -132,6 +128,7 @@ abstract public class AbstractClient implements Client {
      * @param <T>         类型变量
      * @return 请求结果
      */
+    @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
         try {
             String url = getBaseUrl() + uri;

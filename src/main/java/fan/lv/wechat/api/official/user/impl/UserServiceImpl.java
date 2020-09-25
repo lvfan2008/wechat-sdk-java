@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public WxResult setUserRemark(String openId, String remark) {
-        return client.post("/cgi-bin/user/info/updateremark", new WxUserRemarkParam(openId, remark), WxResult.class);
+        return client.postJson("/cgi-bin/user/info/updateremark", new WxUserRemarkParam(openId, remark), WxResult.class);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public WxBatchGetUserInfoResult batchGetUserInfo(WxBatchGetUserInfoParam wxBatchGetUserInfoParam) {
-        return client.post("/cgi-bin/user/info/batchget", wxBatchGetUserInfoParam, WxBatchGetUserInfoResult.class);
+        return client.postJson("/cgi-bin/user/info/batchget", wxBatchGetUserInfoParam, WxBatchGetUserInfoResult.class);
     }
 
     @Override
@@ -59,18 +59,18 @@ public class UserServiceImpl implements UserService {
     public WxGetBlackUserResult getBlackUserList(String beginOpenid) {
         Object object = beginOpenid == null ? Collections.<String, String>emptyMap()
                 : Collections.singletonMap("begin_openid", beginOpenid);
-        return client.post("/cgi-bin/tags/members/getblacklist", object, WxGetBlackUserResult.class);
+        return client.postJson("/cgi-bin/tags/members/getblacklist", object, WxGetBlackUserResult.class);
     }
 
     @Override
     public WxResult batchBlackUser(List<String> openIdList) {
         Object object = Collections.singletonMap("openid_list", openIdList);
-        return client.post("/cgi-bin/tags/members/batchblacklist", object, WxResult.class);
+        return client.postJson("/cgi-bin/tags/members/batchblacklist", object, WxResult.class);
     }
 
     @Override
     public WxResult batchCancelBlackUser(List<String> openIdList) {
         Object object = Collections.singletonMap("openid_list", openIdList);
-        return client.post("/cgi-bin/tags/members/batchunblacklist", object, WxResult.class);
+        return client.postJson("/cgi-bin/tags/members/batchunblacklist", object, WxResult.class);
     }
 }

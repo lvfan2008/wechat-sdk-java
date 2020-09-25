@@ -2,8 +2,6 @@ package fan.lv.wechat.api.official.Intelligence.impl;
 
 import fan.lv.wechat.api.official.Intelligence.IntelligenceService;
 import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.official.customer.CustomerService;
-import fan.lv.wechat.api.official.customer.impl.CustomerServiceImpl;
 import fan.lv.wechat.entity.official.intelligence.*;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
@@ -48,7 +46,7 @@ public class IntelligenceServiceImplTest extends TestCase {
     }
 
     public void testAiTranslateVoice() {
-        WxAiTranslateResult result = intelligenceService.aiTranslateVoice("hello world", "en_US","zh_CN");
+        WxAiTranslateResult result = intelligenceService.aiTranslateVoice("hello world", "en_US", "zh_CN");
         assertTrue(result.success());
     }
 
@@ -57,32 +55,32 @@ public class IntelligenceServiceImplTest extends TestCase {
         assertTrue(result.success() || result.getErrorCode() == 48001);
 
         result = intelligenceService.ocrIdCard(Util.getProperty("ocr.idCardBack"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
     public void testOcrBankCard() {
         WxOcrBankCardResult result = intelligenceService.ocrBankCard(Util.getProperty("ocr.bankCard"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
     public void testOcrDrivingCard() {
         WxOcrDrivingCardResult result = intelligenceService.ocrDrivingCard(Util.getProperty("ocr.drivingCard"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
     public void testOcrDrivingLicenseCard() {
         WxOcrDrivingLicenseCardResult result = intelligenceService.ocrDrivingLicenseCard(Util.getProperty("ocr.drivingLicenseCard"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
     public void testOcrBizLicense() {
         WxOcrBizLicenseResult result = intelligenceService.ocrBizLicense(Util.getProperty("ocr.drivingLicenseCard"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
     public void testOcrCommon() {
         WxOcrCommonResult result = intelligenceService.ocrCommon(Util.getProperty("ocr.common"), false);
-        assertTrue(result.success()|| result.getErrorCode() == 48001);
+        assertTrue(result.success() || result.getErrorCode() == 48001);
     }
 
 }

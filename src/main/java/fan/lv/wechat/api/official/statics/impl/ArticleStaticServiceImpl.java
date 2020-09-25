@@ -27,19 +27,19 @@ public class ArticleStaticServiceImpl implements ArticleStaticService {
     @Override
     public WxArticlesSummaryResult getArticlesSummary(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getarticlesummary", (Object) map, WxArticlesSummaryResult.class);
+        return client.post("/datacube/getarticlesummary", map, WxArticlesSummaryResult.class);
     }
 
     @Override
     public WxArticleTotalResult getArticleTotal(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getarticletotal", (Object) map, WxArticleTotalResult.class);
+        return client.post("/datacube/getarticletotal", map, WxArticleTotalResult.class);
     }
 
     @Override
     public WxUserReadResult getUserRead(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getuserread", (Object) map, WxUserReadResult.class);
+        return client.post("/datacube/getuserread", map, WxUserReadResult.class);
     }
 
     @Override

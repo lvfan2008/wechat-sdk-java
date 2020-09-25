@@ -28,13 +28,13 @@ public class MessageStaticServiceImpl implements MessageStaticService {
     @Override
     public WxUpStreamMsgResult getUpStreamMsgData(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getupstreammsg", (Object) map, WxUpStreamMsgResult.class);
+        return client.post("/datacube/getupstreammsg", map, WxUpStreamMsgResult.class);
     }
 
     @Override
     public WxUpStreamMsgHourResult getUpStreamMsgHourData(String beginDate, String endDate) {
         Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
-        return client.post("/datacube/getupstreammsghour", (Object) map, WxUpStreamMsgHourResult.class);
+        return client.post("/datacube/getupstreammsghour", map, WxUpStreamMsgHourResult.class);
     }
 
     @Override

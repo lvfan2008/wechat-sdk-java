@@ -6,10 +6,7 @@ import fan.lv.wechat.api.official.account.AccountService;
 import fan.lv.wechat.entity.official.account.WxCreateQrCodeParam;
 import fan.lv.wechat.entity.official.account.WxCreateQrCodeResult;
 import fan.lv.wechat.entity.official.account.WxGetShortUrlResult;
-import fan.lv.wechat.entity.official.user.WxUserRemarkParam;
-import fan.lv.wechat.entity.result.WxResult;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**

@@ -1,7 +1,6 @@
 package fan.lv.wechat.api.official.customer;
 
-import fan.lv.wechat.entity.official.customer.WxCustomerListResult;
-import fan.lv.wechat.entity.official.customer.WxOnlineCustomerListResult;
+import fan.lv.wechat.entity.official.customer.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
@@ -69,4 +68,45 @@ public interface CustomerService {
      * @return 返回结果
      */
     WxResult delCustomer(String kfAccount);
+
+    /**
+     * 创建会话，此接口在客服和用户之间创建一个会话，如果该客服和用户会话已存在，则直接返回0。指定的客服帐号必须已经绑定微信号且在线。
+     *
+     * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
+     * @param openId    粉丝的openid
+     * @return 返回结果
+     */
+    WxResult createSession(String kfAccount, String openId);
+
+    /**
+     * 关闭会话
+     *
+     * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
+     * @param openId    粉丝的openid
+     * @return 返回结果
+     */
+    WxResult closeSession(String kfAccount, String openId);
+
+    /**
+     * 获取客户会话状态
+     *
+     * @param openId 粉丝的openid
+     * @return 客户会话状态
+     */
+    WxSessionResult getSession(String openId);
+
+    /**
+     * 获取客服会话列表
+     *
+     * @param kfAccount 完整客服帐号，格式为：帐号前缀@公众号微信号
+     * @return 会话列表
+     */
+    WxSessionListResult getSessionList(String kfAccount);
+
+    /**
+     * 获取未接入会话列表
+     *
+     * @return 未接入会话列表
+     */
+    WxWaitSessionListResult getWaitSessionList();
 }

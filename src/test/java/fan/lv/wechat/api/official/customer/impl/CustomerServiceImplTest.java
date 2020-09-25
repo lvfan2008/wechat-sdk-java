@@ -70,4 +70,41 @@ public class CustomerServiceImplTest extends TestCase {
         WxResult result2 = customerService.delCustomer(account);
         assertTrue(result2.success() || result2.getErrorCode() == 65400);
     }
+
+    public void testCreateSession() {
+        String rand = String.valueOf((new Random().nextInt()));
+        String account = "user" + rand + "@test";
+        WxResult result = customerService.createSession(account, Util.getProperty("user_id"));
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
+
+    public void testCloseSession() {
+        String rand = String.valueOf((new Random().nextInt()));
+        String account = "user" + rand + "@test";
+        customerService.createSession(account, Util.getProperty("user_id"));
+        WxResult result = customerService.closeSession(account, Util.getProperty("user_id"));
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
+
+
+    public void testGetSession() {
+        String rand = String.valueOf((new Random().nextInt()));
+        String account = "user" + rand + "@test";
+        customerService.createSession(account, Util.getProperty("user_id"));
+        WxResult result = customerService.getSession(Util.getProperty("user_id"));
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
+
+    public void testGetSessionList() {
+        String rand = String.valueOf((new Random().nextInt()));
+        String account = "user" + rand + "@test";
+        customerService.createSession(account, Util.getProperty("user_id"));
+        WxResult result = customerService.getSessionList(account);
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
+
+    public void testGetWaitSessionList() {
+        WxResult result = customerService.getWaitSessionList();
+        assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
 }

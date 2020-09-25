@@ -3,8 +3,7 @@ package fan.lv.wechat.api.official.customer.impl;
 import com.google.common.collect.ImmutableMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.customer.CustomerService;
-import fan.lv.wechat.entity.official.customer.WxCustomerListResult;
-import fan.lv.wechat.entity.official.customer.WxOnlineCustomerListResult;
+import fan.lv.wechat.entity.official.customer.*;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.util.Map;
@@ -68,5 +67,34 @@ public class CustomerServiceImpl implements CustomerService {
         return client.get("/customservice/kfaccount/del",
                 ImmutableMap.of("kf_account", kfAccount),
                 WxResult.class);
+    }
+
+    @Override
+    public WxResult createSession(String kfAccount, String openId) {
+        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
+        return client.post("/customservice/kfsession/create", map, WxResult.class);
+    }
+
+    @Override
+    public WxResult closeSession(String kfAccount, String openId) {
+        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
+        return client.post("/customservice/kfsession/close", map, WxResult.class);
+    }
+
+    @Override
+    public WxSessionResult getSession(String openId) {
+        return client.get("/customservice/kfsession/getsession", ImmutableMap.of("openid", openId),
+                WxSessionResult.class);
+    }
+
+    @Override
+    public WxSessionListResult getSessionList(String kfAccount) {
+        return client.get("/customservice/kfsession/getsessionlist", ImmutableMap.of("kf_account", kfAccount),
+                WxSessionListResult.class);
+    }
+
+    @Override
+    public WxWaitSessionListResult getWaitSessionList() {
+        return client.get("/customservice/kfsession/getwaitcase", WxWaitSessionListResult.class);
     }
 }

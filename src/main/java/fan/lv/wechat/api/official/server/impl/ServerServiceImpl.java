@@ -131,11 +131,11 @@ public class ServerServiceImpl implements ServerService {
      * @return 返回回复信息
      */
     protected String processMessage(String xmlMessage) {
-        BaseReceiveMessage object = new BaseReceiveMessage();
-        BaseReceiveMessage message = (BaseReceiveMessage) XmlUtil.parseXml(xmlMessage, object);
+        BaseReceiveMessage message = (BaseReceiveMessage) XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class);
         Class<? extends BaseReceiveMessage> type = getMessageTypeValue(message.getMsgType(), message.getEvent());
+        Object realMessage = XmlUtil.parseXml(xmlMessage, type);
         for (MessageCallback callback : callbackList) {
-            BaseReplyMessage result = callback.handle(message);
+            BaseReplyMessage result = callback.handle(type.cast(realMessage));
             if (result != null) {
                 result.setToUserName(message.getFromUserName());
                 if (StringUtils.isEmpty(result.getFromUserName())) {

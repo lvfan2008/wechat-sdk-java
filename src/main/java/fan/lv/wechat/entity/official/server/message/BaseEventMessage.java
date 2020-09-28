@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
  * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
-@XStreamAlias("xml")
 @Data
 public class BaseEventMessage extends BaseReceiveMessage {
     /**

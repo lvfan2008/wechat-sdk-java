@@ -6,7 +6,6 @@ import lombok.Data;
 /**
  * @author lv_fan2008
  */
-@XStreamAlias("xml")
 @Data
 public class BaseMessage {
     /**

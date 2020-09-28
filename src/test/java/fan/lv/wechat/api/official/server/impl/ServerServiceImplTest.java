@@ -1,13 +1,6 @@
 package fan.lv.wechat.api.official.server.impl;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.ReplyMessage;
-import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.official.message.impl.MassSendServiceImpl;
-import fan.lv.wechat.api.official.server.MessageCallback;
 import fan.lv.wechat.api.official.server.ServerService;
-import fan.lv.wechat.entity.official.server.message.BaseMessage;
-import fan.lv.wechat.entity.official.server.message.BaseReceiveMessage;
-import fan.lv.wechat.entity.official.server.message.CommonTextMessage;
 import fan.lv.wechat.entity.official.server.message.ReplyTextMessage;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;

@@ -4,6 +4,7 @@ import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.customer.CustomerService;
 import fan.lv.wechat.entity.official.customer.WxCustomerListResult;
 import fan.lv.wechat.entity.official.customer.WxOnlineCustomerListResult;
+import fan.lv.wechat.entity.official.customer.message.TextKfMessage;
 import fan.lv.wechat.entity.result.WxResult;
 import junit.framework.TestCase;
 
@@ -113,5 +114,15 @@ public class CustomerServiceImplTest extends TestCase {
         int endTime = starTime + 3600 * 2;
         WxResult result = customerService.getMsgRecord(starTime, endTime, 1, 100);
         assertTrue(result.success() || result.getErrorCode() == 65400);
+    }
+
+    public void testSendMessage() {
+        WxResult result = customerService.sendMessage(Util.getProperty("user_id"),new TextKfMessage("hello"));
+        assertTrue(result.success() || result.getErrorCode() == 45015);
+    }
+
+    public void testSendKfTypingState() {
+        WxResult result = customerService.sendKfTypingState(Util.getProperty("user_id"),"Typing");
+        assertTrue(result.success() || result.getErrorCode() == 45015);
     }
 }

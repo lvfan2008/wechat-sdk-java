@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.official.customer;
 
 import fan.lv.wechat.entity.official.customer.*;
+import fan.lv.wechat.entity.official.customer.message.BaseKfMessage;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
@@ -134,5 +135,30 @@ public interface CustomerService {
      */
     WxMsgRecordResult getMsgRecord(Integer startTime, Integer endTime, Integer msgId, Integer number);
 
+    /**
+     * 发送客服消息
+     *
+     * @param toUser    粉丝OpenId
+     * @param kfMessage 客服消息，BaseKfMessage的子类的实例
+     * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Service_Center_messages.html" target="_blank">微信官方接口文档</a>
+     */
+    WxResult sendMessage(String toUser, BaseKfMessage kfMessage);
 
+    /**
+     * 发送客服输入状态
+     * 如果不满足发送客服消息的触发条件，则无法下发输入状态。
+     * <p>
+     * 下发输入状态，需要客服之前30秒内跟用户有过消息交互。
+     * <p>
+     * 在输入状态中（持续15s），不可重复下发输入态。
+     * <p>
+     * 在输入状态中，如果向用户下发消息，会同时取消输入状态。
+     *
+     * @param toUser  粉丝OpenId
+     * @param command "Typing"：对用户下发“正在输入"状态 "CancelTyping"：取消对用户的”正在输入"状态
+     * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Message_Management/Service_Center_messages.html" target="_blank">微信官方接口文档</a>
+     */
+    WxResult sendKfTypingState(String toUser, String command);
 }

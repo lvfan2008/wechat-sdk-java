@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.customer.CustomerService;
 import fan.lv.wechat.entity.official.customer.*;
+import fan.lv.wechat.entity.official.customer.message.BaseKfMessage;
 import fan.lv.wechat.entity.result.WxResult;
 
 import java.util.Map;
@@ -105,5 +106,17 @@ public class CustomerServiceImpl implements CustomerService {
                 "msgid", (msgId), "number", (number)
         );
         return client.postJson("/customservice/kfsession/close", map, WxMsgRecordResult.class);
+    }
+
+    @Override
+    public WxResult sendMessage(String toUser, BaseKfMessage kfMessage) {
+        kfMessage.setToUser(toUser);
+        return client.postJson("/cgi-bin/message/custom/send", kfMessage, WxResult.class);
+    }
+
+    @Override
+    public WxResult sendKfTypingState(String toUser, String command) {
+        Map<String, String> map = ImmutableMap.of("touser", toUser, "command", command);
+        return client.postJson("/cgi-bin/message/custom/typing", map, WxResult.class);
     }
 }

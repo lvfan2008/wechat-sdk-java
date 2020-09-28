@@ -13,14 +13,13 @@
  */
 package fan.lv.wechat.util.crpto;
 
-import org.apache.commons.codec.binary.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Random;
 
 /**
@@ -40,7 +39,6 @@ import java.util.Random;
  */
 public class WxBizMsgCrypt {
 	static Charset CHARSET = StandardCharsets.UTF_8;
-	Base64 base64 = new Base64();
 	byte[] aesKey;
 	String token;
 	String appId;
@@ -61,7 +59,7 @@ public class WxBizMsgCrypt {
 
 		this.token = token;
 		this.appId = appId;
-		aesKey = Base64.decodeBase64(encodingAesKey + "=");
+		aesKey = Base64.getMimeDecoder().decode(encodingAesKey + "=");
 	}
 
 	// 生成4个字节的网络字节序
@@ -135,7 +133,7 @@ public class WxBizMsgCrypt {
 
 			// 使用BASE64对加密后的字符串进行编码
 
-			return base64.encodeToString(encrypted);
+			return Base64.getMimeEncoder().encodeToString(encrypted);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new AesException(AesException.ENCRYPT_AES_ERROR);
@@ -159,7 +157,7 @@ public class WxBizMsgCrypt {
 			cipher.init(Cipher.DECRYPT_MODE, keySpec, iv);
 
 			// 使用BASE64对密文进行解码
-			byte[] encrypted = Base64.decodeBase64(text);
+			byte[] encrypted = Base64.getMimeDecoder().decode(text);
 
 			// 解密
 			original = cipher.doFinal(encrypted);

@@ -7,6 +7,7 @@ import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.entity.official.server.message.*;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.crpto.AesException;
+import fan.lv.wechat.util.crpto.SHA1;
 import fan.lv.wechat.util.crpto.WxBizMsgCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -83,21 +84,27 @@ public class ServerServiceImpl implements ServerService {
         try {
             crypt = new WxBizMsgCrypt(token, encodingAesKey, appId);
             if (!StringUtils.isEmpty(echoStr)) {
-                reply = crypt.verifyUrl(signature, timestamp, nonce, echoStr);
+                String calSig = SHA1.getSHA1(token, timestamp, nonce, "");
+                if (calSig.equals(signature)) {
+                    reply = echoStr;
+                }
             } else {
                 String xmlMessage = xmlBody;
-                if (xmlBody.contains("<Encrypt>")) {
+                boolean encrypt = xmlBody.contains("<Encrypt>");
+                if (encrypt) {
                     xmlMessage = crypt.decryptMsg(signature, timestamp, nonce, xmlBody);
                 }
                 log.debug("decryptMsg: {}", xmlMessage);
                 reply = processMessage(xmlMessage);
                 log.debug("processMessage reply: {}", reply);
+                if (encrypt) {
+                    reply = crypt.encryptMsg(reply, "", nonce);
+                }
             }
             reply = reply == null ? "success" : reply;
-            reply = crypt.encryptMsg(reply, "", nonce);
-            log.debug("encryptMsg reply: {}", reply);
         } catch (AesException e) {
-            throw new RuntimeException(e);
+            log.error("param: {} {} {} {} {}, AesException:{}", signature, timestamp, nonce, echoStr, xmlBody, e.getMessage());
+            return "success";
         }
         return reply;
     }

@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 /**
  * @author lv_fan2008
  */
-public class ArticleStaticServiceImplTest extends TestCase {
+public class MenuStaticServiceImplTest extends TestCase {
 
     ArticleStaticService articleStaticService;
 

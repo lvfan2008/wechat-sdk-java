@@ -133,4 +133,6 @@ public interface CustomerService {
      * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Customer_Service/Obtain_chat_transcript.html" target="_blank">微信官方接口文档</a>
      */
     WxMsgRecordResult getMsgRecord(Integer startTime, Integer endTime, Integer msgId, Integer number);
+
+
 }

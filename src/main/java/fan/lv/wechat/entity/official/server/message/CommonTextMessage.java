@@ -25,4 +25,10 @@ public class CommonTextMessage extends BaseCommonMessage {
      */
     @XStreamAlias("Content")
     String content;
+
+    /**
+     * 点击的菜单ID，主要用于客服发送菜单消息时，点击菜单时的回复。
+     */
+    @XStreamAlias("bizmsgmenuid")
+    String bizMsgMenuId;
 }

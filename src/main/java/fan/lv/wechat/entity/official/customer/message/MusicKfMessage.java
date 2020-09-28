@@ -1,36 +1,44 @@
-package fan.lv.wechat.entity.official.server.message;
+package fan.lv.wechat.entity.official.customer.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import lombok.*;
+import fan.lv.wechat.entity.official.server.message.ReplyMusicMessage;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
- * 回复音乐消息
- *
  * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
-@XStreamAlias("xml")
 @Data
 @NoArgsConstructor
-public class ReplyMusicMessage extends BaseReplyMessage {
-
+public class MusicKfMessage extends BaseKfMessage {
     /**
-     * 消息类型
+     * 发送类型
      */
-    @XStreamAlias("MsgType")
+    @JsonProperty("msgtype")
     String msgType = "music";
 
     /**
      * 图片
      */
-    @XStreamAlias("Music")
     Music music;
 
-    public ReplyMusicMessage(String title, String description, String musicUrl, String hqMusicUrl, String thumbMediaId) {
+    /**
+     * 构造音乐消息
+     *
+     * @param title        音乐标题
+     * @param description  音乐描述
+     * @param musicUrl     音乐Url
+     * @param hqMusicUrl   高质量音乐链接
+     * @param thumbMediaId 缩略图的媒体id
+     */
+    public MusicKfMessage(String title, String description, String musicUrl, String hqMusicUrl, String thumbMediaId) {
         this.music = new Music(title, description, musicUrl, hqMusicUrl, thumbMediaId);
     }
 
-    @XStreamAlias("Music")
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -38,32 +46,30 @@ public class ReplyMusicMessage extends BaseReplyMessage {
         /**
          * 音乐标题
          */
-        @XStreamAlias("Title")
         String title;
 
 
         /**
          * 音乐描述
          */
-        @XStreamAlias("Description")
         String description;
 
         /**
          * 音乐Url
          */
-        @XStreamAlias("MusicURL")
+        @JsonProperty("musicurl")
         String musicUrl;
 
         /**
          * 高质量音乐链接，WIFI环境优先使用该链接播放音乐
          */
-        @XStreamAlias("HQMusicUrl")
+        @JsonProperty("hqmusicurl")
         String hqMusicUrl;
 
         /**
          * 缩略图的媒体id，通过素材管理中的接口上传多媒体文件，得到的id
          */
-        @XStreamAlias("ThumbMediaId")
+        @JsonProperty("thumb_media_id")
         String thumbMediaId;
     }
 }

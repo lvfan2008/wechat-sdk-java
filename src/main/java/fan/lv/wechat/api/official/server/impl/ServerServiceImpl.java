@@ -1,6 +1,5 @@
 package fan.lv.wechat.api.official.server.impl;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.ImmutableMap;
 import fan.lv.wechat.api.official.server.MessageCallback;
 import fan.lv.wechat.api.official.server.ServerService;
@@ -84,7 +83,7 @@ public class ServerServiceImpl implements ServerService {
         try {
             crypt = new WxBizMsgCrypt(token, encodingAesKey, appId);
             if (!StringUtils.isEmpty(echoStr)) {
-                String calSig = SHA1.getSHA1(token, timestamp, nonce, "");
+                String calSig = SHA1.getSha1(token, timestamp, nonce, "");
                 if (calSig.equals(signature)) {
                     reply = echoStr;
                 }

@@ -216,7 +216,7 @@ public class WxBizMsgCrypt {
 			timeStamp = Long.toString(System.currentTimeMillis());
 		}
 
-		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt);
+		String signature = SHA1.getSha1(token, timeStamp, nonce, encrypt);
 
 		// System.out.println("发送给平台的签名是: " + signature[1].toString());
 		// 生成发送的xml
@@ -247,7 +247,7 @@ public class WxBizMsgCrypt {
 		Object[] encrypt = XmlParse.extract(postData);
 
 		// 验证安全签名
-		String signature = SHA1.getSHA1(token, timeStamp, nonce, encrypt[1].toString());
+		String signature = SHA1.getSha1(token, timeStamp, nonce, encrypt[1].toString());
 
 		// 和URL中的签名比较是否相等
 		// System.out.println("第三方收到URL中的签名：" + msg_sign);
@@ -272,7 +272,7 @@ public class WxBizMsgCrypt {
 	 */
 	public String verifyUrl(String msgSignature, String timeStamp, String nonce, String echoStr)
 			throws AesException {
-		String signature = SHA1.getSHA1(token, timeStamp, nonce, echoStr);
+		String signature = SHA1.getSha1(token, timeStamp, nonce, echoStr);
 
 		if (!signature.equals(msgSignature)) {
 			throw new AesException(AesException.VALIDATE_SIGNATURE_ERROR);

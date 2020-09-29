@@ -24,7 +24,16 @@ import java.util.regex.Pattern;
 @Slf4j
 abstract public class AbstractClient implements Client {
 
+    /**
+     * token过期码
+     */
+    public static final int ERROR_CODE_ACCESS_TOKEN_TIMEOUT = 42001;
+
+    /**
+     * 下载文件名字匹配
+     */
     static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
+
 
     @Override
     public <T extends WxResult> T get(String uri, Class<T> resultType) {
@@ -89,18 +98,11 @@ abstract public class AbstractClient implements Client {
     abstract protected String getBaseUrl();
 
     /**
-     * 得到缓存Token
+     * 获取缓存中的token
      *
-     * @return 缓存Token
+     * @return token串
      */
-    abstract protected String getCacheToken();
-
-    /**
-     * 获取凭证Token,并缓存当前Token
-     *
-     * @return 凭证
-     */
-    abstract protected WxResult getAccessToken();
+    protected abstract String getCacheToken();
 
     /**
      * 通过结果错误码，查看是否token过期
@@ -108,7 +110,9 @@ abstract public class AbstractClient implements Client {
      * @param wxResult 请求结果
      * @return 是否token过期
      */
-    abstract protected boolean isTokenExpired(WxResult wxResult);
+    protected boolean isTokenExpired(WxResult wxResult) {
+        return wxResult.getErrorCode() == ERROR_CODE_ACCESS_TOKEN_TIMEOUT;
+    }
 
     /**
      * 创建带token的url
@@ -137,7 +141,7 @@ abstract public class AbstractClient implements Client {
                 if (StringUtils.isEmpty(accessToken)) {
                     WxResult wxResult = this.getAccessToken();
                     if (!wxResult.success()) {
-                        return errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
+                        return WxResult.errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
                     }
                 }
                 url = this.buildAccessTokenUrl(url, getCacheToken());
@@ -150,7 +154,7 @@ abstract public class AbstractClient implements Client {
             int statusOk = 200;
             if (httpResponse.getStatusLine().getStatusCode() != statusOk) {
                 log.error("getStatusCode() != statusOk httpResponse: {}", httpResponse.toString());
-                return errorResult(-4, httpResponse.getStatusLine().toString(), resultType);
+                return WxResult.errorResult(-4, httpResponse.getStatusLine().toString(), resultType);
             }
 
             // 如果不是json类型，则为原始数据流
@@ -173,7 +177,7 @@ abstract public class AbstractClient implements Client {
             log.debug("result: {}", JsonUtil.toJson(wxResult));
             return wxResult;
         } catch (IOException e) {
-            return errorResult(-3, e.getMessage(), resultType);
+            return WxResult.errorResult(-3, e.getMessage(), resultType);
         }
     }
 
@@ -230,27 +234,6 @@ abstract public class AbstractClient implements Client {
             }
         }
         return null;
-    }
-
-    /**
-     * 转为相应的错误结果
-     *
-     * @param errorCode    错误码
-     * @param errorMessage 错误消息
-     * @param resultType   结果类型
-     * @param <T>          模板类型
-     * @return 错误结果
-     */
-    protected <T extends WxResult> T errorResult(Integer errorCode, String errorMessage, Class<T> resultType) {
-        T result;
-        try {
-            result = resultType.newInstance();
-            result.setErrorCode(errorCode);
-            result.setErrorMessage(errorMessage);
-            return result;
-        } catch (Exception exception) {
-            throw new RuntimeException(exception.getMessage());
-        }
     }
 
 }

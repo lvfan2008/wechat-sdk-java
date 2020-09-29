@@ -91,7 +91,7 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData,  Class<T> resultType);
+    <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType);
 
     /**
      * 上传文件
@@ -117,4 +117,22 @@ public interface Client {
      * @return 返回结果
      */
     <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType);
+
+
+    /**
+     * 获取凭证Token
+     *
+     * @return 凭证结果，必须为WxResult子类的实例
+     */
+    default WxResult getAccessToken() {
+        return getAccessToken(true);
+    }
+
+    /**
+     * 获取凭证Token,如果缓存过期或者不从缓存取，需要缓存已得到的Token
+     *
+     * @param tryCache 是否尝试从cache里获取凭证
+     * @return 凭证结果，必须为WxResult子类的实例
+     */
+    WxResult getAccessToken(boolean tryCache);
 }

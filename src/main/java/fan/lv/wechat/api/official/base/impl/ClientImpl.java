@@ -15,11 +15,6 @@ import org.apache.commons.lang3.StringUtils;
 public class ClientImpl extends AbstractClient {
 
     /**
-     * token过期码
-     */
-    public static final int ERROR_CODE_ACCESS_TOKEN_TIMEOUT = 42001;
-
-    /**
      * api base url
      */
     protected static final String BASE_URL = "https://api.weixin.qq.com";
@@ -94,22 +89,20 @@ public class ClientImpl extends AbstractClient {
     }
 
     @Override
-    protected boolean isTokenExpired(WxResult wxResult) {
-        return wxResult.getErrorCode() == ERROR_CODE_ACCESS_TOKEN_TIMEOUT;
-    }
-
-    @Override
     protected String buildAccessTokenUrl(String url, String accessToken) {
         return url + (url.contains("?") ? "&" : "?") + "access_token=" + accessToken;
     }
 
-    /**
-     * 获取全局唯一接口调用凭据
-     *
-     * @return 接口调用凭据
-     */
+
     @Override
-    protected WxResult getAccessToken() {
+    public WxResult getAccessToken(boolean tryCache) {
+        if (tryCache) {
+            String json = cache.get(getAccessTokenCacheKey());
+            if (!StringUtils.isEmpty(json)) {
+                return JsonUtil.parseJson(json, WxAccessTokenResult.class);
+            }
+        }
+
         String url = String.format("/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", appId, appSecret);
         WxAccessTokenResult accessTokenResult = this.get(url, WxAccessTokenResult.class);
         if (accessTokenResult.success()) {

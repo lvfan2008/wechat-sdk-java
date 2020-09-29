@@ -24,6 +24,4 @@ public class WxAccessTokenResult extends WxResult {
      */
     @JsonProperty("expires_in")
     Integer expiresIn;
-
-
 }

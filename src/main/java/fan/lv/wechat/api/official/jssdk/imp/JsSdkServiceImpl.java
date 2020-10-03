@@ -62,16 +62,13 @@ public class JsSdkServiceImpl implements JsSdkService {
         return result;
     }
 
-    @Override
-    public String signatureJsSdk(String nonce, String timestamp, String url, String ticket) {
+    private String signatureJsSdk(String nonce, String timestamp, String url, String ticket) {
         return SignUtil.sha1(String.format("jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s",
                 ticket, nonce, timestamp, url));
     }
 
     @Override
-    public WxJsConfig getJsConfig(Boolean debug, List<String> jsApiList, String url, String ticket) {
-        WxJsConfig jsConfig = new WxJsConfig();
-        jsConfig.setDebug(debug);
+    public WxJsConfig getSignedJsConfig(WxJsConfig jsConfig, String url, String ticket) {
         jsConfig.setAppId(appId);
         if (StringUtils.isEmpty(jsConfig.getNonceStr())) {
             jsConfig.setNonceStr(SignUtil.nonceStr());
@@ -79,7 +76,6 @@ public class JsSdkServiceImpl implements JsSdkService {
         if (StringUtils.isEmpty(jsConfig.getTimestamp())) {
             jsConfig.setTimestamp(SignUtil.timestamp());
         }
-        jsConfig.setJsApiList(jsApiList);
         jsConfig.setSignature(signatureJsSdk(jsConfig.getNonceStr(), jsConfig.getTimestamp(), url, ticket));
         return jsConfig;
     }
@@ -101,7 +97,7 @@ public class JsSdkServiceImpl implements JsSdkService {
     }
 
     @Override
-    public WxCardExt signatureCartExt(WxCardExt cardExt, String cardApiTicket, String cardId, String balance) {
+    public WxCardExt getSignedCartExt(WxCardExt cardExt, String cardApiTicket, String cardId, String balance) {
         if (StringUtils.isEmpty(cardExt.getNonceStr())) {
             cardExt.setNonceStr(SignUtil.nonceStr());
         }
@@ -120,7 +116,7 @@ public class JsSdkServiceImpl implements JsSdkService {
     }
 
     @Override
-    public WxChooseCard signatureChooseCard(WxChooseCard chooseCard, String cardApiTicket, String locationId) {
+    public WxChooseCard getSignedChooseCard(WxChooseCard chooseCard, String cardApiTicket, String locationId) {
         if (StringUtils.isEmpty(chooseCard.getNonceStr())) {
             chooseCard.setNonceStr(SignUtil.nonceStr());
         }

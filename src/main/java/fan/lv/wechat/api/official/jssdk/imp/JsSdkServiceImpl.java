@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * @author lv_fan2008
  */
@@ -71,8 +73,12 @@ public class JsSdkServiceImpl implements JsSdkService {
         WxJsConfig jsConfig = new WxJsConfig();
         jsConfig.setDebug(debug);
         jsConfig.setAppId(appId);
-        jsConfig.setNonceStr(SignUtil.nonceStr());
-        jsConfig.setTimestamp(SignUtil.timestamp());
+        if (StringUtils.isEmpty(jsConfig.getNonceStr())) {
+            jsConfig.setNonceStr(SignUtil.nonceStr());
+        }
+        if (StringUtils.isEmpty(jsConfig.getTimestamp())) {
+            jsConfig.setTimestamp(SignUtil.timestamp());
+        }
         jsConfig.setJsApiList(jsApiList);
         jsConfig.setSignature(signatureJsSdk(jsConfig.getNonceStr(), jsConfig.getTimestamp(), url, ticket));
         return jsConfig;
@@ -95,14 +101,19 @@ public class JsSdkServiceImpl implements JsSdkService {
     }
 
     @Override
-    public WxCardExt signatureChooseCard(WxCardExt cardExt, String cardApiTicket, String cardId, String balance) {
-        cardExt.setNonceStr(SignUtil.nonceStr());
-        cardExt.setTimestamp(SignUtil.timestamp());
+    public WxCardExt signatureCartExt(WxCardExt cardExt, String cardApiTicket, String cardId, String balance) {
+        if (StringUtils.isEmpty(cardExt.getNonceStr())) {
+            cardExt.setNonceStr(SignUtil.nonceStr());
+        }
+        if (StringUtils.isEmpty(cardExt.getTimestamp())) {
+            cardExt.setTimestamp(SignUtil.timestamp());
+        }
         String[] values = new String[]{
                 cardExt.getCode(), cardExt.getNonceStr(), cardExt.getTimestamp(), cardApiTicket,
                 cardExt.getOpenId(), cardExt.getOuterStr(), cardId, balance,
                 cardExt.getFixedBeginTimestamp()
         };
+        values = Arrays.stream(values).map(StringUtils::defaultString).toArray(String[]::new);
         Arrays.sort(values);
         cardExt.setSignature(SignUtil.sha1(StringUtils.join(values)));
         return cardExt;
@@ -110,13 +121,18 @@ public class JsSdkServiceImpl implements JsSdkService {
 
     @Override
     public WxChooseCard signatureChooseCard(WxChooseCard chooseCard, String cardApiTicket, String locationId) {
-        chooseCard.setNonceStr(SignUtil.nonceStr());
-        chooseCard.setTimestamp(SignUtil.timestamp());
+        if (StringUtils.isEmpty(chooseCard.getNonceStr())) {
+            chooseCard.setNonceStr(SignUtil.nonceStr());
+        }
+        if (StringUtils.isEmpty(chooseCard.getTimestamp())) {
+            chooseCard.setTimestamp(SignUtil.timestamp());
+        }
         String[] values = new String[]{
                 appId, cardApiTicket, locationId,
                 chooseCard.getNonceStr(), chooseCard.getTimestamp(),
                 chooseCard.getCardId(), chooseCard.getCardType()
         };
+        values = Arrays.stream(values).map(StringUtils::defaultString).toArray(String[]::new);
         Arrays.sort(values);
         chooseCard.setCardSign(SignUtil.sha1(StringUtils.join(values)));
         return chooseCard;

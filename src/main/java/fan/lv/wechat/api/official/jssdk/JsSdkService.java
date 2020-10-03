@@ -79,7 +79,7 @@ public interface JsSdkService {
      * @param balance       红包类型余额
      * @return 签名
      */
-    WxCardExt signatureChooseCard(WxCardExt cardExt, String cardApiTicket, String cardId, String balance);
+    WxCardExt signatureCartExt(WxCardExt cardExt, String cardApiTicket, String cardId, String balance);
 
     /**
      * 拉取适用卡券列表(wx.chooseCard)签名

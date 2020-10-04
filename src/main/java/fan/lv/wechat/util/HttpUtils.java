@@ -66,7 +66,6 @@ public class HttpUtils {
             ((HttpPost) httpUriRequest).setEntity(new StringEntity(httpOptions.body, httpOptions.contentType));
         }
         return httpClient.execute(httpUriRequest);
-//        return EntityUtils.toString(httpResponse.getEntity());
     }
 
 
@@ -103,6 +102,6 @@ public class HttpUtils {
                 throw new RuntimeException(e);
             }
         }
-        return StringUtils.joinWith("&", elements);
+        return StringUtils.joinWith("&", elements.toArray());
     }
 }

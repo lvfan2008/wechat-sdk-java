@@ -36,7 +36,7 @@ public class WxVisitDistributionResult extends WxResult {
          *
          * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/analysis.getVisitDistribution.html" target="_blank">参考页面</a>
          */
-        Integer index;
+        String index;
 
 
         /**
@@ -55,7 +55,7 @@ public class WxVisitDistributionResult extends WxResult {
          *
          * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/data-analysis/analysis.getVisitDistribution.html" target="_blank">参考页面</a>
          */
-        Integer key;
+        String key;
 
         /**
          * 该场景 id 访问 pv

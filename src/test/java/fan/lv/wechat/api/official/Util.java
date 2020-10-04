@@ -2,6 +2,7 @@ package fan.lv.wechat.api.official;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fan.lv.wechat.api.kernel.Client;
+import fan.lv.wechat.api.mp.base.MpClientImpl;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
 import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
 import fan.lv.wechat.entity.result.WxResult;
@@ -24,6 +25,11 @@ public class Util {
     private static final Client client;
     private static final Properties properties;
 
+    /**
+     * 小程序客户端
+     */
+    private static final Client mpClient;
+
     static {
         properties = new Properties();
         InputStream inputStream = Util.class.getClassLoader().getResourceAsStream("application.properties");
@@ -34,6 +40,7 @@ public class Util {
             e.printStackTrace();
         }
         client = new ClientImpl(properties.getProperty("app_id"), properties.getProperty("app_secret"), new DefaultCacheImpl());
+        mpClient = new MpClientImpl(properties.getProperty("mp.app_id"), properties.getProperty("mp.app_secret"), new DefaultCacheImpl());
     }
 
     /**
@@ -43,6 +50,15 @@ public class Util {
      */
     public static Client getClient() {
         return client;
+    }
+
+    /**
+     * 得到小程序客户端
+     *
+     * @return 请求客户端
+     */
+    public static Client getMpClient() {
+        return mpClient;
     }
 
 

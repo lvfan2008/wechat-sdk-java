@@ -124,7 +124,7 @@ public class ClientImpl extends AbstractClient {
     }
 
     @Override
-    protected String getBaseUrl() {
+    public String getBaseUrl() {
         return BASE_URL;
     }
 }

@@ -91,13 +91,6 @@ abstract public class AbstractClient implements Client {
     abstract protected boolean isGetAccessTokenUrl(String uri);
 
     /**
-     * 得到基准Url
-     *
-     * @return 基准url
-     */
-    abstract protected String getBaseUrl();
-
-    /**
      * 获取缓存中的token
      *
      * @return token串
@@ -135,16 +128,19 @@ abstract public class AbstractClient implements Client {
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
         try {
-            String url = getBaseUrl() + uri;
-            if (!isGetAccessTokenUrl(uri)) {
-                String accessToken = getCacheToken();
-                if (StringUtils.isEmpty(accessToken)) {
-                    WxResult wxResult = this.getAccessToken();
-                    if (!wxResult.success()) {
-                        return WxResult.errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
+            String url = uri;
+            if (!isRawUrl(uri)) {
+                url = getBaseUrl() + uri;
+                if (!isGetAccessTokenUrl(uri)) {
+                    String accessToken = getCacheToken();
+                    if (StringUtils.isEmpty(accessToken)) {
+                        WxResult wxResult = this.getAccessToken();
+                        if (!wxResult.success()) {
+                            return WxResult.errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
+                        }
                     }
+                    url = this.buildAccessTokenUrl(url, getCacheToken());
                 }
-                url = this.buildAccessTokenUrl(url, getCacheToken());
             }
 
             log.debug("request: url: {}, httpOptions: {}", url, httpOptions.toString());
@@ -168,7 +164,7 @@ abstract public class AbstractClient implements Client {
             log.debug("origin result: {}", result);
 
             T wxResult = JsonUtil.parseJson(result, resultType);
-            if (isTokenExpired(wxResult)) {
+            if (!isRawUrl(uri) && isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();
                 if (accessTokenResult.success()) {
                     return this.request(uri, httpOptions, resultType);
@@ -179,6 +175,16 @@ abstract public class AbstractClient implements Client {
         } catch (IOException e) {
             return WxResult.errorResult(-3, e.getMessage(), resultType);
         }
+    }
+
+    /**
+     * 是否为原生的url，则不使用token尝试机制
+     *
+     * @param uri uri地址
+     * @return 是否为原生的url
+     */
+    private boolean isRawUrl(String uri) {
+        return uri.contains("://");
     }
 
     private boolean isRawStream(HttpResponse httpResponse) {

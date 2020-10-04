@@ -43,11 +43,10 @@ public interface BaseService {
     /**
      * 公众号调用或第三方平台帮公众号调用对公众号的所有api调用（包括第三方帮其调用）次数进行清零：
      *
-     * @param appId 公众号的APPID
      * @return 清零结果
      * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Message_Management/API_Call_Limits.html" target="_blank">微信官方接口文档</a>
      */
-    WxResult clearQuota(String appId);
+    WxResult clearQuota();
 
     /**
      * 获取公众号当前使用的自动回复规则，包括关注后自动回复、消息自动回复（60分钟内触发一次）、关键词自动回复。

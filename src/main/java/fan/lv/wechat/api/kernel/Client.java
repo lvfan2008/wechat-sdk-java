@@ -11,6 +11,13 @@ import java.util.Map;
  * @author lv_fan2008
  */
 public interface Client {
+    /**
+     * 得到基准Url
+     *
+     * @return 基准url
+     */
+    String getBaseUrl();
+
 
     /**
      * Get请求

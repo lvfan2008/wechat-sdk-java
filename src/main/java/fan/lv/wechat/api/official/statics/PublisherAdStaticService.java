@@ -8,7 +8,7 @@ import fan.lv.wechat.entity.official.statics.*;
  * @author lv_fan2008
  * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Analytics/Ad_Analysis.html" target="_blank">微信官方接口文档</a>
  */
-public interface PublishAdStaticService {
+public interface PublisherAdStaticService {
 
     /**
      * 获取公众号分广告位数据

@@ -16,10 +16,17 @@ public class BaseServiceImpl implements BaseService {
     protected Client client;
 
     /**
-     * @param client 请求客户端
+     * appId
      */
-    public BaseServiceImpl(Client client) {
+    protected String appId;
+
+    /**
+     * @param client 请求客户端
+     * @param appId  公众号appId
+     */
+    public BaseServiceImpl(Client client, String appId) {
         this.client = client;
+        this.appId = appId;
     }
 
     @Override
@@ -38,7 +45,7 @@ public class BaseServiceImpl implements BaseService {
     }
 
     @Override
-    public WxResult clearQuota(String appId) {
+    public WxResult clearQuota() {
         return client.postJson("/cgi-bin/clear_quota", new WxClearQuotaParam(appId), WxResult.class);
     }
 

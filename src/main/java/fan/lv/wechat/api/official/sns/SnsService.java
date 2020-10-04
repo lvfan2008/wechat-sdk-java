@@ -5,6 +5,8 @@ import fan.lv.wechat.entity.official.sns.WxSnsOpenIdResult;
 import fan.lv.wechat.entity.official.sns.WxSnsUserInfoResult;
 
 /**
+ * 网页授权服务
+ *
  * @author lv_fan2008
  * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/Wechat_webpage_authorization.html" target="_blank">微信官方接口文档</a>
  */

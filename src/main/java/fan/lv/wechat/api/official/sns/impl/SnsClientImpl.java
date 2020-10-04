@@ -38,11 +38,6 @@ public class SnsClientImpl extends ClientImpl {
     }
 
     @Override
-    protected String getBaseUrl() {
-        return "https://api.weixin.qq.com";
-    }
-
-    @Override
     protected String getCacheToken() {
         WxSnsAccessTokenResult token = (WxSnsAccessTokenResult) getAccessToken();
         return token.getAccessToken();
@@ -57,12 +52,12 @@ public class SnsClientImpl extends ClientImpl {
     @Override
     public WxResult getAccessToken(boolean tryCache) {
         if (tryCache) {
-            String json = cache.get("sns-access-token-" + appId);
+            String json = cache.get("sns-access-token-" + appId + "_" + code);
             if (!StringUtils.isEmpty(json)) {
                 return JsonUtil.parseJson(json, WxSnsAccessTokenResult.class);
             }
         }
-        String refreshTokenJson = cache.get("sns-refresh-token-" + appId);
+        String refreshTokenJson = cache.get("sns-refresh-token-" + appId + "_" + code);
         if (!StringUtils.isEmpty(refreshTokenJson)) {
             WxSnsAccessTokenResult result = JsonUtil.parseJson(refreshTokenJson, WxSnsAccessTokenResult.class);
             return refreshAccessToken(result.getRefreshToken());

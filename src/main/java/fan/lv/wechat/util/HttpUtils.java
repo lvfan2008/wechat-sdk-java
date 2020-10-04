@@ -1,6 +1,7 @@
 package fan.lv.wechat.util;
 
 import org.apache.commons.codec.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -19,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,18 +92,17 @@ public class HttpUtils {
         if (params == null || params.size() == 0) {
             return "";
         }
-        StringBuilder buffer = new StringBuilder();
-        int i = 0;
+        List<String> elements = new ArrayList<>();
         for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (StringUtils.isEmpty(entry.getValue())) {
+                continue;
+            }
             try {
-                buffer.append(String.format("%s=%s", entry.getKey(), URLEncoder.encode(entry.getValue(), CharEncoding.UTF_8)));
+                elements.add(String.format("%s=%s", entry.getKey(), URLEncoder.encode(entry.getValue(), CharEncoding.UTF_8)));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
-            if (i != params.size() - 1) {
-                buffer.append("&");
-            }
         }
-        return buffer.toString();
+        return StringUtils.joinWith("&", elements);
     }
 }

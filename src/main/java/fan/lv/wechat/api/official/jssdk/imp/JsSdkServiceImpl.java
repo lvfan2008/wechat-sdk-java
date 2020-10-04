@@ -6,14 +6,9 @@ import fan.lv.wechat.api.official.jssdk.JsSdkService;
 import fan.lv.wechat.entity.official.jssdk.*;
 import fan.lv.wechat.util.JsonUtil;
 import fan.lv.wechat.util.SignUtil;
-import fan.lv.wechat.util.crpto.SHA1;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * @author lv_fan2008

@@ -17,7 +17,7 @@ public class BaseServiceImplTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        baseService = new BaseServiceImpl(Util.getClient());
+        baseService = new BaseServiceImpl(Util.getClient(),Util.getProperty("app_id"));
     }
 
     public void testGetCallbackIp() {
@@ -40,7 +40,7 @@ public class BaseServiceImplTest extends TestCase {
     }
 
     public void testClearQuota() {
-        WxResult result = baseService.clearQuota(Util.getProperty("app_id"));
+        WxResult result = baseService.clearQuota();
         assertTrue(result.success());
     }
 

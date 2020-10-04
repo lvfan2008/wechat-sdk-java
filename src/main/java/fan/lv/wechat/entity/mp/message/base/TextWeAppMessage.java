@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.mp.message;
+package fan.lv.wechat.entity.mp.message.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class TextMpMessage extends BaseMpMessage {
+public class TextWeAppMessage extends BaseWeAppMessage {
     /**
      * 发送类型
      */
     @JsonProperty("msgtype")
     String msgType = "text";
 
-    public TextMpMessage(String content) {
+    public TextWeAppMessage(String content) {
         this.text = new Text(content);
     }
 

@@ -1,12 +1,10 @@
-package fan.lv.wechat.entity.mp.message;
+package fan.lv.wechat.entity.mp.message.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 /**
  * 发送图文链接
@@ -16,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class LinkMpMessage extends BaseMpMessage {
+public class LinkWeAppMessage extends BaseWeAppMessage {
     /**
      * 发送类型
      */
@@ -28,7 +26,7 @@ public class LinkMpMessage extends BaseMpMessage {
      */
     Link link;
 
-    public LinkMpMessage(String title, String description, String url, String thumbUrl) {
+    public LinkWeAppMessage(String title, String description, String url, String thumbUrl) {
         this.link = new Link(title, description, url, thumbUrl);
     }
 

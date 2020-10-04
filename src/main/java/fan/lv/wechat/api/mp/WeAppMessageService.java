@@ -1,13 +1,14 @@
 package fan.lv.wechat.api.mp;
 
-import fan.lv.wechat.entity.mp.message.BaseMpMessage;
+import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;
+import fan.lv.wechat.entity.mp.message.base.BaseWeAppMessage;
 import fan.lv.wechat.entity.mp.message.WxUploadTempMediaResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
  * @author lv_fan2008
  */
-public interface MpMessageService {
+public interface WeAppMessageService {
     /**
      * 获取客服消息内的临时素材。即下载临时的多媒体文件。目前小程序仅支持下载图片文件。
      *
@@ -28,11 +29,11 @@ public interface MpMessageService {
     /**
      * 发送客服消息给用户
      *
-     * @param toUser        用户OpenId
-     * @param baseMpMessage 客服消息，必须为BaseMpMessage的子类
+     * @param toUser           用户OpenId
+     * @param baseWeAppMessage 客服消息，必须为BaseMpMessage的子类
      * @return 返回结果
      */
-    WxResult send(String toUser, BaseMpMessage baseMpMessage);
+    WxResult send(String toUser, BaseWeAppMessage baseWeAppMessage);
 
     /**
      * 发送客服输入状态
@@ -50,4 +51,13 @@ public interface MpMessageService {
      * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.setTyping.html" target="_blank">微信官方接口文档</a>
      */
     WxResult sendKfTypingState(String toUser, String command);
+
+    /**
+     * 下发小程序和公众号统一的服务消息
+     *
+     * @param param 统一消息参数
+     * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html" target="_blank">微信官方接口文档</a>
+     */
+    WxResult sendUniformMessage(WxUniformMessageParam param);
 }

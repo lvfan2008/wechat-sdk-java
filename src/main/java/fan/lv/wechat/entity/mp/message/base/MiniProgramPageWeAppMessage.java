@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.mp.message;
+package fan.lv.wechat.entity.mp.message.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class MiniProgramPageMpMessage extends BaseMpMessage {
+public class MiniProgramPageWeAppMessage extends BaseWeAppMessage {
     /**
      * 发送类型
      */
@@ -31,7 +31,7 @@ public class MiniProgramPageMpMessage extends BaseMpMessage {
      * @param pagePath     小程序的页面路径，跟app.json对齐，支持参数，比如pages/index/index?foo=bar
      * @param thumbMediaId 缩略图的媒体id，通过素材管理中的接口上传多媒体文件，得到的id
      */
-    public MiniProgramPageMpMessage(String title, String pagePath, String thumbMediaId) {
+    public MiniProgramPageWeAppMessage(String title, String pagePath, String thumbMediaId) {
         this.miniProgramPage = new MiniProgramPage(title, pagePath, thumbMediaId);
     }
 

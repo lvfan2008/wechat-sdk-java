@@ -12,10 +12,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class WxDataValue {
+public class WxDataColorValue {
     /**
      * 数据值
      */
     String value;
 
+    /**
+     * 模板内容字体颜色，不填默认为黑色
+     */
+    String color;
+
+    public WxDataColorValue(String value) {
+        this.value = value;
+    }
 }

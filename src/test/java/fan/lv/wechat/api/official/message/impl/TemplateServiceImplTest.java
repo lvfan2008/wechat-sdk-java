@@ -3,7 +3,7 @@ package fan.lv.wechat.api.official.message.impl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.message.TemplateService;
 import fan.lv.wechat.entity.official.message.template.*;
-import fan.lv.wechat.entity.official.message.template.base.WxDataValue;
+import fan.lv.wechat.entity.official.message.template.base.WxDataColorValue;
 import fan.lv.wechat.entity.result.WxResult;
 import junit.framework.TestCase;
 
@@ -57,11 +57,11 @@ public class TemplateServiceImplTest extends TestCase {
         param.setTemplateId(result.getTemplateId());
         param.setUrl("http://www.baidu.com");
 
-        Map<String, WxDataValue> data = new HashMap<>();
-        data.put("first", new WxDataValue("你好", "#00ff00"));
-        data.put("delivername", new WxDataValue("顺丰", "#00ffff"));
-        data.put("ordername", new WxDataValue("9834983489982398", "#ffff00"));
-        data.put("remark", new WxDataValue("祝你一路顺丰", "#ff00ff"));
+        Map<String, WxDataColorValue> data = new HashMap<>();
+        data.put("first", new WxDataColorValue("你好", "#00ff00"));
+        data.put("delivername", new WxDataColorValue("顺丰", "#00ffff"));
+        data.put("ordername", new WxDataColorValue("9834983489982398", "#ffff00"));
+        data.put("remark", new WxDataColorValue("祝你一路顺丰", "#ff00ff"));
         param.setData(data);
 
         WxSendTemplateMessageResult result2 = templateService.sendTemplateMessage(param);
@@ -77,7 +77,7 @@ public class TemplateServiceImplTest extends TestCase {
         param.setUrl("http://www.baidu.com");
 
         WxSubscribeMessageParam.DataContent dataContent = new WxSubscribeMessageParam.DataContent(
-                new WxDataValue("测试一次性订阅接口", "#00ff00")
+                new WxDataColorValue("测试一次性订阅接口", "#00ff00")
         );
         param.setData(dataContent);
 

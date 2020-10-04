@@ -2,8 +2,9 @@ package fan.lv.wechat.api.mp.impl;
 
 import com.google.common.collect.ImmutableMap;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.MpMessageService;
-import fan.lv.wechat.entity.mp.message.BaseMpMessage;
+import fan.lv.wechat.api.mp.WeAppMessageService;
+import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;
+import fan.lv.wechat.entity.mp.message.base.BaseWeAppMessage;
 import fan.lv.wechat.entity.mp.message.WxUploadTempMediaResult;
 import fan.lv.wechat.entity.result.WxResult;
 
@@ -12,7 +13,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-public class MpMessageServiceImpl implements MpMessageService {
+public class WeAppMessageServiceImpl implements WeAppMessageService {
     /**
      * 请求客户端
      */
@@ -22,7 +23,7 @@ public class MpMessageServiceImpl implements MpMessageService {
     /**
      * @param client 请求客户端
      */
-    public MpMessageServiceImpl(Client client) {
+    public WeAppMessageServiceImpl(Client client) {
         this.client = client;
     }
 
@@ -38,14 +39,19 @@ public class MpMessageServiceImpl implements MpMessageService {
     }
 
     @Override
-    public WxResult send(String toUser, BaseMpMessage baseMpMessage) {
-        baseMpMessage.setToUser(toUser);
-        return client.postJson("/cgi-bin/message/custom/send", baseMpMessage, WxResult.class);
+    public WxResult send(String toUser, BaseWeAppMessage baseWeAppMessage) {
+        baseWeAppMessage.setToUser(toUser);
+        return client.postJson("/cgi-bin/message/custom/send", baseWeAppMessage, WxResult.class);
     }
 
     @Override
     public WxResult sendKfTypingState(String toUser, String command) {
         Map<String, String> map = ImmutableMap.of("touser", toUser, "command", command);
         return client.postJson("/cgi-bin/message/custom/typing", map, WxResult.class);
+    }
+
+    @Override
+    public WxResult sendUniformMessage(WxUniformMessageParam param) {
+        return client.postJson("/cgi-bin/message/wxopen/template/uniform_send", param, WxResult.class);
     }
 }

@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.mp.message;
+package fan.lv.wechat.entity.mp.message.base;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class ImageMpMessage extends BaseMpMessage {
+public class ImageWeAppMessage extends BaseWeAppMessage {
     /**
      * 发送类型
      */
@@ -24,7 +24,7 @@ public class ImageMpMessage extends BaseMpMessage {
      */
     Image image;
 
-    public ImageMpMessage(String mediaId) {
+    public ImageWeAppMessage(String mediaId) {
         this.image = new Image(mediaId);
     }
 

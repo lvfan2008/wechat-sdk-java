@@ -57,4 +57,12 @@ public class WeAppMessageServiceImplTest extends TestCase {
         WxResult result = weAppMessageService.sendUniformMessage(param);
         assertEquals(40003, (int) result.getErrorCode());
     }
+
+    public void testCreateActivityId() {
+        WxResult result = weAppMessageService.createActivityId(null);
+        assertTrue(result.success());
+    }
+
+    public void testSetUpdatableMsg() {
+    }
 }

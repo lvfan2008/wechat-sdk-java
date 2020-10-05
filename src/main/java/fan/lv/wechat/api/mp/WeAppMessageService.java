@@ -1,6 +1,8 @@
 package fan.lv.wechat.api.mp;
 
+import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
 import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;
+import fan.lv.wechat.entity.mp.message.WxUpdatableMsgParam;
 import fan.lv.wechat.entity.mp.message.base.BaseWeAppMessage;
 import fan.lv.wechat.entity.mp.message.WxUploadTempMediaResult;
 import fan.lv.wechat.entity.result.WxResult;
@@ -60,4 +62,22 @@ public interface WeAppMessageService {
      * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/uniform-message/uniformMessage.send.html" target="_blank">微信官方接口文档</a>
      */
     WxResult sendUniformMessage(WxUniformMessageParam param);
+
+    /**
+     * 创建被分享动态消息或私密消息的 activity_id。
+     *
+     * @param unionId 可以为null,为私密消息创建activity_id时，指定分享者为unionid用户。其余用户不能用此activity_id分享私密消息。
+     * @return 返回活动Id
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/updatable-message/updatableMessage.createActivityId.html" target="_blank">微信官方文档</a>
+     */
+    WxCreateActivityIdResult createActivityId(String unionId);
+
+    /**
+     * 修改被分享的动态消息
+     *
+     * @param param 修改被分享的动态消息参数
+     * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/updatable-message/updatableMessage.setUpdatableMsg.html" target="_blank">微信官方文档</a>
+     */
+    WxResult setUpdatableMsg(WxUpdatableMsgParam param);
 }

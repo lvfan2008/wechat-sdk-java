@@ -98,7 +98,8 @@ public class IntelligenceServiceImpl implements IntelligenceService {
     @Override
     public WxImageAiCropResult imageAiCrop(String imagePathOrUrl, boolean isUrl, String ratios) {
         return uploadImage("/cv/img/aicrop", imagePathOrUrl, isUrl,
-                ImmutableMap.of("ratios", ratios), WxImageAiCropResult.class);
+                ratios == null ? ImmutableMap.of() : ImmutableMap.of("ratios", ratios),
+                WxImageAiCropResult.class);
     }
 
 

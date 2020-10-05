@@ -8,6 +8,7 @@ import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
 import fan.lv.wechat.entity.official.sns.WxSnsOpenIdResult;
 import fan.lv.wechat.entity.official.sns.WxSnsUserInfoResult;
 import fan.lv.wechat.util.HttpUtils;
+import fan.lv.wechat.util.SignUtil;
 
 /**
  * @author lv_fan2008
@@ -44,6 +45,7 @@ public class SnsServiceImpl implements SnsService {
 
     @Override
     public String getOpenAuthUrl(String redirectUrl, String scope, String state) {
+        state = state == null ? SignUtil.timestamp() : state;
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?response_type=code";
         url = HttpUtils.buildUrlQuery(url, ImmutableMap.of("appid", appId, "redirect_uri", redirectUrl,
                 "scope", scope, "state", state));

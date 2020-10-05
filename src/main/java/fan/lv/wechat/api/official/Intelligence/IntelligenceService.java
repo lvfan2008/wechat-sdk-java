@@ -26,7 +26,7 @@ public interface IntelligenceService {
      * @param format   文件格式 （只支持mp3，16k，单声道，最大1M）
      * @param voiceId  语音唯一标识
      * @param filePath 语音文件路径
-     * @param lang     语言，zh_CN 或 en_US，默认中文
+     * @param lang     语言，zh_CN 或 en_US
      * @return 返回结果
      * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Intelligent_Interface/AI_Open_API.html" target="_blank">微信官方接口文档</a>
      */
@@ -37,7 +37,7 @@ public interface IntelligenceService {
      * 请注意，添加完文件之后10s内调用这个接口
      *
      * @param voiceId 语音唯一标识
-     * @param lang    语言，zh_CN 或 en_US，默认中文
+     * @param lang    语言，zh_CN 或 en_US
      * @return 语音识别结果
      * @see <a href="https://developers.weixin.qq.com/doc/offiaccount/Intelligent_Interface/AI_Open_API.html" target="_blank">微信官方接口文档</a>
      */

@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.official;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.base.WeAppClientImpl;
+import fan.lv.wechat.api.mp.impl.WeAppClientImpl;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
 import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
 import fan.lv.wechat.entity.result.WxResult;

@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.mp.base;
+package fan.lv.wechat.api.mp.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;

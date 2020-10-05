@@ -3,6 +3,7 @@ package fan.lv.wechat.entity.mp.subscribe;
 import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.util.List;
 

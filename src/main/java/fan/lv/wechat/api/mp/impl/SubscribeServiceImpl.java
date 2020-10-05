@@ -50,14 +50,14 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     @Override
     public WxPubTemplateKeywordsResult getPubTemplateKeywords(String tid) {
-        return client.postJson("/wxaapi/newtmpl/getpubtemplatekeywords", ImmutableMap.of("tid", tid),
+        return client.get("/wxaapi/newtmpl/getpubtemplatekeywords", ImmutableMap.of("tid", tid),
                 WxPubTemplateKeywordsResult.class);
     }
 
     @Override
     public WxPubTemplateTitleResult getPubTemplateTitle(String ids, Integer start, Integer limit) {
-        return client.postJson("/wxaapi/newtmpl/getpubtemplatetitles",
-                ImmutableMap.of("ids", ids, "start", start, "limit", limit),
+        return client.get("/wxaapi/newtmpl/getpubtemplatetitles",
+                ImmutableMap.of("ids", ids, "start", String.valueOf(start), "limit", String.valueOf(limit)),
                 WxPubTemplateTitleResult.class);
     }
 

@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.Intelligence.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.Intelligence.IntelligenceService;
 import fan.lv.wechat.entity.official.intelligence.*;
@@ -32,25 +32,25 @@ public class IntelligenceServiceImpl implements IntelligenceService {
 
     @Override
     public WxResult aiSubmitVoiceForText(String format, String voiceId, String filePath, String lang) {
-        Map<String, String> queryMap = ImmutableMap.of("format", format, "voice_id", voiceId,
+        Map<String, String> queryMap = SimpleMap.of("format", format, "voice_id", voiceId,
                 "lang", lang);
         return client.uploadFile("/cgi-bin/media/voice/addvoicetorecofortext", queryMap,
-                ImmutableMap.<String, String>of(),
-                ImmutableMap.of("media", filePath),
+                SimpleMap.<String, String>of(),
+                SimpleMap.of("media", filePath),
                 WxResult.class);
     }
 
     @Override
     public WxAiQueryVoiceTextResult aiQueryVoiceForText(String voiceId, String lang) {
         return client.postJson("/cgi-bin/media/voice/queryrecoresultfortext",
-                ImmutableMap.of("lang", lang, "voice_id", voiceId),
-                ImmutableMap.<String, String>of(), WxAiQueryVoiceTextResult.class);
+                SimpleMap.of("lang", lang, "voice_id", voiceId),
+                SimpleMap.<String, String>of(), WxAiQueryVoiceTextResult.class);
     }
 
     @Override
     public WxAiTranslateResult aiTranslateVoice(String content, String fromLanguage, String toLanguage) {
         return client.postJson("/cgi-bin/media/voice/translatecontent",
-                ImmutableMap.of("lfrom", fromLanguage, "lto", toLanguage),
+                SimpleMap.of("lfrom", fromLanguage, "lto", toLanguage),
                 content,
                 WxAiTranslateResult.class);
     }
@@ -98,7 +98,7 @@ public class IntelligenceServiceImpl implements IntelligenceService {
     @Override
     public WxImageAiCropResult imageAiCrop(String imagePathOrUrl, boolean isUrl, String ratios) {
         return uploadImage("/cv/img/aicrop", imagePathOrUrl, isUrl,
-                ratios == null ? ImmutableMap.of() : ImmutableMap.of("ratios", ratios),
+                ratios == null ? SimpleMap.of() : SimpleMap.of("ratios", ratios),
                 WxImageAiCropResult.class);
     }
 
@@ -131,15 +131,15 @@ public class IntelligenceServiceImpl implements IntelligenceService {
     private <T extends WxResult> T uploadImage(String uri, String imagePathOrUrl, boolean isUrl, Map<String, String> formData, Class<T> resultType) {
         if (isUrl) {
             if (formData == null) {
-                return client.get(uri, ImmutableMap.of("img_url", imagePathOrUrl), resultType);
+                return client.get(uri, SimpleMap.of("img_url", imagePathOrUrl), resultType);
             } else {
-                return client.postForm(uri, ImmutableMap.of("img_url", imagePathOrUrl), formData, resultType);
+                return client.postForm(uri, SimpleMap.of("img_url", imagePathOrUrl), formData, resultType);
             }
         } else {
             if (formData == null) {
-                return client.uploadFile(uri, ImmutableMap.<String, String>of(), ImmutableMap.of("img", imagePathOrUrl), resultType);
+                return client.uploadFile(uri, SimpleMap.<String, String>of(), SimpleMap.of("img", imagePathOrUrl), resultType);
             } else {
-                return client.uploadFile(uri, formData, ImmutableMap.of("img", imagePathOrUrl), resultType);
+                return client.uploadFile(uri, formData, SimpleMap.of("img", imagePathOrUrl), resultType);
             }
         }
     }

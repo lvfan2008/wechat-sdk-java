@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.customer.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.customer.CustomerService;
 import fan.lv.wechat.entity.official.customer.*;
@@ -38,59 +38,59 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public WxResult addCustomer(String kfAccount, String nickname) {
-        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "nickname", nickname);
+        Map<String, String> map = SimpleMap.of("kf_account", kfAccount, "nickname", nickname);
         return client.postJson("/customservice/kfaccount/add", map, WxResult.class);
     }
 
     @Override
     public WxResult inviteBindKfAccount(String kfAccount, String inviteWx) {
-        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "invite_wx", inviteWx);
+        Map<String, String> map = SimpleMap.of("kf_account", kfAccount, "invite_wx", inviteWx);
         return client.postJson("/customservice/kfaccount/inviteworker", map, WxResult.class);
     }
 
     @Override
     public WxResult setCustomer(String kfAccount, String nickname) {
-        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "nickname", nickname);
+        Map<String, String> map = SimpleMap.of("kf_account", kfAccount, "nickname", nickname);
         return client.postJson("/customservice/kfaccount/update", map, WxResult.class);
     }
 
     @Override
     public WxResult setCustomerAvatar(String kfAccount, String avatarPath) {
-        Map<String, String> queryMap = ImmutableMap.of("kf_account", kfAccount);
+        Map<String, String> queryMap = SimpleMap.of("kf_account", kfAccount);
         return client.uploadFile("/customservice/kfaccount/uploadheadimg", queryMap,
-                ImmutableMap.<String, String>of(),
-                ImmutableMap.of("media", avatarPath),
+                SimpleMap.<String, String>of(),
+                SimpleMap.of("media", avatarPath),
                 WxResult.class);
     }
 
     @Override
     public WxResult delCustomer(String kfAccount) {
         return client.get("/customservice/kfaccount/del",
-                ImmutableMap.of("kf_account", kfAccount),
+                SimpleMap.of("kf_account", kfAccount),
                 WxResult.class);
     }
 
     @Override
     public WxResult createSession(String kfAccount, String openId) {
-        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
+        Map<String, String> map = SimpleMap.of("kf_account", kfAccount, "openid", openId);
         return client.postJson("/customservice/kfsession/create", map, WxResult.class);
     }
 
     @Override
     public WxResult closeSession(String kfAccount, String openId) {
-        Map<String, String> map = ImmutableMap.of("kf_account", kfAccount, "openid", openId);
+        Map<String, String> map = SimpleMap.of("kf_account", kfAccount, "openid", openId);
         return client.postJson("/customservice/kfsession/close", map, WxResult.class);
     }
 
     @Override
     public WxSessionResult getSession(String openId) {
-        return client.get("/customservice/kfsession/getsession", ImmutableMap.of("openid", openId),
+        return client.get("/customservice/kfsession/getsession", SimpleMap.of("openid", openId),
                 WxSessionResult.class);
     }
 
     @Override
     public WxSessionListResult getSessionList(String kfAccount) {
-        return client.get("/customservice/kfsession/getsessionlist", ImmutableMap.of("kf_account", kfAccount),
+        return client.get("/customservice/kfsession/getsessionlist", SimpleMap.of("kf_account", kfAccount),
                 WxSessionListResult.class);
     }
 
@@ -101,7 +101,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public WxMsgRecordResult getMsgRecord(Integer startTime, Integer endTime, Integer msgId, Integer number) {
-        Map<String, Integer> map = ImmutableMap.of(
+        Map<String, Integer> map = SimpleMap.of(
                 "starttime", (startTime), "endtime", (endTime),
                 "msgid", (msgId), "number", (number)
         );
@@ -116,7 +116,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public WxResult sendKfTypingState(String toUser, String command) {
-        Map<String, String> map = ImmutableMap.of("touser", toUser, "command", command);
+        Map<String, String> map = SimpleMap.of("touser", toUser, "command", command);
         return client.postJson("/cgi-bin/message/custom/typing", map, WxResult.class);
     }
 }

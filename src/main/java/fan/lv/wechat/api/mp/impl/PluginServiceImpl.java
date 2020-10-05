@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.mp.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.mp.PluginService;
 import fan.lv.wechat.entity.mp.plugin.WxPluginDevApplyListResult;
@@ -30,7 +30,7 @@ public class PluginServiceImpl implements PluginService {
     @Override
     public WxResult applyPlugin(String pluginAppId, String reason) {
         return client.postJson("/wxa/plugin",
-                ImmutableMap.of("action", "apply", "plugin_appid", pluginAppId,
+                SimpleMap.of("action", "apply", "plugin_appid", pluginAppId,
                         "reason", StringUtils.defaultString(reason)),
                 WxResult.class);
     }
@@ -38,19 +38,19 @@ public class PluginServiceImpl implements PluginService {
     @Override
     public WxPluginDevApplyListResult getPluginDevApplyList(Integer page, Integer num) {
         return client.postJson("/wxa/devplugin",
-                ImmutableMap.of("action", "dev_apply_list", "page", page, "num", num),
+                SimpleMap.of("action", "dev_apply_list", "page", page, "num", num),
                 WxPluginDevApplyListResult.class);
     }
 
     @Override
     public WxPluginListResult getPluginList() {
-        return client.postJson("/wxa/plugin", ImmutableMap.of("action", "list"), WxPluginListResult.class);
+        return client.postJson("/wxa/plugin", SimpleMap.of("action", "list"), WxPluginListResult.class);
     }
 
     @Override
     public WxResult setDevPluginApplyStatus(String action, String appId, String reason) {
         return client.postJson("/wxa/devplugin",
-                ImmutableMap.of("action", action,
+                SimpleMap.of("action", action,
                         "appid", StringUtils.defaultString(appId),
                         "reason", StringUtils.defaultString(reason)),
                 WxResult.class);
@@ -59,7 +59,7 @@ public class PluginServiceImpl implements PluginService {
     @Override
     public WxResult unbindPlugin(String pluginAppId) {
         return client.postJson("/wxa/plugin",
-                ImmutableMap.of("action", "unbind", "plugin_appid", pluginAppId),
+                SimpleMap.of("action", "unbind", "plugin_appid", pluginAppId),
                 WxResult.class);
     }
 }

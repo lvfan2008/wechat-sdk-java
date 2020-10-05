@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.sns.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.sns.SnsService;
@@ -47,7 +47,7 @@ public class SnsServiceImpl implements SnsService {
     public String getOpenAuthUrl(String redirectUrl, String scope, String state) {
         state = state == null ? SignUtil.timestamp() : state;
         String url = "https://open.weixin.qq.com/connect/oauth2/authorize?response_type=code";
-        url = HttpUtils.buildUrlQuery(url, ImmutableMap.of("appid", appId, "redirect_uri", redirectUrl,
+        url = HttpUtils.buildUrlQuery(url, SimpleMap.of("appid", appId, "redirect_uri", redirectUrl,
                 "scope", scope, "state", state));
         return url + "#wechat_redirect";
     }
@@ -66,7 +66,7 @@ public class SnsServiceImpl implements SnsService {
     public WxSnsUserInfoResult getUserInfo(String openId, String lang) {
         String code = cache.get("sns-code-openid-" + appId);
         return new SnsClientImpl(appId, appSecret, cache, code).postJson("/cgi-bin/tags/members/batchunblacklist",
-                ImmutableMap.of("openid", openId, "lang", lang),
+                SimpleMap.of("openid", openId, "lang", lang),
                 WxSnsUserInfoResult.class);
     }
 

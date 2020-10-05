@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.server.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.official.server.MessageCallback;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.entity.official.server.message.*;
@@ -40,21 +40,20 @@ public class ServerServiceImpl implements ServerService {
      * 事件消息对应类,key=msgType:event
      */
     protected Map<String, Class<? extends BaseReceiveMessage>> msgTypeMap =
-            new ImmutableMap.Builder<String, Class<? extends BaseReceiveMessage>>()
-                    .put("text", CommonTextMessage.class)
-                    .put("image", CommonImageMessage.class)
-                    .put("voice", CommonVoiceMessage.class)
-                    .put("video", CommonVideoMessage.class)
-                    .put("link", CommonLinkMessage.class)
-                    .put("location", CommonLocationMessage.class)
-                    .put("shortvideo", CommonShortVideoMessage.class)
-                    .put("event:subscribe", EventSubscribeMessage.class)
-                    .put("event:SCAN", EventScanMessage.class)
-                    .put("event:unsubscribe", EventUnSubscribeMessage.class)
-                    .put("event:CLICK", EventClickMessage.class)
-                    .put("event:VIEW", EventViewMessage.class)
-                    .put("event:LOCATION", EventLocationMessage.class)
-                    .build();
+            new SimpleMap<String, Class<? extends BaseReceiveMessage>>()
+                    .add("text", CommonTextMessage.class)
+                    .add("image", CommonImageMessage.class)
+                    .add("voice", CommonVoiceMessage.class)
+                    .add("video", CommonVideoMessage.class)
+                    .add("link", CommonLinkMessage.class)
+                    .add("location", CommonLocationMessage.class)
+                    .add("shortvideo", CommonShortVideoMessage.class)
+                    .add("event:subscribe", EventSubscribeMessage.class)
+                    .add("event:SCAN", EventScanMessage.class)
+                    .add("event:unsubscribe", EventUnSubscribeMessage.class)
+                    .add("event:CLICK", EventClickMessage.class)
+                    .add("event:VIEW", EventViewMessage.class)
+                    .add("event:LOCATION", EventLocationMessage.class);
 
     /**
      * 消息回调列表

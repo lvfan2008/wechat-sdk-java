@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.account.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.account.AccountService;
 import fan.lv.wechat.entity.official.account.WxCreateQrCodeParam;
@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public WxGetShortUrlResult getShortUrl(String longUrl) {
-        Map<String, String> map = ImmutableMap.of("action", "long2short", "long_url", longUrl);
+        Map<String, String> map = SimpleMap.of("action", "long2short", "long_url", longUrl);
         return client.postJson("/cgi-bin/shorturl", (Object) map, WxGetShortUrlResult.class);
     }
 }

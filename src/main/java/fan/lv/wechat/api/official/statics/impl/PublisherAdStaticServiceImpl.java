@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.statics.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.statics.PublisherAdStaticService;
 import fan.lv.wechat.entity.official.statics.*;
@@ -27,7 +27,7 @@ public class PublisherAdStaticServiceImpl implements PublisherAdStaticService {
     @Override
     public WxPublisherAdPosGeneralResult getPublisherAdPosGeneral(Integer page, Integer pageSize,
                                                                   String startDate, String endDate, String adSlot) {
-        Map<String, String> queryMap = ImmutableMap.of(
+        Map<String, String> queryMap = SimpleMap.of(
                 "page", String.valueOf(page), "page_size", String.valueOf(pageSize),
                 "start_date", startDate, "end_date", endDate);
         if (adSlot != null) {
@@ -38,7 +38,7 @@ public class PublisherAdStaticServiceImpl implements PublisherAdStaticService {
 
     @Override
     public WxPublisherCpsGeneralResult getPublisherCpsGeneral(Integer page, Integer pageSize, String startDate, String endDate) {
-        Map<String, String> queryMap = ImmutableMap.of(
+        Map<String, String> queryMap = SimpleMap.of(
                 "page", String.valueOf(page), "page_size", String.valueOf(pageSize),
                 "start_date", startDate, "end_date", endDate);
         return client.get("/publisher/stat?action=publisher_cps_general", queryMap, WxPublisherCpsGeneralResult.class);
@@ -46,7 +46,7 @@ public class PublisherAdStaticServiceImpl implements PublisherAdStaticService {
 
     @Override
     public WxPublisherSettlementResult getPublisherSettlement(Integer page, Integer pageSize, String startDate, String endDate) {
-        Map<String, String> queryMap = ImmutableMap.of(
+        Map<String, String> queryMap = SimpleMap.of(
                 "page", String.valueOf(page), "page_size", String.valueOf(pageSize),
                 "start_date", startDate, "end_date", endDate);
         return client.get("/publisher/stat?action=publisher_settlement", queryMap, WxPublisherSettlementResult.class);

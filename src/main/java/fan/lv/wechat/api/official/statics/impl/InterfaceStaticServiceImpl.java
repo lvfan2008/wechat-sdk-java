@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.official.statics.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.statics.InterfaceStaticService;
 import fan.lv.wechat.entity.official.statics.*;
@@ -26,13 +26,13 @@ public class InterfaceStaticServiceImpl implements InterfaceStaticService {
 
     @Override
     public WxInterfaceSummaryResult getInterfaceSummary(String beginDate, String endDate) {
-        Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
+        Map<String, String> map = SimpleMap.of("begin_date", beginDate, "end_date", endDate);
         return client.postJson("/datacube/getinterfacesummary", map, WxInterfaceSummaryResult.class);
     }
 
     @Override
     public WxInterfaceSummaryHourResult getInterfaceSummaryHour(String beginDate, String endDate) {
-        Map<String, String> map = ImmutableMap.of("begin_date", beginDate, "end_date", endDate);
+        Map<String, String> map = SimpleMap.of("begin_date", beginDate, "end_date", endDate);
         return client.postJson("/datacube/getinterfacesummaryhour", map, WxInterfaceSummaryHourResult.class);
     }
 }

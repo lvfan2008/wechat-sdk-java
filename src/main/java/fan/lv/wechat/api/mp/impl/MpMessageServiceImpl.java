@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.mp.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.mp.MpMessageService;
 import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
@@ -31,13 +31,13 @@ public class MpMessageServiceImpl implements MpMessageService {
 
     @Override
     public WxResult getTempMedia(String mediaId) {
-        return client.get("/cgi-bin/media/get", ImmutableMap.of("media_id", mediaId), WxResult.class);
+        return client.get("/cgi-bin/media/get", SimpleMap.of("media_id", mediaId), WxResult.class);
     }
 
     @Override
     public WxUploadTempMediaResult uploadTempMedia(String type, String filePath) {
-        return client.uploadFile("/cgi-bin/media/upload", ImmutableMap.of("type", type),
-                ImmutableMap.of(), ImmutableMap.of("media", filePath), WxUploadTempMediaResult.class);
+        return client.uploadFile("/cgi-bin/media/upload", SimpleMap.of("type", type),
+                SimpleMap.of(), SimpleMap.of("media", filePath), WxUploadTempMediaResult.class);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MpMessageServiceImpl implements MpMessageService {
 
     @Override
     public WxResult sendKfTypingState(String toUser, String command) {
-        Map<String, String> map = ImmutableMap.of("touser", toUser, "command", command);
+        Map<String, String> map = SimpleMap.of("touser", toUser, "command", command);
         return client.postJson("/cgi-bin/message/custom/typing", map, WxResult.class);
     }
 
@@ -60,7 +60,7 @@ public class MpMessageServiceImpl implements MpMessageService {
     @Override
     public WxCreateActivityIdResult createActivityId(String unionId) {
         return client.get("/cgi-bin/message/wxopen/activityid/create",
-                unionId == null ? ImmutableMap.of() : ImmutableMap.of("unionid", unionId),
+                unionId == null ? SimpleMap.of() : SimpleMap.of("unionid", unionId),
                 WxCreateActivityIdResult.class);
     }
 

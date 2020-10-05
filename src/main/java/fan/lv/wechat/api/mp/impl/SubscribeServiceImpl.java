@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.mp.impl;
 
-import com.google.common.collect.ImmutableMap;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.mp.SubscribeService;
 import fan.lv.wechat.entity.mp.subscribe.*;
@@ -40,7 +40,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     @Override
     public WxResult deleteTemplate(String priTmplId) {
-        return client.postJson("/wxaapi/newtmpl/deltemplate", ImmutableMap.of("priTmplId", priTmplId), WxResult.class);
+        return client.postJson("/wxaapi/newtmpl/deltemplate", SimpleMap.of("priTmplId", priTmplId), WxResult.class);
     }
 
     @Override
@@ -50,14 +50,14 @@ public class SubscribeServiceImpl implements SubscribeService {
 
     @Override
     public WxPubTemplateKeywordsResult getPubTemplateKeywords(String tid) {
-        return client.get("/wxaapi/newtmpl/getpubtemplatekeywords", ImmutableMap.of("tid", tid),
+        return client.get("/wxaapi/newtmpl/getpubtemplatekeywords", SimpleMap.of("tid", tid),
                 WxPubTemplateKeywordsResult.class);
     }
 
     @Override
     public WxPubTemplateTitleResult getPubTemplateTitle(String ids, Integer start, Integer limit) {
         return client.get("/wxaapi/newtmpl/getpubtemplatetitles",
-                ImmutableMap.of("ids", ids, "start", String.valueOf(start), "limit", String.valueOf(limit)),
+                SimpleMap.of("ids", ids, "start", String.valueOf(start), "limit", String.valueOf(limit)),
                 WxPubTemplateTitleResult.class);
     }
 

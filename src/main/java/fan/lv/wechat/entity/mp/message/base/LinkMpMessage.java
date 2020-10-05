@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class LinkWeAppMessage extends BaseWeAppMessage {
+public class LinkMpMessage extends BaseMpMessage {
     /**
      * 发送类型
      */
@@ -26,7 +26,7 @@ public class LinkWeAppMessage extends BaseWeAppMessage {
      */
     Link link;
 
-    public LinkWeAppMessage(String title, String description, String url, String thumbUrl) {
+    public LinkMpMessage(String title, String description, String url, String thumbUrl) {
         this.link = new Link(title, description, url, thumbUrl);
     }
 

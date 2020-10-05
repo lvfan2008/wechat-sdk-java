@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class TextWeAppMessage extends BaseWeAppMessage {
+public class TextMpMessage extends BaseMpMessage {
     /**
      * 发送类型
      */
     @JsonProperty("msgtype")
     String msgType = "text";
 
-    public TextWeAppMessage(String content) {
+    public TextMpMessage(String content) {
         this.text = new Text(content);
     }
 

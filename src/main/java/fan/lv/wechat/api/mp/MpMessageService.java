@@ -3,14 +3,14 @@ package fan.lv.wechat.api.mp;
 import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
 import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;
 import fan.lv.wechat.entity.mp.message.WxUpdatableMsgParam;
-import fan.lv.wechat.entity.mp.message.base.BaseWeAppMessage;
+import fan.lv.wechat.entity.mp.message.base.BaseMpMessage;
 import fan.lv.wechat.entity.mp.message.WxUploadTempMediaResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**
  * @author lv_fan2008
  */
-public interface WeAppMessageService {
+public interface MpMessageService {
     /**
      * 获取客服消息内的临时素材。即下载临时的多媒体文件。目前小程序仅支持下载图片文件。
      *
@@ -32,10 +32,10 @@ public interface WeAppMessageService {
      * 发送客服消息给用户
      *
      * @param toUser           用户OpenId
-     * @param baseWeAppMessage 客服消息，必须为BaseMpMessage的子类
+     * @param baseMpMessage 客服消息，必须为BaseMpMessage的子类
      * @return 返回结果
      */
-    WxResult send(String toUser, BaseWeAppMessage baseWeAppMessage);
+    WxResult send(String toUser, BaseMpMessage baseMpMessage);
 
     /**
      * 发送客服输入状态

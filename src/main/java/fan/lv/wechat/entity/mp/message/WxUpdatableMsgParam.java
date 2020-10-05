@@ -1,7 +1,9 @@
 package fan.lv.wechat.entity.mp.message;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -41,6 +43,8 @@ public class WxUpdatableMsgParam {
     }
 
     @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class TemplateParameter {
         /**
          * 要修改的参数名

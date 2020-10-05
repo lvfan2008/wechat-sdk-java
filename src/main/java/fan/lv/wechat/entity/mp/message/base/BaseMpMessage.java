@@ -7,7 +7,7 @@ import lombok.Data;
  * @author lv_fan2008
  */
 @Data
-public class BaseWeAppMessage {
+public class BaseMpMessage {
     /**
      * 粉丝Id
      */

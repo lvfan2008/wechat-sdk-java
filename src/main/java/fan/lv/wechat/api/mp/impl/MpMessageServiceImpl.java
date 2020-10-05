@@ -2,11 +2,11 @@ package fan.lv.wechat.api.mp.impl;
 
 import com.google.common.collect.ImmutableMap;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.WeAppMessageService;
+import fan.lv.wechat.api.mp.MpMessageService;
 import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
 import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;
 import fan.lv.wechat.entity.mp.message.WxUpdatableMsgParam;
-import fan.lv.wechat.entity.mp.message.base.BaseWeAppMessage;
+import fan.lv.wechat.entity.mp.message.base.BaseMpMessage;
 import fan.lv.wechat.entity.mp.message.WxUploadTempMediaResult;
 import fan.lv.wechat.entity.result.WxResult;
 
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-public class WeAppMessageServiceImpl implements WeAppMessageService {
+public class MpMessageServiceImpl implements MpMessageService {
     /**
      * 请求客户端
      */
@@ -25,7 +25,7 @@ public class WeAppMessageServiceImpl implements WeAppMessageService {
     /**
      * @param client 请求客户端
      */
-    public WeAppMessageServiceImpl(Client client) {
+    public MpMessageServiceImpl(Client client) {
         this.client = client;
     }
 
@@ -41,9 +41,9 @@ public class WeAppMessageServiceImpl implements WeAppMessageService {
     }
 
     @Override
-    public WxResult send(String toUser, BaseWeAppMessage baseWeAppMessage) {
-        baseWeAppMessage.setToUser(toUser);
-        return client.postJson("/cgi-bin/message/custom/send", baseWeAppMessage, WxResult.class);
+    public WxResult send(String toUser, BaseMpMessage baseMpMessage) {
+        baseMpMessage.setToUser(toUser);
+        return client.postJson("/cgi-bin/message/custom/send", baseMpMessage, WxResult.class);
     }
 
     @Override

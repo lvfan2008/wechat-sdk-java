@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class ImageWeAppMessage extends BaseWeAppMessage {
+public class ImageMpMessage extends BaseMpMessage {
     /**
      * 发送类型
      */
@@ -24,7 +24,7 @@ public class ImageWeAppMessage extends BaseWeAppMessage {
      */
     Image image;
 
-    public ImageWeAppMessage(String mediaId) {
+    public ImageMpMessage(String mediaId) {
         this.image = new Image(mediaId);
     }
 

@@ -1,7 +1,6 @@
 package fan.lv.wechat.util;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 快捷Map

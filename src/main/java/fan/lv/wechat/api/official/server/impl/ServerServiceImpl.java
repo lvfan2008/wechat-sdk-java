@@ -41,9 +41,9 @@ public class ServerServiceImpl implements ServerService {
     protected String appId;
 
     /**
-     * 是否数据格式为xml格式
+     * 是否数据格式为Json格式，默认为Xml格式
      */
-    protected Boolean isBodyXml = true;
+    protected Boolean isBodyJson = false;
 
     /**
      * 事件消息对应类,key=msgType:event
@@ -97,12 +97,12 @@ public class ServerServiceImpl implements ServerService {
                 }
             } else {
                 String xmlMessage = xmlBody;
-                isBodyXml = xmlBody.trim().startsWith("{");
-                EncryptReceiveMessage encryptReceiveMessage = isBodyXml ? JsonUtil.parseJson(xmlBody, EncryptReceiveMessage.class)
+                isBodyJson = xmlBody.trim().startsWith("{");
+                EncryptReceiveMessage encryptReceiveMessage = isBodyJson ? JsonUtil.parseJson(xmlBody, EncryptReceiveMessage.class)
                         : XmlUtil.parseXml(xmlBody, EncryptReceiveMessage.class);
                 boolean encrypt = encryptReceiveMessage.getEncrypt() != null;
                 if (encrypt) {
-                    if (!SignUtil.sha1(token, timestamp, nonce, echoStr).equals(signature)) {
+                    if (!SignUtil.sha1(token, timestamp, nonce, encryptReceiveMessage.getEncrypt()).equals(signature)) {
                         throw new AesException(AesException.VALIDATE_SIGNATURE_ERROR);
                     }
                     xmlMessage = crypt.decrypt(encryptReceiveMessage.getEncrypt());
@@ -137,7 +137,7 @@ public class ServerServiceImpl implements ServerService {
         String timeStamp = Long.toString(System.currentTimeMillis());
         String signature = SHA1.getSha1(token, timeStamp, nonce, encrypt);
         EncryptReplyMessage encryptReplyMessage = new EncryptReplyMessage(encrypt, signature, timeStamp, nonce);
-        return isBodyXml ? XmlUtil.toXml(encryptReplyMessage) : JsonUtil.toJson(encryptReplyMessage);
+        return isBodyJson ? JsonUtil.toJson(encryptReplyMessage) : XmlUtil.toXml(encryptReplyMessage);
     }
 
     @Override
@@ -169,10 +169,10 @@ public class ServerServiceImpl implements ServerService {
      * @return 返回回复信息
      */
     protected String processMessage(String xmlMessage) {
-        BaseReceiveMessage message = isBodyXml ? XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class)
-                : JsonUtil.parseJson(xmlMessage, BaseReceiveMessage.class);
+        BaseReceiveMessage message = isBodyJson ? JsonUtil.parseJson(xmlMessage, BaseReceiveMessage.class)
+                : XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class);
         Class<? extends BaseReceiveMessage> type = getMessageTypeValue(message.getMsgType(), message.getEvent());
-        Object realMessage = isBodyXml ? XmlUtil.parseXml(xmlMessage, type) : JsonUtil.parseJson(xmlMessage, type);
+        Object realMessage = isBodyJson ? JsonUtil.parseJson(xmlMessage, type) : XmlUtil.parseXml(xmlMessage, type);
         for (MessageCallback callback : callbackList) {
             BaseReplyMessage result = callback.handle(type.cast(realMessage));
             if (result != null) {
@@ -180,7 +180,7 @@ public class ServerServiceImpl implements ServerService {
                 if (StringUtils.isEmpty(result.getFromUserName())) {
                     result.setFromUserName(message.getToUserName());
                 }
-                return isBodyXml ? XmlUtil.toXml(result) : JsonUtil.toJson(result);
+                return isBodyJson ? JsonUtil.toJson(result) : XmlUtil.toXml(result);
             }
         }
         return null;

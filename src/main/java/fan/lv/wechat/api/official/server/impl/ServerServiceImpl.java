@@ -84,8 +84,8 @@ public class ServerServiceImpl implements ServerService {
 
 
     @Override
-    public String serv(String signature, String timestamp, String nonce, String echoStr, String xmlBody) {
-        log.debug("serv: {} {} {} {} {}", signature, timestamp, nonce, echoStr, xmlBody);
+    public String serv(String signature, String timestamp, String nonce, String echoStr, String body) {
+        log.debug("serv: {} {} {} {} {}", signature, timestamp, nonce, echoStr, body);
         WxBizMsgCrypt crypt;
         String reply = null;
         try {
@@ -96,27 +96,27 @@ public class ServerServiceImpl implements ServerService {
                     reply = echoStr;
                 }
             } else {
-                String xmlMessage = xmlBody;
-                isBodyJson = xmlBody.trim().startsWith("{");
-                EncryptReceiveMessage encryptReceiveMessage = isBodyJson ? JsonUtil.parseJson(xmlBody, EncryptReceiveMessage.class)
-                        : XmlUtil.parseXml(xmlBody, EncryptReceiveMessage.class);
+                String message = body;
+                isBodyJson = body.trim().startsWith("{");
+                EncryptReceiveMessage encryptReceiveMessage = isBodyJson ? JsonUtil.parseJson(body, EncryptReceiveMessage.class)
+                        : XmlUtil.parseXml(body, EncryptReceiveMessage.class);
                 boolean encrypt = encryptReceiveMessage.getEncrypt() != null;
                 if (encrypt) {
                     if (!SignUtil.sha1(token, timestamp, nonce, encryptReceiveMessage.getEncrypt()).equals(signature)) {
                         throw new AesException(AesException.VALIDATE_SIGNATURE_ERROR);
                     }
-                    xmlMessage = crypt.decrypt(encryptReceiveMessage.getEncrypt());
+                    message = crypt.decrypt(encryptReceiveMessage.getEncrypt());
                 }
-                log.debug("decryptMsg: {}", xmlMessage);
-                reply = processMessage(xmlMessage);
+                log.debug("decryptMsg: {}", message);
+                reply = processMessage(message);
                 log.debug("processMessage reply: {}", reply);
-                if (encrypt) {
+                if (encrypt && reply != null) {
                     reply = encryptMsg(crypt, reply, nonce);
                 }
             }
             reply = reply == null ? "success" : reply;
         } catch (AesException e) {
-            log.error("param: {} {} {} {} {}, AesException:{}", signature, timestamp, nonce, echoStr, xmlBody, e.getMessage());
+            log.error("param: {} {} {} {} {}, AesException:{}", signature, timestamp, nonce, echoStr, body, e.getMessage());
             return "success";
         }
         return reply;
@@ -165,20 +165,24 @@ public class ServerServiceImpl implements ServerService {
     /**
      * 处理回调消息
      *
-     * @param xmlMessage 原始Message
+     * @param message 原始Message
      * @return 返回回复信息
      */
-    protected String processMessage(String xmlMessage) {
-        BaseReceiveMessage message = isBodyJson ? JsonUtil.parseJson(xmlMessage, BaseReceiveMessage.class)
-                : XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class);
-        Class<? extends BaseReceiveMessage> type = getMessageTypeValue(message.getMsgType(), message.getEvent());
-        Object realMessage = isBodyJson ? JsonUtil.parseJson(xmlMessage, type) : XmlUtil.parseXml(xmlMessage, type);
+    protected String processMessage(String message) {
+        BaseReceiveMessage baseReceiveMessage = isBodyJson ? JsonUtil.parseJson(message, BaseReceiveMessage.class)
+                : XmlUtil.parseXml(message, BaseReceiveMessage.class);
+        Class<? extends BaseReceiveMessage> type = getMessageTypeValue(baseReceiveMessage.getMsgType(), baseReceiveMessage.getEvent());
+        BaseReceiveMessage realMessage = baseReceiveMessage;
+        if (type != null) {
+            realMessage = isBodyJson ? JsonUtil.parseJson(message, type) : XmlUtil.parseXml(message, type);
+        }
+        realMessage.setOriginMessage(message);
         for (MessageCallback callback : callbackList) {
-            BaseReplyMessage result = callback.handle(type.cast(realMessage));
+            BaseReplyMessage result = callback.handle(realMessage);
             if (result != null) {
-                result.setToUserName(message.getFromUserName());
+                result.setToUserName(realMessage.getFromUserName());
                 if (StringUtils.isEmpty(result.getFromUserName())) {
-                    result.setFromUserName(message.getToUserName());
+                    result.setFromUserName(realMessage.getToUserName());
                 }
                 return isBodyJson ? JsonUtil.toJson(result) : XmlUtil.toXml(result);
             }

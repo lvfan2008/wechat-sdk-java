@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.*;
 
@@ -18,12 +19,14 @@ public class ReplyImageMessage extends BaseReplyMessage {
      * 消息类型
      */
     @XStreamAlias("MsgType")
+    @JsonProperty("MsgType")
     String msgType = "image";
 
     /**
      * 图片
      */
     @XStreamAlias("Image")
+    @JsonProperty("Image")
     Image image;
 
 
@@ -40,6 +43,7 @@ public class ReplyImageMessage extends BaseReplyMessage {
          * 图片消息媒体id，可以调用获取临时素材接口拉取数据。
          */
         @XStreamAlias("MediaId")
+        @JsonProperty("MediaId")
         String mediaId;
     }
 }

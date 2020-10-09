@@ -28,8 +28,8 @@ public class XmlUtil {
      * @param xml xml字符串
      * @return 对象
      */
-    public static Object parseXml(String xml, Class<?> resultType) {
-        return getXmlStream(resultType).fromXML(xml);
+    public static <T> T parseXml(String xml, Class<T> resultType) {
+        return resultType.cast(getXmlStream(resultType).fromXML(xml));
     }
 
     /**

@@ -1,8 +1,8 @@
-package fan.lv.wechat.api.mp.impl;
+package fan.lv.wechat.api.mp.service.impl;
 
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.UserService;
+import fan.lv.wechat.api.mp.service.UserService;
 import fan.lv.wechat.entity.mp.user.WxPaidUnionIdResult;
 import fan.lv.wechat.entity.mp.user.WxSessionResult;
 

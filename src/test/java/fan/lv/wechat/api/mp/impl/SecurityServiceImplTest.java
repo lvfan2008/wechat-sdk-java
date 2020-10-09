@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.mp.impl;
 
-import fan.lv.wechat.api.mp.QrCodeService;
-import fan.lv.wechat.api.mp.SecurityService;
+import fan.lv.wechat.api.mp.service.SecurityService;
+import fan.lv.wechat.api.mp.service.impl.SecurityServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.mp.security.WxMediaCheckAsyncResult;
 import fan.lv.wechat.entity.result.WxResult;

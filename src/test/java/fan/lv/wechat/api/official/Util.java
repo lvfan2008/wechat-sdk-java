@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.official;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.impl.WeAppClientImpl;
+import fan.lv.wechat.api.mp.service.impl.MpClientImpl;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
 import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
 import fan.lv.wechat.entity.result.WxResult;
@@ -39,7 +39,7 @@ public class Util {
             e.printStackTrace();
         }
         client = new ClientImpl(properties.getProperty("app_id"), properties.getProperty("app_secret"), new DefaultCacheImpl());
-        mpClient = new WeAppClientImpl(properties.getProperty("mp.app_id"), properties.getProperty("mp.app_secret"), new DefaultCacheImpl());
+        mpClient = new MpClientImpl(properties.getProperty("mp.app_id"), properties.getProperty("mp.app_secret"), new DefaultCacheImpl());
     }
 
     /**

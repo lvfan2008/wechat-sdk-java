@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.mp;
+package fan.lv.wechat.api.mp.service;
 
 import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
 import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;

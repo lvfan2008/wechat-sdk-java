@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.mp.impl;
 
-import fan.lv.wechat.api.mp.DataAnalysisService;
+import fan.lv.wechat.api.mp.service.DataAnalysisService;
+import fan.lv.wechat.api.mp.service.impl.DataAnalysisServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.mp.datacube.*;
 import junit.framework.TestCase;

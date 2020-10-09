@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.mp.impl;
 
-import fan.lv.wechat.api.mp.MpMessageService;
-import fan.lv.wechat.api.mp.NearByPoiService;
+import fan.lv.wechat.api.mp.service.NearByPoiService;
+import fan.lv.wechat.api.mp.service.impl.NearByPoiServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.mp.nearbypoi.WxAddNearByPoiParam;
 import fan.lv.wechat.entity.mp.nearbypoi.WxAddNearByPoiResult;

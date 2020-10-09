@@ -1,8 +1,8 @@
-package fan.lv.wechat.api.mp.impl;
+package fan.lv.wechat.api.mp.service.impl;
 
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.QrCodeService;
+import fan.lv.wechat.api.mp.service.QrCodeService;
 import fan.lv.wechat.entity.mp.qrcode.WxGetMpCodeParam;
 import fan.lv.wechat.entity.mp.qrcode.WxGetUnlimitedMpCodeParam;
 import fan.lv.wechat.entity.result.WxResult;

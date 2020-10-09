@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.*;
 
@@ -18,12 +19,14 @@ public class ReplyVideoMessage extends BaseReplyMessage {
      * 消息类型
      */
     @XStreamAlias("MsgType")
+    @JsonProperty("MsgType")
     String msgType = "video";
 
     /**
      * 图片
      */
     @XStreamAlias("Video")
+    @JsonProperty("Video")
     Video video;
 
     public ReplyVideoMessage(String mediaId, String title, String description) {
@@ -39,12 +42,14 @@ public class ReplyVideoMessage extends BaseReplyMessage {
          * 通过素材管理中的接口上传多媒体文件，得到的id
          */
         @XStreamAlias("MediaId")
+        @JsonProperty("MediaId")
         String mediaId;
 
         /**
          * 视频消息的标题
          */
         @XStreamAlias("Title")
+        @JsonProperty("Title")
         String title;
 
 
@@ -52,6 +57,7 @@ public class ReplyVideoMessage extends BaseReplyMessage {
          * 视频消息的描述
          */
         @XStreamAlias("Description")
+        @JsonProperty("Description")
         String description;
     }
 }

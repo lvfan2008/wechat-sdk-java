@@ -8,6 +8,9 @@
 
 package fan.lv.wechat.util.crpto;
 
+import fan.lv.wechat.util.SignUtil;
+import org.apache.commons.lang3.StringUtils;
+
 import java.security.MessageDigest;
 import java.util.Arrays;
 
@@ -62,11 +65,13 @@ public class SHA1 {
     /**
      * SHA1加密
      *
-     * @param str 加密串
+     * @param values 加密串
      * @return 加密结果
      * @throws AesException 异常
      */
-    public static String getSha1(String str) throws AesException {
-        return getSha1(str, "", "", "");
+    public static String getSha1(String... values) throws AesException {
+        values = Arrays.stream(values).map(StringUtils::defaultString).toArray(String[]::new);
+        Arrays.sort(values);
+        return getSha1(StringUtils.join(values), "", "", "");
     }
 }

@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.mp.impl;
 
-import fan.lv.wechat.api.mp.MpMessageService;
-import fan.lv.wechat.api.mp.PluginService;
+import fan.lv.wechat.api.mp.service.PluginService;
+import fan.lv.wechat.api.mp.service.impl.PluginServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.mp.plugin.WxPluginDevApplyListResult;
 import fan.lv.wechat.entity.mp.plugin.WxPluginListResult;

@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.mp.impl;
+package fan.lv.wechat.api.mp.service.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.DataAnalysisService;
+import fan.lv.wechat.api.mp.service.DataAnalysisService;
 import fan.lv.wechat.entity.mp.datacube.*;
 import fan.lv.wechat.util.SimpleMap;
 

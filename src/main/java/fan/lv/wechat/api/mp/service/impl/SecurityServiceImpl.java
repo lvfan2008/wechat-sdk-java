@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.mp.impl;
+package fan.lv.wechat.api.mp.service.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.mp.SecurityService;
+import fan.lv.wechat.api.mp.service.SecurityService;
 import fan.lv.wechat.entity.mp.security.WxMediaCheckAsyncResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.SimpleMap;

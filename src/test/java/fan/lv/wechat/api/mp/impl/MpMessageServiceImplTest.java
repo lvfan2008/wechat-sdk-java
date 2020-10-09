@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.mp.impl;
 
-import fan.lv.wechat.api.mp.MpMessageService;
+import fan.lv.wechat.api.mp.service.MpMessageService;
+import fan.lv.wechat.api.mp.service.impl.MpMessageServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.entity.mp.message.WxCreateActivityIdResult;
 import fan.lv.wechat.entity.mp.message.WxUniformMessageParam;

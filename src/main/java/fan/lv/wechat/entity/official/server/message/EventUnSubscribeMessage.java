@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,5 +18,6 @@ public class EventUnSubscribeMessage extends BaseEventMessage {
      * 事件类型: unsubscribe(取消订阅)
      */
     @XStreamAlias("Event")
+    @JsonProperty("Event")
     String event = "unsubscribe";
 }

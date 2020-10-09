@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +22,14 @@ public class ReplyTextMessage extends BaseReplyMessage {
      * 消息类型
      */
     @XStreamAlias("MsgType")
+    @JsonProperty("MsgType")
     String msgType = "text";
 
     /**
      * 回复的消息内容（换行：在content中能够换行，微信客户端就支持换行显示）
      */
     @XStreamAlias("Content")
+    @JsonProperty("Content")
     String content;
 
     public ReplyTextMessage(String content) {

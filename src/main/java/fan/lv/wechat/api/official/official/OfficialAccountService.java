@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.official.official;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.official.Intelligence.IntelligenceService;
+import fan.lv.wechat.api.official.Intelligence.AiService;
 import fan.lv.wechat.api.official.account.AccountService;
 import fan.lv.wechat.api.official.asset.MaterialService;
 import fan.lv.wechat.api.official.base.BaseService;
@@ -69,7 +69,7 @@ public interface OfficialAccountService {
      *
      * @return 智能接口服务
      */
-    IntelligenceService getIntelligenceService();
+    AiService getIntelligenceService();
 
     /**
      * 得到JsSdk服务

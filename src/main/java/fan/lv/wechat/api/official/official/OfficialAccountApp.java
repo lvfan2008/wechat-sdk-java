@@ -2,7 +2,7 @@ package fan.lv.wechat.api.official.official;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.kernel.impl.ContainerImpl;
-import fan.lv.wechat.api.official.Intelligence.IntelligenceService;
+import fan.lv.wechat.api.official.Intelligence.AiService;
 import fan.lv.wechat.api.official.account.AccountService;
 import fan.lv.wechat.api.official.asset.MaterialService;
 import fan.lv.wechat.api.official.base.BaseService;
@@ -64,8 +64,8 @@ public class OfficialAccountApp extends ContainerImpl implements OfficialAccount
     }
 
     @Override
-    public IntelligenceService getIntelligenceService() {
-        return get(IntelligenceService.class);
+    public AiService getIntelligenceService() {
+        return get(AiService.class);
     }
 
     @Override

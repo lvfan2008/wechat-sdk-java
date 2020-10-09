@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,11 +17,13 @@ public class BaseEventMessage extends BaseReceiveMessage {
      * 消息类型
      */
     @XStreamAlias("MsgType")
+    @JsonProperty("MsgType")
     String msgType = "event";
 
     /**
      * 事件类型
      */
     @XStreamAlias("Event")
+    @JsonProperty("Event")
     String event;
 }

@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.official.server.message;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,12 +20,14 @@ public class EventViewMessage extends BaseEventMessage {
      * 事件类型
      */
     @XStreamAlias("Event")
+    @JsonProperty("Event")
     String event = "VIEW";
 
     /**
      * 事件KEY值，设置的跳转URL
      */
     @XStreamAlias("EventKey")
+    @JsonProperty("EventKey")
     String eventKey;
 
     public EventViewMessage(String eventKey) {

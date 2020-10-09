@@ -1,5 +1,6 @@
 package fan.lv.wechat.util;
 
+import fan.lv.wechat.util.crpto.AesException;
 import fan.lv.wechat.util.crpto.SHA1;
 
 import java.util.UUID;
@@ -29,12 +30,12 @@ public class SignUtil {
     /**
      * SHA-1签名
      *
-     * @param str 签名串
+     * @param values 签名串
      * @return 摘要作为签名
      */
-    public static String sha1(String str) {
+    public static String sha1(String... values) {
         try {
-            return SHA1.getSha1(str);
+            return SHA1.getSha1(values);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

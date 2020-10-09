@@ -2,8 +2,8 @@ package fan.lv.wechat.api.official.official;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.kernel.impl.DefaultCacheImpl;
-import fan.lv.wechat.api.official.Intelligence.IntelligenceService;
-import fan.lv.wechat.api.official.Intelligence.impl.IntelligenceServiceImpl;
+import fan.lv.wechat.api.official.Intelligence.AiService;
+import fan.lv.wechat.api.official.Intelligence.impl.AiServiceImpl;
 import fan.lv.wechat.api.official.Util;
 import fan.lv.wechat.api.official.account.AccountService;
 import fan.lv.wechat.api.official.account.impl.AccountServiceImpl;
@@ -60,7 +60,7 @@ public class OfficialAccountAppTest extends TestCase {
         assertEquals(officialAccountApp.get(BaseService.class).getClass(), BaseServiceImpl.class);
         assertEquals(officialAccountApp.get(CommentService.class).getClass(), CommentServiceImpl.class);
         assertEquals(officialAccountApp.get(CustomerService.class).getClass(), CustomerServiceImpl.class);
-        assertEquals(officialAccountApp.get(IntelligenceService.class).getClass(), IntelligenceServiceImpl.class);
+        assertEquals(officialAccountApp.get(AiService.class).getClass(), AiServiceImpl.class);
         assertEquals(officialAccountApp.get(JsSdkService.class).getClass(), JsSdkServiceImpl.class);
         assertEquals(officialAccountApp.get(MenuService.class).getClass(), MenuServiceImpl.class);
         assertEquals(officialAccountApp.get(MassSendService.class).getClass(), MassSendServiceImpl.class);

@@ -1,9 +1,11 @@
 package fan.lv.wechat.api.official.server.impl;
 
-import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.official.server.MessageCallback;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.entity.official.server.message.*;
+import fan.lv.wechat.util.JsonUtil;
+import fan.lv.wechat.util.SignUtil;
+import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.crpto.AesException;
 import fan.lv.wechat.util.crpto.SHA1;
@@ -11,7 +13,9 @@ import fan.lv.wechat.util.crpto.WxBizMsgCrypt;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 公众号或小程序服务回调
@@ -35,6 +39,11 @@ public class ServerServiceImpl implements ServerService {
      * appId
      */
     protected String appId;
+
+    /**
+     * 是否数据格式为xml格式
+     */
+    protected Boolean isBodyXml = true;
 
     /**
      * 事件消息对应类,key=msgType:event
@@ -88,15 +97,21 @@ public class ServerServiceImpl implements ServerService {
                 }
             } else {
                 String xmlMessage = xmlBody;
-                boolean encrypt = xmlBody.contains("<Encrypt>");
+                isBodyXml = xmlBody.trim().startsWith("{");
+                EncryptReceiveMessage encryptReceiveMessage = isBodyXml ? JsonUtil.parseJson(xmlBody, EncryptReceiveMessage.class)
+                        : XmlUtil.parseXml(xmlBody, EncryptReceiveMessage.class);
+                boolean encrypt = encryptReceiveMessage.getEncrypt() != null;
                 if (encrypt) {
-                    xmlMessage = crypt.decryptMsg(signature, timestamp, nonce, xmlBody);
+                    if (!SignUtil.sha1(token, timestamp, nonce, echoStr).equals(signature)) {
+                        throw new AesException(AesException.VALIDATE_SIGNATURE_ERROR);
+                    }
+                    xmlMessage = crypt.decrypt(encryptReceiveMessage.getEncrypt());
                 }
                 log.debug("decryptMsg: {}", xmlMessage);
                 reply = processMessage(xmlMessage);
                 log.debug("processMessage reply: {}", reply);
                 if (encrypt) {
-                    reply = crypt.encryptMsg(reply, "", nonce);
+                    reply = encryptMsg(crypt, reply, nonce);
                 }
             }
             reply = reply == null ? "success" : reply;
@@ -105,6 +120,24 @@ public class ServerServiceImpl implements ServerService {
             return "success";
         }
         return reply;
+    }
+
+    /**
+     * 加密回复消息
+     *
+     * @param crypt    加解密实例
+     * @param replyMsg 回复消息
+     * @param nonce    随机串
+     * @return 加密后的字符串
+     * @throws AesException 异常
+     */
+    protected String encryptMsg(WxBizMsgCrypt crypt, String replyMsg, String nonce) throws AesException {
+        // 加密
+        String encrypt = crypt.encrypt(crypt.getRandomStr(), replyMsg);
+        String timeStamp = Long.toString(System.currentTimeMillis());
+        String signature = SHA1.getSha1(token, timeStamp, nonce, encrypt);
+        EncryptReplyMessage encryptReplyMessage = new EncryptReplyMessage(encrypt, signature, timeStamp, nonce);
+        return isBodyXml ? XmlUtil.toXml(encryptReplyMessage) : JsonUtil.toJson(encryptReplyMessage);
     }
 
     @Override
@@ -136,9 +169,10 @@ public class ServerServiceImpl implements ServerService {
      * @return 返回回复信息
      */
     protected String processMessage(String xmlMessage) {
-        BaseReceiveMessage message = (BaseReceiveMessage) XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class);
+        BaseReceiveMessage message = isBodyXml ? XmlUtil.parseXml(xmlMessage, BaseReceiveMessage.class)
+                : JsonUtil.parseJson(xmlMessage, BaseReceiveMessage.class);
         Class<? extends BaseReceiveMessage> type = getMessageTypeValue(message.getMsgType(), message.getEvent());
-        Object realMessage = XmlUtil.parseXml(xmlMessage, type);
+        Object realMessage = isBodyXml ? XmlUtil.parseXml(xmlMessage, type) : JsonUtil.parseJson(xmlMessage, type);
         for (MessageCallback callback : callbackList) {
             BaseReplyMessage result = callback.handle(type.cast(realMessage));
             if (result != null) {
@@ -146,7 +180,7 @@ public class ServerServiceImpl implements ServerService {
                 if (StringUtils.isEmpty(result.getFromUserName())) {
                     result.setFromUserName(message.getToUserName());
                 }
-                return XmlUtil.toXml(result);
+                return isBodyXml ? XmlUtil.toXml(result) : JsonUtil.toJson(result);
             }
         }
         return null;

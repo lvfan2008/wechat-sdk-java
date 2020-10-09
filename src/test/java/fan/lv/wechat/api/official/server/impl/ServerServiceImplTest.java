@@ -42,25 +42,4 @@ public class ServerServiceImplTest extends TestCase {
             return new ReplyTextMessage("receive: " + JsonUtil.toJson(message));
         }).serv(sMsgSignature, sTimestamp, sNonce, null, sPostData);
     }
-
-    public void testServ2() {
-        String sMsgSignature = "003fee52ecc56afb46c00b5c7721be87860ce785";
-        String sTimestamp = "1410349438";
-        String sNonce = "298025754";
-        String sEncryptBase64 = "mfBCs65c67CeJw22u4VT2TD73q5H06+ocrAIxswCaeZ/d/Lw" +
-                "0msSZFHY0teqgSYiI1zR2gD2DKrB3TIrmX/liNSDrGqS8jSI/" +
-                "WPeKB5VPr7Ezr7gomZAyGCwJSgT1TRFWPfONGJMxuj2nk4faTu" +
-                "spAuVIFQ6SHwZuJBZC7mcJp7Cgr9cUhATQWDbOPaE7ukZBTV2Yq" +
-                "yzH+UI2AK+J1S47cE79k1RX8t0hcTz/O0hlK8DGXKnvYv88qKQcI" +
-                "7z4iaajqHfRVZKBNyOODabs+It+ZfM3dWTeFcPgDbGtIEnpt/EDtu" +
-                "uA/zMvtkaKdHdswPnVZQ+xdwbYr3ldGvfT8HlEYEgkgKaThxTFobVl" +
-                "wzu2ZkXCjicbP3xdr15Iq48ObgzPpqYuZ3IEoyggZDKClquk0u0orMck4GTF/XyE8yGzc4=";
-
-        String sPostData = JsonUtil.toJson(SimpleMap.of("ToUserName", "toUser", "Encrypt", sEncryptBase64));
-
-
-        serverService.messageCallback((message) -> {
-            return new ReplyTextMessage("receive: " + JsonUtil.toJson(message));
-        }).serv(sMsgSignature, sTimestamp, sNonce, null, sPostData);
-    }
 }

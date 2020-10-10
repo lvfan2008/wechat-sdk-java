@@ -13,6 +13,7 @@ public interface MarketService {
      *
      * @param param 参数
      * @return 接口结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/service-market/serviceMarket.invokeService.html" target="_blank">微信官方文档</a>
      */
     WxInvokeServiceResult invokeService(WxInvokeServiceParam param);
 }

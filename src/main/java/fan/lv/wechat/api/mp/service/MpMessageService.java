@@ -16,6 +16,7 @@ public interface MpMessageService {
      *
      * @param mediaId 媒体文件 ID
      * @return 如果调用成功，会直接返回图片二进制内容(WxResult.getContent)，如果请求失败，会返回 JSON 格式的数据。
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.getTempMedia.html" target="_blank">微信官方文档</a>
      */
     WxResult getTempMedia(String mediaId);
 
@@ -25,6 +26,7 @@ public interface MpMessageService {
      * @param type     只支持image
      * @param filePath 上传图片路径
      * @return 上传结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.uploadTempMedia.html" target="_blank">微信官方文档</a>
      */
     WxUploadTempMediaResult uploadTempMedia(String type, String filePath);
 
@@ -34,6 +36,7 @@ public interface MpMessageService {
      * @param toUser           用户OpenId
      * @param baseMpMessage 客服消息，必须为BaseMpMessage的子类
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/customer-message/customerServiceMessage.send.html" target="_blank">微信官方文档</a>
      */
     WxResult send(String toUser, BaseMpMessage baseMpMessage);
 

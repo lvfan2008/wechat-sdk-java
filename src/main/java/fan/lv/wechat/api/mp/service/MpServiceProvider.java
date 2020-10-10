@@ -25,5 +25,7 @@ public class MpServiceProvider implements ServiceProvider {
         container.bind(SubscribeService.class, () -> new SubscribeServiceImpl(client));
         container.bind(ServerService.class, () -> new ServerServiceImpl(config.getEncodingAesKey(), config.getToken(), config.getAppId()));
         container.bind(MpImageOcrService.class, () -> new MpImageOcrServiceImpl(client));
+        container.bind(MarketService.class, () -> new MarketServiceImpl(client));
+        container.bind(SoterService.class, () -> new SoterServiceImpl(client));
     }
 }

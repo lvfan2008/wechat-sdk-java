@@ -12,6 +12,7 @@ public interface UserService {
      *
      * @param code 登录时获取的 code
      * @return 登录会话凭证
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/login/auth.code2Session.html" target="_blank">微信官方文档</a>
      */
     WxSessionResult codeToSession(String code);
 
@@ -21,6 +22,7 @@ public interface UserService {
      * @param openId        支付用户唯一标识
      * @param transactionId 微信支付订单号
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html" target="_blank">微信官方文档</a>
      */
     default WxPaidUnionIdResult getPaidUnionId(String openId, String transactionId) {
         return getPaidUnionId(openId, transactionId, null, null);
@@ -33,6 +35,7 @@ public interface UserService {
      * @param mchId      微信支付分配的商户号，和商户订单号配合使用
      * @param outTradeNo 微信支付商户订单号，和商户号配合使用
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html" target="_blank">微信官方文档</a>
      */
     default WxPaidUnionIdResult getPaidUnionId(String openId, String mchId, String outTradeNo) {
         return getPaidUnionId(openId, null, mchId, outTradeNo);
@@ -46,6 +49,7 @@ public interface UserService {
      * @param mchId         微信支付分配的商户号，和商户订单号配合使用
      * @param outTradeNo    微信支付商户订单号，和商户号配合使用
      * @return 返回结果
+     * @see <a href="https://developers.weixin.qq.com/miniprogram/dev/api-backend/open-api/user-info/auth.getPaidUnionId.html" target="_blank">微信官方文档</a>
      */
     WxPaidUnionIdResult getPaidUnionId(String openId, String transactionId, String mchId, String outTradeNo);
 }

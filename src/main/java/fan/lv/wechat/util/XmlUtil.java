@@ -58,6 +58,7 @@ public class XmlUtil {
             }
         };
         xstream.addPermission(AnyTypePermission.ANY);
+        xstream.denyPermission(NullPermission.NULL);
         xstream.alias("xml", resultType);
         xstream.processAnnotations(resultType);
         return xstream;

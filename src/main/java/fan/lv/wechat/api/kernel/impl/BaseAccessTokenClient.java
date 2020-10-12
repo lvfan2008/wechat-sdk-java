@@ -97,14 +97,13 @@ abstract public class BaseAccessTokenClient extends BaseClient {
                 }
             }
 
-            T wxResult = super.request(uri, httpOptions, resultType);
+            T wxResult = super.request(url, httpOptions, resultType);
             if (isNotRawUrl(uri) && isTokenExpired(wxResult)) {
                 WxResult accessTokenResult = this.getAccessToken();
                 if (accessTokenResult.success()) {
                     return this.request(uri, httpOptions, resultType);
                 }
             }
-            log.debug("result: {}", JsonUtil.toJson(wxResult));
             return wxResult;
         } catch (Exception e) {
             return WxResult.errorResult(-3, e.getMessage(), resultType);

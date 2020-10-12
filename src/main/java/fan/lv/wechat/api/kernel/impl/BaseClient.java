@@ -28,7 +28,7 @@ abstract public class BaseClient implements Client {
 
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
-        String url = getBaseUrl() + uri;
+        String url = uri.contains("://") ? uri : getBaseUrl() + uri;
         log.debug("request: url: {}, httpOptions: {}", url, httpOptions.toString());
 
         HttpResponse httpResponse = null;

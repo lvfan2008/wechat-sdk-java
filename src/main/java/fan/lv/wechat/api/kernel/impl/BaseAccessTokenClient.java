@@ -90,7 +90,7 @@ abstract public class BaseAccessTokenClient extends BaseClient {
                     if (StringUtils.isEmpty(accessToken)) {
                         WxResult wxResult = this.getAccessToken();
                         if (!wxResult.success()) {
-                            return WxResult.errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
+                            return errorResult(wxResult.getErrorCode(), wxResult.getErrorMessage(), resultType);
                         }
                     }
                     url = this.buildAccessTokenUrl(url, getCacheToken());
@@ -106,7 +106,7 @@ abstract public class BaseAccessTokenClient extends BaseClient {
             }
             return wxResult;
         } catch (Exception e) {
-            return WxResult.errorResult(-3, e.getMessage(), resultType);
+            return errorResult(-3, e.getMessage(), resultType);
         }
     }
 

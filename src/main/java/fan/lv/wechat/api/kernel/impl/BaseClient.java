@@ -35,13 +35,13 @@ abstract public class BaseClient implements Client {
         try {
             httpResponse = HttpUtils.httpRequest(url, httpOptions);
         } catch (Exception exception) {
-            return WxResult.errorResult(-1, exception.getMessage(), resultType);
+            return errorResult(-1, exception.getMessage(), resultType);
         }
 
         int statusOk = 200;
         if (httpResponse.getStatusLine().getStatusCode() != statusOk) {
             log.error("getStatusCode() != statusOk httpResponse: {}", httpResponse.toString());
-            return WxResult.errorResult(-1, httpResponse.getStatusLine().toString(), resultType);
+            return errorResult(-1, httpResponse.getStatusLine().toString(), resultType);
         }
 
         // 如果不是json类型，则为原始数据流
@@ -58,7 +58,7 @@ abstract public class BaseClient implements Client {
             wxResult = result.trim().startsWith("{") ? JsonUtil.parseJson(result, resultType)
                     : XmlUtil.parseXml(result, resultType);
         } catch (IOException e) {
-            return WxResult.errorResult(-1, e.getMessage(), resultType);
+            return errorResult(-1, e.getMessage(), resultType);
         }
         log.debug("origin result: {}", result);
         log.debug("result: {}", JsonUtil.toJson(wxResult));
@@ -108,12 +108,32 @@ abstract public class BaseClient implements Client {
         T result;
         try {
             Header header = httpResponse.getEntity().getContentType();
-            result = resultType.newInstance();
+            result = resultType.getDeclaredConstructor().newInstance();
             result.setIsRawStream(true);
             result.setFilename(getFileName(httpResponse));
             result.setContentType(header != null ? header.getValue() : null);
             result.setContent(httpResponse.getEntity().getContent());
             result.setLength(httpResponse.getEntity().getContentLength());
+            return result;
+        } catch (Exception exception) {
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
+
+    /**
+     * 原生结果
+     *
+     * @param errorCode  错误码
+     * @param resultType 返回类型
+     * @param <T>        模板类型
+     * @return 原生结果
+     */
+    protected <T extends WxResult> T errorResult(int errorCode, String errorMessage, Class<T> resultType) {
+        T result;
+        try {
+            result = resultType.getDeclaredConstructor().newInstance();
+            result.setErrorCode(errorCode);
+            result.setErrorMessage(errorMessage);
             return result;
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());

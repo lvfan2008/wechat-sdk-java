@@ -52,10 +52,12 @@ public class RequestOptions {
     /**
      * body内容类型
      */
+    @Builder.Default
     String mimeType = "application/json";
 
     /**
      * 字符集
      */
+    @Builder.Default
     String charset = "UTF-8";
 }

@@ -5,7 +5,6 @@ import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.smartcardio.Card;
 
 /**
  * 行驶证OCR识别结果

@@ -72,25 +72,4 @@ public class WxResult {
         return getErrorCode() == 0;
     }
 
-    /**
-     * 转为相应的错误结果
-     *
-     * @param errorCode    错误码
-     * @param errorMessage 错误消息
-     * @param resultType   结果类型
-     * @param <T>          模板类型
-     * @return 错误结果
-     */
-    public static  <T extends WxResult> T errorResult(Integer errorCode, String errorMessage, Class<T> resultType) {
-        T result;
-        try {
-            result = resultType.newInstance();
-            result.setErrorCode(errorCode);
-            result.setErrorMessage(errorMessage);
-            return result;
-        } catch (Exception exception) {
-            throw new RuntimeException(exception.getMessage());
-        }
-    }
-
 }

@@ -103,7 +103,7 @@ public class SnsClientImpl extends ClientImpl {
      * @param result token
      */
     protected void cacheToken(WxSnsAccessTokenResult result) {
-        cache.put("sns-access-token-" + appId, JsonUtil.toJson(result), result.getExpiresIn() - 60);
-        cache.put("sns-refresh-token-" + appId, JsonUtil.toJson(result), 30 * 24 * 3600 - 60);
+        cache.put("sns-access-token-" + appId + "_" + code, JsonUtil.toJson(result), result.getExpiresIn() - 60);
+        cache.put("sns-refresh-token-" + appId + "_" + code, JsonUtil.toJson(result), 30 * 24 * 3600 - 60);
     }
 }

@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.kernel;
 
 import fan.lv.wechat.entity.result.WxResult;
-import fan.lv.wechat.util.RequestOptions;
+import fan.lv.wechat.util.*;
 
 import java.util.Map;
 
@@ -27,7 +27,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T get(String uri, Class<T> resultType);
+    default <T extends WxResult> T get(String uri, Class<T> resultType) {
+        return get(uri, SimpleMap.of(), resultType);
+    }
 
     /**
      * Post Json请求
@@ -38,7 +40,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T postJson(String uri, Object object, Class<T> resultType);
+    default <T extends WxResult> T postJson(String uri, Object object, Class<T> resultType) {
+        return postJson(uri, SimpleMap.of(), object, resultType);
+    }
 
     /**
      * Post表单
@@ -49,7 +53,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T postForm(String uri, Map<String, String> formData, Class<T> resultType);
+    default <T extends WxResult> T postForm(String uri, Map<String, String> formData, Class<T> resultType) {
+        return postForm(uri, SimpleMap.of(), formData, resultType);
+    }
 
     /**
      * 上传文件
@@ -61,8 +67,10 @@ public interface Client {
      * @param <T>         模板类型
      * @return 返回结果
      */
-    <T extends WxResult> T uploadFile(String uri, Map<String, String> formData,
-                                      Map<String, String> filePathMap, Class<T> resultType);
+    default <T extends WxResult> T uploadFile(String uri, Map<String, String> formData,
+                                              Map<String, String> filePathMap, Class<T> resultType) {
+        return uploadFile(uri, SimpleMap.of(), formData, filePathMap, resultType);
+    }
 
 
     /**
@@ -74,7 +82,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType);
+    default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType) {
+        return get(uri, queryMap, resultType, null);
+    }
 
     /**
      * Post请求
@@ -86,7 +96,23 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType);
+    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
+        return postJson(uri, queryMap, object, resultType, null);
+    }
+
+    /**
+     * Post Xml请求
+     *
+     * @param uri        uri地址
+     * @param queryMap   get参数
+     * @param object     json参数对象
+     * @param resultType 返回类型
+     * @param <T>        模板变量
+     * @return 返回结果
+     */
+    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
+        return postXml(uri, queryMap, object, resultType, null);
+    }
 
     /**
      * Post表单
@@ -98,7 +124,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType);
+    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType) {
+        return postForm(uri, queryMap, formData, resultType, null);
+    }
 
     /**
      * 上传文件
@@ -111,8 +139,89 @@ public interface Client {
      * @param <T>         模板类型
      * @return 返回结果
      */
-    <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
-                                      Map<String, String> filePathMap, Class<T> resultType);
+    default <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
+                                              Map<String, String> filePathMap, Class<T> resultType) {
+        return uploadFile(uri, queryMap, formData, filePathMap, resultType, null);
+    }
+
+    /**
+     * Get请求
+     *
+     * @param uri        uri地址，不包含主域名部分
+     * @param queryMap   get参数
+     * @param resultType 返回类型
+     * @param sslCert    证书
+     * @param <T>        模板变量
+     * @return 返回结果
+     */
+    default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType, SslCert sslCert) {
+        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).build(), resultType);
+    }
+
+    /**
+     * Post请求
+     *
+     * @param uri        uri地址
+     * @param queryMap   get参数
+     * @param object     json参数对象
+     * @param resultType 返回类型
+     * @param sslCert    证书
+     * @param <T>        模板变量
+     * @return 返回结果
+     */
+    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType, SslCert sslCert) {
+        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert)
+                .body(JsonUtil.toJson(object)).build(), resultType);
+    }
+
+    /**
+     * Post Xml请求
+     *
+     * @param uri        uri地址
+     * @param queryMap   get参数
+     * @param object     json参数对象
+     * @param resultType 返回类型
+     * @param sslCert    证书
+     * @param <T>        模板变量
+     * @return 返回结果
+     */
+    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object, Class<T> resultType, SslCert sslCert) {
+        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).body(XmlUtil.toXml(object))
+                .mimeType("application/xml").build(), resultType);
+    }
+
+    /**
+     * Post表单
+     *
+     * @param uri        uri地址
+     * @param queryMap   get参数
+     * @param formData   form表单
+     * @param resultType 返回类型
+     * @param sslCert    证书
+     * @param <T>        模板变量
+     * @return 返回结果
+     */
+    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType, SslCert sslCert) {
+        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).formData(formData).build(), resultType);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param uri         uri地址
+     * @param queryMap    get参数
+     * @param formData    form表单
+     * @param filePathMap 上传文件map，key为上传名，value为上传文件路径
+     * @param resultType  返回类型
+     * @param sslCert     证书
+     * @param <T>         模板类型
+     * @return 返回结果
+     */
+    default <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
+                                              Map<String, String> filePathMap, Class<T> resultType, SslCert sslCert) {
+        return request(uri, RequestOptions.builder().queryMap(queryMap).uploadFiles(filePathMap).sslCert(sslCert)
+                .formData(formData).build(), resultType);
+    }
 
     /**
      * Http请求
@@ -125,21 +234,4 @@ public interface Client {
      */
     <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType);
 
-
-    /**
-     * 获取凭证Token
-     *
-     * @return 凭证结果，必须为WxResult子类的实例
-     */
-    default WxResult getAccessToken() {
-        return getAccessToken(true);
-    }
-
-    /**
-     * 获取凭证Token,如果缓存过期或者不从缓存取，需要缓存已得到的Token
-     *
-     * @param tryCache 是否尝试从cache里获取凭证
-     * @return 凭证结果，必须为WxResult子类的实例
-     */
-    WxResult getAccessToken(boolean tryCache);
 }

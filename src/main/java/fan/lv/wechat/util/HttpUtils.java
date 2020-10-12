@@ -6,6 +6,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.DefaultHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -13,13 +18,19 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.KeyStore;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +44,10 @@ public class HttpUtils {
      *
      * @param url url地址
      * @return HttpResponse
-     * @throws IOException 例外
+     * @throws Exception 例外
      */
-    public static HttpResponse httpRequest(String url, RequestOptions httpOptions) throws IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+    public static HttpResponse httpRequest(String url, RequestOptions httpOptions) throws Exception {
+        CloseableHttpClient httpClient = getHttpClient(httpOptions.getSslCert());
         url = HttpUtils.buildUrlQuery(url, httpOptions.getQueryMap());
         HttpUriRequest httpUriRequest;
         MultipartEntityBuilder builder;
@@ -63,9 +74,54 @@ public class HttpUtils {
             ((HttpPost) httpUriRequest).setEntity(builder.build());
         } else if (httpOptions.body != null) {
             assert httpUriRequest instanceof HttpPost;
-            ((HttpPost) httpUriRequest).setEntity(new StringEntity(httpOptions.body, httpOptions.contentType));
+            ((HttpPost) httpUriRequest).setEntity(new StringEntity(httpOptions.getBody(),
+                    ContentType.create(httpOptions.getMimeType(), httpOptions.getCharset())));
         }
         return httpClient.execute(httpUriRequest);
+    }
+
+    /**
+     * 得到httpClient
+     *
+     * @param sslCert 证书
+     * @return httpClient
+     * @throws Exception 异常
+     */
+    private static CloseableHttpClient getHttpClient(SslCert sslCert) throws Exception {
+        BasicHttpClientConnectionManager connManager;
+        if (sslCert != null) {
+            // 证书
+            char[] password = sslCert.getPassword().toCharArray();
+            KeyStore ks = KeyStore.getInstance("PKCS12");
+            ks.load(sslCert.getCertInputStream(), password);
+
+            // 实例化密钥库 & 初始化密钥工厂
+            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            kmf.init(ks, password);
+
+            // 创建 SSLContext
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(kmf.getKeyManagers(), null, new SecureRandom());
+
+            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
+                    sslContext, new String[]{"TLSv1"}, null, new DefaultHostnameVerifier());
+
+            connManager = new BasicHttpClientConnectionManager(
+                    RegistryBuilder.<ConnectionSocketFactory>create()
+                            .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                            .register("https", sslConnectionSocketFactory)
+                            .build(), null, null, null
+            );
+        } else {
+            connManager = new BasicHttpClientConnectionManager(
+                    RegistryBuilder.<ConnectionSocketFactory>create()
+                            .register("http", PlainConnectionSocketFactory.getSocketFactory())
+                            .register("https", SSLConnectionSocketFactory.getSocketFactory())
+                            .build(), null, null, null
+            );
+        }
+
+        return HttpClientBuilder.create().setConnectionManager(connManager).build();
     }
 
 

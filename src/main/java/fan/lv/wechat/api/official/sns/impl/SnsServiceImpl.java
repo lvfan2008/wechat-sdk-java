@@ -54,17 +54,17 @@ public class SnsServiceImpl implements SnsService {
 
     @Override
     public WxSnsOpenIdResult getAuthToken(String code) {
-        Client client = new SnsClientImpl(appId, appSecret, cache, code);
+        SnsClientImpl client = new SnsClientImpl(appId, appSecret, cache, code);
         WxSnsAccessTokenResult result = (WxSnsAccessTokenResult) client.getAccessToken();
         if (result.success()) {
-            cache.put("sns-code-openid-" + appId, code, 30 * 24 * 3600 - 10);
+            cache.put("sns-code-openid-" + appId + "_" + result.getOpenid(), code, 30 * 24 * 3600 - 10);
         }
         return result;
     }
 
     @Override
     public WxSnsUserInfoResult getUserInfo(String openId, String lang) {
-        String code = cache.get("sns-code-openid-" + appId);
+        String code = cache.get("sns-code-openid-" + appId + "_" + openId);
         return new SnsClientImpl(appId, appSecret, cache, code).postJson("/cgi-bin/tags/members/batchunblacklist",
                 SimpleMap.of("openid", openId, "lang", lang),
                 WxSnsUserInfoResult.class);

@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
-import fan.lv.wechat.api.kernel.impl.AbstractClient;
+import fan.lv.wechat.api.kernel.impl.BaseAccessTokenClient;
 import fan.lv.wechat.entity.official.base.WxAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author lv_fan2008
  */
 @Slf4j
-public class ClientImpl extends AbstractClient {
+public class ClientImpl extends BaseAccessTokenClient {
 
     /**
      * api base url

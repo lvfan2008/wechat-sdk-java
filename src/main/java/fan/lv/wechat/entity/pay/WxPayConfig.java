@@ -44,4 +44,9 @@ public class WxPayConfig {
      * 支付后通知Url
      */
     String notifyUrl;
+
+    /**
+     * 签名方式，支持 MD5 和 HMAC-SHA256两种签名
+     */
+    String signType = "MD5";
 }

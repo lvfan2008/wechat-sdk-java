@@ -11,7 +11,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,6 +24,29 @@ abstract public class BaseClient implements Client {
      * 下载文件名字匹配
      */
     static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
+
+    /**
+     * 校验结果是否合法，不合法则抛出异常
+     *
+     * @param result 结果字符串
+     * @throws Exception 异常
+     */
+    protected void verifyResult(String result) throws Exception {
+    }
+
+
+    /**
+     * 转换结果
+     *
+     * @param result     接收的字符串
+     * @param resultType 结果类型
+     * @param <T>        模板类型
+     * @return 返回结果
+     */
+    protected <T extends WxResult> T convertResult(String result, Class<T> resultType) {
+        return result.trim().startsWith("{") ? JsonUtil.parseJson(result, resultType)
+                : XmlUtil.parseXml(result, resultType);
+    }
 
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
@@ -55,9 +77,9 @@ abstract public class BaseClient implements Client {
         T wxResult;
         try {
             result = EntityUtils.toString(httpResponse.getEntity());
-            wxResult = result.trim().startsWith("{") ? JsonUtil.parseJson(result, resultType)
-                    : XmlUtil.parseXml(result, resultType);
-        } catch (IOException e) {
+            verifyResult(result);
+            wxResult = convertResult(result, resultType);
+        } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
         }
         log.debug("origin result: {}", result);

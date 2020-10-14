@@ -2,6 +2,7 @@ package fan.lv.wechat.util;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import org.apache.http.entity.ContentType;
 
 import java.util.HashMap;
@@ -13,30 +14,25 @@ import java.util.Map;
  * @author lv_fan2008
  */
 @Data
-@Builder
 public class RequestOptions {
     /**
      * 头信息
      */
-    @Builder.Default
     Map<String, String> headers = new HashMap<>();
 
     /**
      * get参数信息
      */
-    @Builder.Default
     Map<String, String> queryMap = new HashMap<>();
 
     /**
      * 表单信息
      */
-    @Builder.Default
     Map<String, String> formData = new HashMap<>();
 
     /**
      * 上传文件列表
      */
-    @Builder.Default
     Map<String, String> uploadFiles = new HashMap<>();
 
     /**
@@ -52,12 +48,74 @@ public class RequestOptions {
     /**
      * body内容类型
      */
-    @Builder.Default
     String mimeType = "application/json";
 
     /**
      * 字符集
      */
-    @Builder.Default
     String charset = "UTF-8";
+
+    /**
+     * 连接超时时间，单位毫秒
+     */
+    Integer connectTimeoutMs = 6 * 1000;
+
+    /**
+     * 读数据超时时间，单位毫秒
+     */
+    Integer readTimeoutMs = 8 * 1000;
+
+    public RequestOptions headers(Map<String, String> headers) {
+        this.headers = headers;
+        return this;
+    }
+
+    public RequestOptions queryMap(Map<String, String> queryMap) {
+        this.queryMap = queryMap;
+        return this;
+    }
+
+    public RequestOptions formData(Map<String, String> formData) {
+        this.formData = formData;
+        return this;
+    }
+
+    public RequestOptions uploadFiles(Map<String, String> uploadFiles) {
+        this.uploadFiles = uploadFiles;
+        return this;
+    }
+
+    public RequestOptions body(String body) {
+        this.body = body;
+        return this;
+    }
+
+    public RequestOptions sslCert(SslCert sslCert) {
+        this.sslCert = sslCert;
+        return this;
+    }
+
+    public RequestOptions mimeType(String mimeType) {
+        this.mimeType = mimeType;
+        return this;
+    }
+
+    public RequestOptions charset(String charset) {
+        this.charset = charset;
+        return this;
+    }
+
+    public RequestOptions connectTimeoutMs(Integer connectTimeoutMs) {
+        this.connectTimeoutMs = connectTimeoutMs;
+        return this;
+    }
+
+    public RequestOptions readTimeoutMs(Integer readTimeoutMs) {
+        this.readTimeoutMs = readTimeoutMs;
+        return this;
+    }
+
+    public static RequestOptions defOpts(RequestOptions defOpts) {
+        return defOpts == null ? new RequestOptions() : defOpts;
+    }
 }

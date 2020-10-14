@@ -3,8 +3,10 @@ package fan.lv.wechat.util;
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -47,13 +49,16 @@ public class HttpUtils {
     public static HttpResponse httpRequest(String url, RequestOptions httpOptions) throws Exception {
         CloseableHttpClient httpClient = getHttpClient(httpOptions.getSslCert());
         url = HttpUtils.buildUrlQuery(url, httpOptions.getQueryMap());
-        HttpUriRequest httpUriRequest;
+        HttpRequestBase httpUriRequest;
         MultipartEntityBuilder builder;
         if (httpOptions.uploadFiles.size() > 0 || httpOptions.body != null) {
             httpUriRequest = new HttpPost(url);
         } else {
             httpUriRequest = new HttpGet(url);
         }
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(httpOptions.getReadTimeoutMs())
+                .setConnectTimeout(httpOptions.getConnectTimeoutMs()).build();
+        httpUriRequest.setConfig(requestConfig);
 
         for (Map.Entry<String, String> entry : httpOptions.headers.entrySet()) {
             httpUriRequest.addHeader(entry.getKey(), entry.getValue());

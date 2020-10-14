@@ -150,12 +150,12 @@ public interface Client {
      * @param uri        uri地址，不包含主域名部分
      * @param queryMap   get参数
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType, SslCert sslCert) {
-        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).build(), resultType);
+    default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType, RequestOptions defOpts) {
+        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap), resultType);
     }
 
     /**
@@ -165,13 +165,13 @@ public interface Client {
      * @param queryMap   get参数
      * @param object     json参数对象
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType, SslCert sslCert) {
-        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert)
-                .body(JsonUtil.toJson(object)).build(), resultType);
+    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object,
+                                            Class<T> resultType, RequestOptions defOpts) {
+        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(JsonUtil.toJson(object)), resultType);
     }
 
     /**
@@ -181,13 +181,14 @@ public interface Client {
      * @param queryMap   get参数
      * @param object     json参数对象
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object, Class<T> resultType, SslCert sslCert) {
-        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).body(XmlUtil.toXml(object))
-                .mimeType("application/xml").build(), resultType);
+    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object,
+                                           Class<T> resultType, RequestOptions defOpts) {
+        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(XmlUtil.toXml(object))
+                .mimeType("application/xml"), resultType);
     }
 
     /**
@@ -197,12 +198,13 @@ public interface Client {
      * @param queryMap   get参数
      * @param formData   form表单
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType, SslCert sslCert) {
-        return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).formData(formData).build(), resultType);
+    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData,
+                                            Class<T> resultType, RequestOptions defOpts) {
+        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).formData(formData), resultType);
     }
 
     /**
@@ -213,14 +215,14 @@ public interface Client {
      * @param formData    form表单
      * @param filePathMap 上传文件map，key为上传名，value为上传文件路径
      * @param resultType  返回类型
-     * @param sslCert     证书
+     * @param defOpts     默认选项
      * @param <T>         模板类型
      * @return 返回结果
      */
     default <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
-                                              Map<String, String> filePathMap, Class<T> resultType, SslCert sslCert) {
-        return request(uri, RequestOptions.builder().queryMap(queryMap).uploadFiles(filePathMap).sslCert(sslCert)
-                .formData(formData).build(), resultType);
+                                              Map<String, String> filePathMap, Class<T> resultType, RequestOptions defOpts) {
+        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).uploadFiles(filePathMap).formData(formData),
+                resultType);
     }
 
     /**

@@ -137,14 +137,14 @@ public interface PaymentService {
      */
     WxDownloadBillResult downloadBill(String billDate, String billType, String tarType);
 
-
     /**
      * 解析退款通知结果
      *
-     * @param xml 退款通知的xml
+     * @param longUrl 退款通知的xml
      * @return 退款通知结果
      */
-    WxRefundNotifyResult refundNotifyParse(String xml);
+    WxShortUrlResult shortUrl(String longUrl);
+
 
     /**
      * 交易保障
@@ -163,6 +163,15 @@ public interface PaymentService {
      */
     WxBasePayResult report(String interfaceUrl, Integer executeTime, String returnCode, String resultCode,
                            String userIp, Map<String, String> others);
+
+
+    /**
+     * 解析退款通知结果
+     *
+     * @param xml 退款通知的xml
+     * @return 退款通知结果
+     */
+    WxRefundNotifyResult refundNotifyParse(String xml);
 
     /**
      * 支付通知结果

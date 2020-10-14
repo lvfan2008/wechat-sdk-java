@@ -82,6 +82,8 @@ public class PayClientImpl extends BaseClient {
 
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
+        httpOptions.setConnectTimeoutMs(payConfig.getConnectTimeoutMs());
+        httpOptions.setReadTimeoutMs(payConfig.getReadTimeoutMs());
         T wxResult = super.request(uri, httpOptions, resultType);
         WxBasePayResult wxPayResult = (WxBasePayResult) wxResult;
         if (wxResult.getErrorCode() == 0 && !WxPayConstants.SUCCESS.equals(wxPayResult.getResultCode())) {
@@ -97,16 +99,16 @@ public class PayClientImpl extends BaseClient {
      * @param uri        uri地址
      * @param reqData    请求Map
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
-    public <T extends WxResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, SslCert sslCert) {
+    public <T extends WxResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
 
         try {
             reqData = fullRequest(reqData);
-            return request(uri, RequestOptions.builder().sslCert(sslCert).body(XmlUtil.toXml(reqData))
-                    .mimeType("application/xml").build(), resultType);
+            return request(uri, RequestOptions.defOpts(defOpts).body(XmlUtil.toXml(reqData))
+                    .mimeType("application/xml"), resultType);
         } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
         }
@@ -119,19 +121,20 @@ public class PayClientImpl extends BaseClient {
      * @param queryMap   get参数
      * @param object     json参数对象
      * @param resultType 返回类型
-     * @param sslCert    证书
+     * @param defOpts    默认选项
      * @param <T>        模板变量
      * @return 返回结果
      */
     @Override
-    public <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object, Class<T> resultType, SslCert sslCert) {
+    public <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object,
+                                          Class<T> resultType, RequestOptions defOpts) {
 
         try {
             String xml = XmlUtil.toXml(object);
             Map<String, String> map = WxPayUtil.xmlToMap(xml);
             map = fullRequest(map);
-            return request(uri, RequestOptions.builder().queryMap(queryMap).sslCert(sslCert).body(XmlUtil.toXml(map))
-                    .mimeType("application/xml").build(), resultType);
+            return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(XmlUtil.toXml(map))
+                    .mimeType("application/xml"), resultType);
         } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
         }

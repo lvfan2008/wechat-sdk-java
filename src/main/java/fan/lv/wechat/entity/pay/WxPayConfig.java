@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.pay;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.InputStream;
@@ -49,4 +50,15 @@ public class WxPayConfig {
      * 签名方式，支持 MD5 和 HMAC-SHA256两种签名
      */
     String signType = "MD5";
+
+
+    /**
+     * 连接超时时间，单位毫秒
+     */
+    Integer connectTimeoutMs = 6 * 1000;
+
+    /**
+     * 读数据超时时间，单位毫秒
+     */
+    Integer readTimeoutMs = 8 * 1000;
 }

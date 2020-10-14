@@ -5,6 +5,7 @@ import fan.lv.wechat.entity.pay.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.*;
 import fan.lv.wechat.entity.result.WxBasePayResult;
 import fan.lv.wechat.entity.result.WxCommonPayResult;
+import fan.lv.wechat.util.RequestOptions;
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.SslCert;
 import fan.lv.wechat.util.XmlUtil;
@@ -31,13 +32,14 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        return postXml("/pay/micropay", map, WxMicroPayResult.class, (SslCert) null);
+        return postXml("/pay/micropay", map, WxMicroPayResult.class, (RequestOptions) null);
     }
 
     @Override
     public WxPayReverseResult reverse(String outTradeNo, String transactionId) {
+        RequestOptions defOpts = RequestOptions.defOpts(null).sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
         return postXml("/secapi/pay/reverse", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
-                WxPayReverseResult.class, new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
+                WxPayReverseResult.class, defOpts);
     }
 
     @Override
@@ -53,19 +55,19 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, (SslCert) null);
+        return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, (RequestOptions) null);
     }
 
     @Override
     public WxOrderQueryResult orderQuery(String outTradeNo, String transactionId) {
         return postXml("/pay/orderquery", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
-                WxOrderQueryResult.class, (SslCert) null);
+                WxOrderQueryResult.class, (RequestOptions) null);
     }
 
     @Override
     public WxCommonPayResult closeOrder(String outTradeNo) {
         return postXml("/pay/orderquery", SimpleMap.of("out_trade_no", outTradeNo),
-                WxOrderQueryResult.class, (SslCert) null);
+                WxOrderQueryResult.class, (RequestOptions) null);
     }
 
     @Override
@@ -76,8 +78,8 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        return postXml("/secapi/pay/refund", map,
-                WxOrderRefundResult.class, new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
+        RequestOptions defOpts = RequestOptions.defOpts(null).sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
+        return postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defOpts);
     }
 
     @Override
@@ -88,7 +90,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                         "out_refund_no", outRefundNo,
                         "refund_id", refundId,
                         "offset", offset == null ? null : offset.toString()),
-                WxRefundQueryResult.class, (SslCert) null);
+                WxRefundQueryResult.class, (RequestOptions) null);
     }
 
     @Override
@@ -97,14 +99,19 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                 SimpleMap.of("bill_date", billDate,
                         "bill_type", billType,
                         "tar_type", tarType),
-                WxDownloadBillResult.class, (SslCert) null);
+                WxDownloadBillResult.class, (RequestOptions) null);
+    }
+
+    @Override
+    public WxShortUrlResult shortUrl(String longUrl) {
+        return postXml("/tools/shorturl", SimpleMap.of("long_url", longUrl), WxShortUrlResult.class, (RequestOptions) null);
     }
 
     @Override
     public WxAuthCodeToOpenIdResult authCodeToOpenId(String authCode) {
         return postXml("/tools/authcodetoopenid",
                 SimpleMap.of("auth_code", authCode),
-                WxAuthCodeToOpenIdResult.class, (SslCert) null);
+                WxAuthCodeToOpenIdResult.class, (RequestOptions) null);
     }
 
     @Override
@@ -116,7 +123,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        return postXml("/payitil/report", map, WxBasePayResult.class, (SslCert) null);
+        return postXml("/payitil/report", map, WxBasePayResult.class, (RequestOptions) null);
     }
 
     @Override

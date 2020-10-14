@@ -26,6 +26,21 @@ public interface PaymentService {
                               String authCode, String spBillCreateIp, Map<String, String> others);
 
     /**
+     * 提交刷卡支付，针对软POS，尽可能做成功,内置重试机制，最多60s
+     *
+     * @param outTradeNo     商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
+     * @param totalFee       订单总金额，只能为整数
+     * @param body           商品或支付单简要描述，格式要求：门店品牌名-城市分店名-实际商品名称
+     * @param authCode       扫码支付付款码，设备读取用户微信中的条码或者二维码信息
+     *                       （注：用户付款码条形码规则：18位纯数字，以10、11、12、13、14、15开头）
+     * @param spBillCreateIp 支持IPV4和IPV6两种格式的IP地址。调用微信支付API的机器IP
+     * @param others         其他参数，参考官方接口文档
+     * @return 付款码支付结果
+     */
+    WxMicroPayResult microPayByPos(String outTradeNo, Integer totalFee, String body,
+                                   String authCode, String spBillCreateIp, Map<String, String> others);
+
+    /**
      * 撤销订单
      * 支付交易返回失败或支付系统超时，调用该接口撤销交易。如果此订单用户支付失败，微信支付系统会将此订单关闭；
      * 如果用户支付成功，微信支付系统会将此订单资金退还给用户。

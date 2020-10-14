@@ -118,4 +118,8 @@ public class RequestOptions {
     public static RequestOptions defOpts(RequestOptions defOpts) {
         return defOpts == null ? new RequestOptions() : defOpts;
     }
+
+    public static RequestOptions defOpts() {
+        return new RequestOptions();
+    }
 }

@@ -36,8 +36,53 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
     }
 
     @Override
+    public WxMicroPayResult microPayByPos(String outTradeNo, Integer totalFee, String body, String authCode, String spBillCreateIp, Map<String, String> others) {
+        int remainingTimeMs = 60 * 1000;
+        int connectTimeoutMs = payConfig.getConnectTimeoutMs();
+        long startTimestampMs = 0;
+        WxMicroPayResult lastResult = null;
+        while (true) {
+            startTimestampMs = WxPayUtil.getCurrentTimestampMs();
+            int readTimeoutMs = remainingTimeMs - connectTimeoutMs;
+            if (readTimeoutMs <= 1000) {
+                break;
+            }
+            // 支付请求
+            RequestOptions defOpts = RequestOptions.defOpts().readTimeoutMs(readTimeoutMs).connectTimeoutMs(connectTimeoutMs);
+            SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo)
+                    .add("total_fee", totalFee.toString()).add("body", body)
+                    .add("auth_code", authCode).add("spbill_create_ip", spBillCreateIp);
+            if (others != null) {
+                map.putAll(others);
+            }
+            lastResult = postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts);
+
+            // 支付成功或者支付业务成功则返回结果
+            if (!lastResult.success() || lastResult.resultSuccess()) {
+                return lastResult;
+            }
+            // 看错误码，若支付结果未知，则重试提交刷卡支付
+            if ("SYSTEMERROR".equals(lastResult.getPayErrCode())
+                    || "BANKERROR".equals(lastResult.getPayErrCode()) || "USERPAYING".equals(lastResult.getPayErrCode())) {
+                remainingTimeMs = remainingTimeMs - (int) (WxPayUtil.getCurrentTimestampMs() - startTimestampMs);
+                if (remainingTimeMs <= 100) {
+                    break;
+                } else {
+                    WxPayUtil.getLogger().info("microPayWithPos: try micropay again");
+                    try {
+                        Thread.sleep((remainingTimeMs > 5 * 1000) ? 5 * 1000 : 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return lastResult;
+    }
+
+    @Override
     public WxPayReverseResult reverse(String outTradeNo, String transactionId) {
-        RequestOptions defOpts = RequestOptions.defOpts(null).sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
+        RequestOptions defOpts = RequestOptions.defOpts().sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
         return postXml("/secapi/pay/reverse", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
                 WxPayReverseResult.class, defOpts);
     }
@@ -78,7 +123,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        RequestOptions defOpts = RequestOptions.defOpts(null).sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
+        RequestOptions defOpts = RequestOptions.defOpts().sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
         return postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defOpts);
     }
 

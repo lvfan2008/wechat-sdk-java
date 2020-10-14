@@ -40,6 +40,16 @@ import java.util.Map;
  */
 public class HttpUtils {
     /**
+     * 连接超时时间，单位毫秒
+     */
+    public static final int CONNECT_TIMEOUT_MS = 6 * 1000;
+
+    /**
+     * 读数据超时时间，单位毫秒
+     */
+    public static final int READ_TIMEOUT_MS = 8 * 1000;
+
+    /**
      * http请求类
      *
      * @param url url地址
@@ -56,8 +66,10 @@ public class HttpUtils {
         } else {
             httpUriRequest = new HttpGet(url);
         }
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(httpOptions.getReadTimeoutMs())
-                .setConnectTimeout(httpOptions.getConnectTimeoutMs()).build();
+        int socketTimeout = httpOptions.getReadTimeoutMs() == null ? CONNECT_TIMEOUT_MS : httpOptions.getReadTimeoutMs();
+        int connectTimeout = httpOptions.getConnectTimeoutMs() == null ? READ_TIMEOUT_MS : httpOptions.getConnectTimeoutMs();
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(socketTimeout)
+                .setConnectTimeout(connectTimeout).build();
         httpUriRequest.setConfig(requestConfig);
 
         for (Map.Entry<String, String> entry : httpOptions.headers.entrySet()) {

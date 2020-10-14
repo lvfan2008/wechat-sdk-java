@@ -58,12 +58,12 @@ public class RequestOptions {
     /**
      * 连接超时时间，单位毫秒
      */
-    Integer connectTimeoutMs = 6 * 1000;
+    Integer connectTimeoutMs;
 
     /**
      * 读数据超时时间，单位毫秒
      */
-    Integer readTimeoutMs = 8 * 1000;
+    Integer readTimeoutMs;
 
     public RequestOptions headers(Map<String, String> headers) {
         this.headers = headers;

@@ -5,7 +5,6 @@ import fan.lv.wechat.entity.pay.WxPayConfig;
 import fan.lv.wechat.entity.result.WxBasePayResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.RequestOptions;
-import fan.lv.wechat.util.SslCert;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
@@ -82,8 +81,12 @@ public class PayClientImpl extends BaseClient {
 
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
-        httpOptions.setConnectTimeoutMs(payConfig.getConnectTimeoutMs());
-        httpOptions.setReadTimeoutMs(payConfig.getReadTimeoutMs());
+        if (httpOptions.getConnectTimeoutMs() == null) {
+            httpOptions.setConnectTimeoutMs(payConfig.getConnectTimeoutMs());
+        }
+        if (httpOptions.getReadTimeoutMs() == null) {
+            httpOptions.setReadTimeoutMs(payConfig.getReadTimeoutMs());
+        }
         T wxResult = super.request(uri, httpOptions, resultType);
         WxBasePayResult wxPayResult = (WxBasePayResult) wxResult;
         if (wxResult.getErrorCode() == 0 && !WxPayConstants.SUCCESS.equals(wxPayResult.getResultCode())) {

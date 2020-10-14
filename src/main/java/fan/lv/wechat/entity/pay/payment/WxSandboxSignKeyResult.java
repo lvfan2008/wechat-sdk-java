@@ -6,17 +6,23 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 下载账单结果
+ * 沙箱支付密钥结果
  *
  * @author lv_fan2008
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class WxDownloadBillResult extends WxBasePayResult {
+public class WxSandboxSignKeyResult extends WxBasePayResult {
 
     /**
-     * 失败错误码，详见错误码列表
+     * 微信支付分配的微信商户号
      */
-    @XStreamAlias("error_code")
-    String downloadBillErrorCode;
+    @XStreamAlias("mch_id")
+    String mchId;
+
+    /**
+     * 返回的沙箱密钥
+     */
+    @XStreamAlias("sandbox_signkey")
+    String sandboxSignKey;
 }

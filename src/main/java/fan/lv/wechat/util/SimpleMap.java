@@ -1,6 +1,7 @@
 package fan.lv.wechat.util;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 快捷Map
@@ -15,6 +16,13 @@ public class SimpleMap<K, V> extends HashMap<K, V> {
 
     public SimpleMap<K, V> add(K k, V v) {
         put(k, v);
+        return this;
+    }
+
+    public SimpleMap<K, V> addAll(Map<K, V> map) {
+        if (map != null) {
+            putAll(map);
+        }
         return this;
     }
 

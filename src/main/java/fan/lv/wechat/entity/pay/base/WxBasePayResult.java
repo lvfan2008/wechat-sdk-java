@@ -1,7 +1,9 @@
-package fan.lv.wechat.entity.result;
+package fan.lv.wechat.entity.pay.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -61,15 +63,17 @@ public class WxBasePayResult extends WxResult {
 
 
     /**
-     * 错误码
+     * 错误码，在WxBasePayResult无用
      */
     @XStreamOmitField
+    @JsonIgnore
     Integer errorCode = 0;
 
     /**
-     * 错误消息
+     * 错误消息，在WxBasePayResult无用
      */
     @XStreamOmitField
+    @JsonIgnore
     String errorMessage = "";
 
     /**

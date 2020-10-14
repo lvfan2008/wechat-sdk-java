@@ -1,8 +1,8 @@
 package fan.lv.wechat.api.payment.service;
 
 import fan.lv.wechat.entity.pay.payment.*;
-import fan.lv.wechat.entity.result.WxBasePayResult;
-import fan.lv.wechat.entity.result.WxCommonPayResult;
+import fan.lv.wechat.entity.pay.base.WxBasePayResult;
+import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
 
 import java.util.Map;
 

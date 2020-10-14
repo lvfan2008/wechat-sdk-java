@@ -1,7 +1,7 @@
 package fan.lv.wechat.entity.pay.payment;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import fan.lv.wechat.entity.result.WxCommonPayResult;
+import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

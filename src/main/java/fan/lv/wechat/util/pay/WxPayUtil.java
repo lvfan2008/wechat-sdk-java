@@ -85,8 +85,8 @@ public class WxPayUtil {
         document.appendChild(root);
         for (String key : data.keySet()) {
             String value = data.get(key);
-            if (value == null) {
-                value = "";
+            if (value == null || value.trim().length() == 0) {
+                continue;
             }
             value = value.trim();
             org.w3c.dom.Element filed = document.createElement(key);

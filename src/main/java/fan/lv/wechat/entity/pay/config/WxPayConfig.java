@@ -1,14 +1,13 @@
-package fan.lv.wechat.entity.pay;
+package fan.lv.wechat.entity.pay.config;
 
 import lombok.Builder;
 import lombok.Data;
-
-import java.io.InputStream;
 
 /**
  * @author lv_fan2008
  */
 @Data
+@Builder
 public class WxPayConfig {
 
     /**
@@ -19,7 +18,7 @@ public class WxPayConfig {
     /**
      * 商户号，使用子商户时，此处填写服务商商户号
      */
-    String getMchId;
+    String mchId;
 
     /**
      * 商户密钥，使用子商户时，填写服务商商户密钥
@@ -49,16 +48,30 @@ public class WxPayConfig {
     /**
      * 签名方式，支持 MD5 和 HMAC-SHA256两种签名
      */
+    @Builder.Default
     String signType = "MD5";
 
 
     /**
      * 连接超时时间，单位毫秒
      */
+    @Builder.Default
     Integer connectTimeoutMs = 6 * 1000;
 
     /**
      * 读数据超时时间，单位毫秒
      */
+    @Builder.Default
     Integer readTimeoutMs = 8 * 1000;
+
+    /**
+     * 是否为沙盒环境
+     */
+    @Builder.Default
+    Boolean sandbox = false;
+
+    /**
+     * 沙盒密钥
+     */
+    String sandboxSignKey;
 }

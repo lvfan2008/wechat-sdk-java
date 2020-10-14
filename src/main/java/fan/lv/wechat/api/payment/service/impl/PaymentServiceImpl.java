@@ -1,21 +1,22 @@
 package fan.lv.wechat.api.payment.service.impl;
 
 import fan.lv.wechat.api.payment.service.PaymentService;
-import fan.lv.wechat.entity.pay.WxPayConfig;
+import fan.lv.wechat.entity.pay.base.WxBasePayResult;
+import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
+import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.*;
-import fan.lv.wechat.entity.result.WxBasePayResult;
-import fan.lv.wechat.entity.result.WxCommonPayResult;
 import fan.lv.wechat.util.RequestOptions;
 import fan.lv.wechat.util.SimpleMap;
-import fan.lv.wechat.util.SslCert;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.pay.WxPayUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
 /**
  * @author lv_fan2008
  */
+@Slf4j
 public class PaymentServiceImpl extends PayClientImpl implements PaymentService {
 
     public PaymentServiceImpl(WxPayConfig payConfig) {
@@ -28,11 +29,9 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                 .add("total_fee", totalFee.toString())
                 .add("body", body)
                 .add("auth_code", authCode)
-                .add("spbill_create_ip", spBillCreateIp);
-        if (others != null) {
-            map.putAll(others);
-        }
-        return postXml("/pay/micropay", map, WxMicroPayResult.class, (RequestOptions) null);
+                .add("spbill_create_ip", spBillCreateIp)
+                .addAll(others);
+        return postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts());
     }
 
     @Override
@@ -82,9 +81,9 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
 
     @Override
     public WxPayReverseResult reverse(String outTradeNo, String transactionId) {
-        RequestOptions defOpts = RequestOptions.defOpts().sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
-        return postXml("/secapi/pay/reverse", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
-                WxPayReverseResult.class, defOpts);
+        return postXml("/secapi/pay/reverse",
+                SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
+                WxPayReverseResult.class, defSslOpts());
     }
 
     @Override
@@ -100,31 +99,31 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
         if (others != null) {
             map.putAll(others);
         }
-        return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, (RequestOptions) null);
+        return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, defOpts());
     }
 
     @Override
     public WxOrderQueryResult orderQuery(String outTradeNo, String transactionId) {
-        return postXml("/pay/orderquery", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
-                WxOrderQueryResult.class, (RequestOptions) null);
+        return postXml("/pay/orderquery",
+                SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
+                WxOrderQueryResult.class, defOpts());
     }
 
     @Override
     public WxCommonPayResult closeOrder(String outTradeNo) {
         return postXml("/pay/orderquery", SimpleMap.of("out_trade_no", outTradeNo),
-                WxOrderQueryResult.class, (RequestOptions) null);
+                WxOrderQueryResult.class, defOpts());
     }
 
     @Override
     public WxOrderRefundResult orderRefund(String outTradeNo, String transactionId, String outRefundNo, Integer totalFee,
                                            Integer refundFee, Map<String, String> others) {
-        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId,
-                "total_fee", totalFee.toString(), "refund_fee", refundFee.toString());
-        if (others != null) {
-            map.putAll(others);
-        }
-        RequestOptions defOpts = RequestOptions.defOpts().sslCert(new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
-        return postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defOpts);
+        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo,
+                "transaction_id", transactionId,
+                "total_fee", totalFee.toString(),
+                "refund_fee", refundFee.toString())
+                .addAll(others);
+        return postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defSslOpts());
     }
 
     @Override
@@ -135,7 +134,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                         "out_refund_no", outRefundNo,
                         "refund_id", refundId,
                         "offset", offset == null ? null : offset.toString()),
-                WxRefundQueryResult.class, (RequestOptions) null);
+                WxRefundQueryResult.class, defOpts());
     }
 
     @Override
@@ -144,31 +143,31 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                 SimpleMap.of("bill_date", billDate,
                         "bill_type", billType,
                         "tar_type", tarType),
-                WxDownloadBillResult.class, (RequestOptions) null);
+                WxDownloadBillResult.class, defOpts());
     }
 
     @Override
     public WxShortUrlResult shortUrl(String longUrl) {
-        return postXml("/tools/shorturl", SimpleMap.of("long_url", longUrl), WxShortUrlResult.class, (RequestOptions) null);
+        return postXml("/tools/shorturl", SimpleMap.of("long_url", longUrl), WxShortUrlResult.class, defOpts());
     }
 
     @Override
     public WxAuthCodeToOpenIdResult authCodeToOpenId(String authCode) {
         return postXml("/tools/authcodetoopenid",
                 SimpleMap.of("auth_code", authCode),
-                WxAuthCodeToOpenIdResult.class, (RequestOptions) null);
+                WxAuthCodeToOpenIdResult.class, defOpts());
     }
 
     @Override
     public WxBasePayResult report(String interfaceUrl, Integer executeTime, String returnCode, String resultCode,
                                   String userIp, Map<String, String> others) {
-        Map<String, String> map = SimpleMap.of("auth_code", interfaceUrl, "auth_code", executeTime.toString(),
-                "auth_code", returnCode, "auth_code", resultCode,
-                "auth_code", userIp);
-        if (others != null) {
-            map.putAll(others);
-        }
-        return postXml("/payitil/report", map, WxBasePayResult.class, (RequestOptions) null);
+        Map<String, String> map = SimpleMap.of("auth_code", interfaceUrl,
+                "auth_code", executeTime.toString(),
+                "auth_code", returnCode,
+                "auth_code", resultCode,
+                "auth_code", userIp)
+                .addAll(others);
+        return postXml("/payitil/report", map, WxBasePayResult.class, defOpts());
     }
 
     @Override

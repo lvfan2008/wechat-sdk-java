@@ -56,8 +56,9 @@ abstract public class BaseClient implements Client {
         HttpResponse httpResponse = null;
         try {
             httpResponse = HttpUtils.httpRequest(url, httpOptions);
-        } catch (Exception exception) {
-            return errorResult(-1, exception.getMessage(), resultType);
+        } catch (Exception e) {
+            log.error("errorResult: {}", e.getMessage());
+            return errorResult(-1, e.getMessage(), resultType);
         }
 
         int statusOk = 200;
@@ -80,6 +81,7 @@ abstract public class BaseClient implements Client {
             verifyResult(result);
             wxResult = convertResult(result, resultType);
         } catch (Exception e) {
+            log.error("errorResult: {}", e.getMessage());
             return errorResult(-1, e.getMessage(), resultType);
         }
         log.debug("origin result: {}", result);

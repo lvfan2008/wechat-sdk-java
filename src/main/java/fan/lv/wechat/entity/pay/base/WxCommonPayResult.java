@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.result;
+package fan.lv.wechat.entity.pay.base;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import lombok.Data;

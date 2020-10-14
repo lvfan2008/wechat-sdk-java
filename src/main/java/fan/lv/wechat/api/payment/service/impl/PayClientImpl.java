@@ -1,14 +1,21 @@
 package fan.lv.wechat.api.payment.service.impl;
 
 import fan.lv.wechat.api.kernel.impl.BaseClient;
-import fan.lv.wechat.entity.pay.WxPayConfig;
-import fan.lv.wechat.entity.result.WxBasePayResult;
+import fan.lv.wechat.entity.pay.config.WxPayConfig;
+import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
+import fan.lv.wechat.entity.pay.base.WxBasePayResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.RequestOptions;
+import fan.lv.wechat.util.SimpleMap;
+import fan.lv.wechat.util.SslCert;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static fan.lv.wechat.util.pay.WxPayConstants.FIELD_SIGN_TYPE;
@@ -16,6 +23,7 @@ import static fan.lv.wechat.util.pay.WxPayConstants.FIELD_SIGN_TYPE;
 /**
  * @author lv_fan2008
  */
+@Slf4j
 public class PayClientImpl extends BaseClient {
 
     WxPayConfig payConfig;
@@ -26,9 +34,29 @@ public class PayClientImpl extends BaseClient {
 
     @Override
     public String getBaseUrl() {
-        return WxPayConstants.DOMAIN_API;
+        return "https://api.mch.weixin.qq.com";
     }
 
+    /**
+     * 获取沙盒Key
+     *
+     * @return 沙盒Key
+     */
+    protected String getSandboxSignKey() {
+        WxSandboxSignKeyResult result;
+        try {
+            WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
+                    : WxPayConstants.SignType.HMACSHA256;
+            Map<String, String> reqData = SimpleMap.of("mch_id", payConfig.getMchId(), "nonce_str", WxPayUtil.generateNonceStr());
+            reqData.put("sign", WxPayUtil.generateSignature(reqData, payConfig.getKey(), signType));
+            result = request("/pay/getsignkey", RequestOptions.defOpts().body(WxPayUtil.mapToXml(reqData))
+                    .mimeType("application/xml"), WxSandboxSignKeyResult.class);
+        } catch (Exception e) {
+            log.error("getSandboxSignKey errorResult {}", e.getMessage());
+            return "";
+        }
+        return result.success() ? result.getSandboxSignKey() : "";
+    }
 
     /**
      * 原生结果
@@ -69,14 +97,18 @@ public class PayClientImpl extends BaseClient {
                     signType = WxPayConstants.MD5.equals(signTypeName) ? WxPayConstants.SignType.MD5
                             : WxPayConstants.SignType.HMACSHA256;
                 }
-                boolean valid = WxPayUtil.isSignatureValid(mapResult, payConfig.getKey(), signType);
-                wxPayResult.setValidSignature(valid);
+                // 请求沙盒签名结果，不用验证签名
+                boolean sandboxSignKeyResult = resultType.getName().equals(WxSandboxSignKeyResult.class.getName());
+                if (!sandboxSignKeyResult) {
+                    String key = payConfig.getSandbox() ? payConfig.getSandboxSignKey() : payConfig.getKey();
+                    boolean valid = WxPayUtil.isSignatureValid(mapResult, key, signType);
+                    wxPayResult.setValidSignature(valid);
+                }
             }
             return wxResult;
         } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
         }
-
     }
 
     @Override
@@ -87,13 +119,10 @@ public class PayClientImpl extends BaseClient {
         if (httpOptions.getReadTimeoutMs() == null) {
             httpOptions.setReadTimeoutMs(payConfig.getReadTimeoutMs());
         }
-        T wxResult = super.request(uri, httpOptions, resultType);
-        WxBasePayResult wxPayResult = (WxBasePayResult) wxResult;
-        if (wxResult.getErrorCode() == 0 && !WxPayConstants.SUCCESS.equals(wxPayResult.getResultCode())) {
-            wxResult.setErrorCode(-1);
-            wxResult.setErrorMessage(wxPayResult.getReturnMsg());
+        if (payConfig.getSandbox()) {
+            uri = "/sandboxnew" + uri;
         }
-        return wxResult;
+        return super.request(uri, httpOptions, resultType);
     }
 
     /**
@@ -109,8 +138,9 @@ public class PayClientImpl extends BaseClient {
     public <T extends WxResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
 
         try {
+            checkSandboxSignKey();
             reqData = fullRequest(reqData);
-            return request(uri, RequestOptions.defOpts(defOpts).body(XmlUtil.toXml(reqData))
+            return request(uri, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
                     .mimeType("application/xml"), resultType);
         } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
@@ -133,6 +163,7 @@ public class PayClientImpl extends BaseClient {
                                           Class<T> resultType, RequestOptions defOpts) {
 
         try {
+            checkSandboxSignKey();
             String xml = XmlUtil.toXml(object);
             Map<String, String> map = WxPayUtil.xmlToMap(xml);
             map = fullRequest(map);
@@ -140,6 +171,15 @@ public class PayClientImpl extends BaseClient {
                     .mimeType("application/xml"), resultType);
         } catch (Exception e) {
             return errorResult(-1, e.getMessage(), resultType);
+        }
+    }
+
+    /**
+     * 检测沙盒模式下的密钥
+     */
+    protected void checkSandboxSignKey() {
+        if (payConfig.getSandbox() && payConfig.getSandboxSignKey() == null) {
+            payConfig.setSandboxSignKey(getSandboxSignKey());
         }
     }
 
@@ -154,12 +194,39 @@ public class PayClientImpl extends BaseClient {
         WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
                 : WxPayConstants.SignType.HMACSHA256;
         reqData.put("appid", payConfig.getAppId());
-        reqData.put("mch_id", payConfig.getGetMchId());
+        reqData.put("mch_id", payConfig.getMchId());
         reqData.put("nonce_str", WxPayUtil.generateNonceStr());
         reqData.put("sub_mch_id", payConfig.getSubMchId());
         reqData.put("sub_appid", payConfig.getSubAppId());
         reqData.put("sign_type", payConfig.getSignType());
-        reqData.put("sign", WxPayUtil.generateSignature(reqData, payConfig.getKey(), signType));
+        reqData = filterBlank(reqData);
+        String key = payConfig.getSandbox() ? payConfig.getSandboxSignKey() : payConfig.getKey();
+        reqData.put("sign", WxPayUtil.generateSignature(reqData, key, signType));
         return reqData;
+    }
+
+    /**
+     * 过滤空数据
+     *
+     * @param reqData 请求数据
+     * @return 过滤的书籍
+     */
+    protected Map<String, String> filterBlank(Map<String, String> reqData) {
+        List<String> removeKeys = new ArrayList<>();
+        for (Map.Entry<String, String> entry : reqData.entrySet()) {
+            if (StringUtils.isBlank(entry.getKey()) || StringUtils.isBlank(entry.getValue())) {
+                removeKeys.add(entry.getKey());
+            }
+        }
+        removeKeys.forEach(reqData::remove);
+        return reqData;
+    }
+
+    protected RequestOptions defOpts(){
+        return RequestOptions.defOpts();
+    }
+
+    protected RequestOptions defSslOpts(){
+        return RequestOptions.defOpts().sslCert(new SslCert(payConfig.getMchId(), payConfig.getCertBytes()));
     }
 }

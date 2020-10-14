@@ -26,9 +26,9 @@ public class WxPayConfig {
     String key;
 
     /**
-     * 证书流，使用子商户时，填写服务商证书流
+     * 证书内容，使用子商户时，填写服务商证书内容
      */
-    InputStream certStream;
+    byte[] certBytes;
 
     /**
      * 子商户appId，非子商户无需必填

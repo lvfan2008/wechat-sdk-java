@@ -2,12 +2,16 @@ package fan.lv.wechat.util.pay;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.thoughtworks.xstream.XStream;
+import fan.lv.wechat.util.crpto.AesException;
+import fan.lv.wechat.util.crpto.PKCS7Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.crypto.Cipher;
 import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.OutputKeys;
@@ -23,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.*;
+
+import static fan.lv.wechat.util.crpto.WxBizMsgCrypt.recoverNetworkBytesOrder;
 
 
 public class WxPayUtil {
@@ -268,6 +274,34 @@ public class WxPayUtil {
             sb.append(Integer.toHexString((item & 0xFF) | 0x100).substring(1, 3));
         }
         return sb.toString().toUpperCase();
+    }
+
+    /**
+     * 解密加密文本
+     *
+     * @param key         支付商户密钥
+     * @param encryptText 加密文本
+     * @return 解密文本
+     * @throws Exception 异常
+     */
+    public static String aesDecode(String key, String encryptText) throws Exception {
+        byte[] encrypted = Base64.getMimeDecoder().decode(encryptText);
+        String keyMd5 = getMd5(key).toLowerCase();
+        byte[] original;
+        try {
+            // 设置解密模式为AES的CBC模式
+            Cipher cipher = Cipher.getInstance("AES/CBC/NoPadding");
+            SecretKeySpec keySpec = new SecretKeySpec(keyMd5.getBytes(), "AES");
+            cipher.init(Cipher.DECRYPT_MODE, keySpec);
+            // 解密
+            original = cipher.doFinal(encrypted);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AesException(AesException.DECRYPT_AES_ERROR);
+        }
+        // 去除补位字符
+        byte[] bytes = PKCS7Encoder.decode(original);
+        return new String(Arrays.copyOfRange(bytes, 0, bytes.length), StandardCharsets.UTF_8);
     }
 
     /**

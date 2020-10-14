@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.pay.commonpay;
+package fan.lv.wechat.entity.pay.payment;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import fan.lv.wechat.entity.result.WxCommonPayResult;

@@ -2,13 +2,12 @@ package fan.lv.wechat.api.payment.service.impl;
 
 import fan.lv.wechat.api.payment.service.PaymentService;
 import fan.lv.wechat.entity.pay.WxPayConfig;
-import fan.lv.wechat.entity.pay.commonpay.*;
+import fan.lv.wechat.entity.pay.payment.*;
 import fan.lv.wechat.entity.result.WxBasePayResult;
 import fan.lv.wechat.entity.result.WxCommonPayResult;
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.SslCert;
 import fan.lv.wechat.util.XmlUtil;
-import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
 
 import java.util.Map;
@@ -20,6 +19,25 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
 
     public PaymentServiceImpl(WxPayConfig payConfig) {
         super(payConfig);
+    }
+
+    @Override
+    public WxMicroPayResult microPay(String outTradeNo, Integer totalFee, String body, String authCode, String spBillCreateIp, Map<String, String> others) {
+        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo)
+                .add("total_fee", totalFee.toString())
+                .add("body", body)
+                .add("auth_code", authCode)
+                .add("spbill_create_ip", spBillCreateIp);
+        if (others != null) {
+            map.putAll(others);
+        }
+        return postXml("/pay/micropay", map, WxMicroPayResult.class, (SslCert) null);
+    }
+
+    @Override
+    public WxPayReverseResult reverse(String outTradeNo, String transactionId) {
+        return postXml("/secapi/pay/reverse", SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
+                WxPayReverseResult.class, new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
     }
 
     @Override
@@ -59,7 +77,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
             map.putAll(others);
         }
         return postXml("/secapi/pay/refund", map,
-                WxOrderRefundResult.class, new SslCert(payConfig.getGetMchId(), payConfig.getCertStream()));
+                WxOrderRefundResult.class, new SslCert(payConfig.getGetMchId(), payConfig.getCertBytes()));
     }
 
     @Override
@@ -90,11 +108,43 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
     }
 
     @Override
+    public WxBasePayResult report(String interfaceUrl, Integer executeTime, String returnCode, String resultCode,
+                                  String userIp, Map<String, String> others) {
+        Map<String, String> map = SimpleMap.of("auth_code", interfaceUrl, "auth_code", executeTime.toString(),
+                "auth_code", returnCode, "auth_code", resultCode,
+                "auth_code", userIp);
+        if (others != null) {
+            map.putAll(others);
+        }
+        return postXml("/payitil/report", map, WxBasePayResult.class, (SslCert) null);
+    }
+
+    @Override
     public WxRefundNotifyResult refundNotifyParse(String xml) {
         WxRefundNotifyResult wxPayResult = this.convertResult(xml, WxRefundNotifyResult.class);
         if (wxPayResult.getReqInfo() != null) {
-            //TODO:解密req_info
+            try {
+                String decodeXml = WxPayUtil.aesDecode(payConfig.getKey(), wxPayResult.getReqInfo());
+                WxRefundNotifyResult.WxReqInfo reqInfo = XmlUtil.parseXml(decodeXml, WxRefundNotifyResult.WxReqInfo.class, "root");
+                wxPayResult.setDecodeReqInfo(reqInfo);
+            } catch (Exception e) {
+                wxPayResult.setErrorMessage("decode reqInfo failed: " + e.getMessage());
+            }
         }
         return wxPayResult;
+    }
+
+
+    @Override
+    public WxPayNotifyResult payNotifyParse(String xml) {
+        return this.convertResult(xml, WxPayNotifyResult.class);
+    }
+
+    @Override
+    public String getNotifyReplyXml(String returnCode, String returnMsg) {
+        WxBasePayResult result = new WxBasePayResult();
+        result.setResultCode(returnCode);
+        result.setReturnMsg(returnMsg);
+        return XmlUtil.toXml(result);
     }
 }

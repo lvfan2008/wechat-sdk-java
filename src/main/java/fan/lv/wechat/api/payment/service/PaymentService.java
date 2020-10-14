@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.payment.service;
 
-import fan.lv.wechat.entity.pay.commonpay.*;
+import fan.lv.wechat.entity.pay.payment.*;
+import fan.lv.wechat.entity.result.WxBasePayResult;
 import fan.lv.wechat.entity.result.WxCommonPayResult;
 
 import java.util.Map;
@@ -9,6 +10,43 @@ import java.util.Map;
  * @author lv_fan2008
  */
 public interface PaymentService {
+    /**
+     * 付款码支付
+     *
+     * @param outTradeNo     商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*且在同一个商户号下唯一
+     * @param totalFee       订单总金额，只能为整数
+     * @param body           商品或支付单简要描述，格式要求：门店品牌名-城市分店名-实际商品名称
+     * @param authCode       扫码支付付款码，设备读取用户微信中的条码或者二维码信息
+     *                       （注：用户付款码条形码规则：18位纯数字，以10、11、12、13、14、15开头）
+     * @param spBillCreateIp 支持IPV4和IPV6两种格式的IP地址。调用微信支付API的机器IP
+     * @param others         其他参数，参考官方接口文档
+     * @return 付款码支付结果
+     */
+    WxMicroPayResult microPay(String outTradeNo, Integer totalFee, String body,
+                              String authCode, String spBillCreateIp, Map<String, String> others);
+
+    /**
+     * 撤销订单
+     * 支付交易返回失败或支付系统超时，调用该接口撤销交易。如果此订单用户支付失败，微信支付系统会将此订单关闭；
+     * 如果用户支付成功，微信支付系统会将此订单资金退还给用户。
+     * 注意：7天以内的交易单可调用撤销，其他正常支付的单如需实现相同功能请调用申请退款API。
+     * 提交支付交易后调用【查询订单API】，没有明确的支付结果再调用【撤销订单API】。
+     * 调用支付接口后请勿立即调用撤销订单API，建议支付后至少15s后再调用撤销订单接口。
+     *
+     * @param outTradeNo    微信的订单号，建议优先使用，outTradeNo 和 transactionId二选一
+     * @param transactionId 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一，outTradeNo 和 transactionId二选一
+     * @return 付款码支付结果
+     */
+    WxPayReverseResult reverse(String outTradeNo, String transactionId);
+
+    /**
+     * 通过付款码查询公众号Openid，调用查询后，该付款码只能由此商户号发起扣款，直至付款码更新。
+     *
+     * @param authCode 扫码支付付款码，设备读取用户微信中的条码或者二维码信息
+     * @return 公众号Openid
+     */
+    WxAuthCodeToOpenIdResult authCodeToOpenId(String authCode);
+
     /**
      * 统一下单
      *
@@ -99,13 +137,6 @@ public interface PaymentService {
      */
     WxDownloadBillResult downloadBill(String billDate, String billType, String tarType);
 
-    /**
-     * 通过付款码查询公众号Openid，调用查询后，该付款码只能由此商户号发起扣款，直至付款码更新。
-     *
-     * @param authCode 扫码支付付款码，设备读取用户微信中的条码或者二维码信息
-     * @return 公众号Openid
-     */
-    WxAuthCodeToOpenIdResult authCodeToOpenId(String authCode);
 
     /**
      * 解析退款通知结果
@@ -114,4 +145,39 @@ public interface PaymentService {
      * @return 退款通知结果
      */
     WxRefundNotifyResult refundNotifyParse(String xml);
+
+    /**
+     * 交易保障
+     * <p>
+     * 商户在调用微信支付提供的相关接口时，会得到微信支付返回的相关信息以及获得整个接口的响应时间。
+     * 为提高整体的服务水平，协助商户一起提高服务质量，微信支付提供了相关接口调用耗时和返回信息的主动上报接口，
+     * 微信支付可以根据商户侧上报的数据进一步优化网络部署，完善服务监控，和商户更好的协作为用户提供更好的业务体验。
+     *
+     * @param interfaceUrl 上报对应的接口的完整URL，类似： https://api.mch.weixin.qq.com/pay/unifiedorder
+     * @param executeTime  接口耗时情况，单位为毫秒
+     * @param returnCode   SUCCESS/FAIL 此字段是通信标识，非交易标识，交易是否成功需要查看trade_state来判断
+     * @param resultCode   业务结果, SUCCESS/FAIL
+     * @param userIp       发起接口调用时的机器IP
+     * @param others       其他参数，参考官方文档
+     * @return 返回结果
+     */
+    WxBasePayResult report(String interfaceUrl, Integer executeTime, String returnCode, String resultCode,
+                           String userIp, Map<String, String> others);
+
+    /**
+     * 支付通知结果
+     *
+     * @param xml 支付通知的xml
+     * @return 支付通知结果
+     */
+    WxPayNotifyResult payNotifyParse(String xml);
+
+    /**
+     * 通知回复Xml信息
+     *
+     * @param returnCode SUCCESS/FAIL SUCCESS表示商户接收通知成功并校验成功
+     * @param returnMsg  返回信息，如非空，为错误原因： 签名失败 参数格式校验错误
+     * @return 回复Xml信息
+     */
+    String getNotifyReplyXml(String returnCode, String returnMsg);
 }

@@ -19,14 +19,12 @@ import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
-import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyStore;
@@ -93,7 +91,7 @@ public class HttpUtils {
             // 证书
             char[] password = sslCert.getPassword().toCharArray();
             KeyStore ks = KeyStore.getInstance("PKCS12");
-            ks.load(sslCert.getCertInputStream(), password);
+            ks.load(new ByteArrayInputStream(sslCert.getCertBytes()), password);
 
             // 实例化密钥库 & 初始化密钥工厂
             KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());

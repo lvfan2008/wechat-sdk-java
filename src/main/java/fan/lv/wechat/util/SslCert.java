@@ -21,5 +21,5 @@ public class SslCert {
     /**
      * 证书流
      */
-    InputStream certInputStream;
+    byte[] certBytes;
 }

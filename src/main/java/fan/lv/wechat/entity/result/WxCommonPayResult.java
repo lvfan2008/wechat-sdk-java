@@ -46,6 +46,12 @@ public class WxCommonPayResult extends WxBasePayResult {
     @XStreamAlias("sign")
     String sign;
 
+    /**
+     * 签名
+     */
+    @XStreamAlias("sign_type")
+    String signType;
+
 
     /**
      * 详细参见第6节错误列表

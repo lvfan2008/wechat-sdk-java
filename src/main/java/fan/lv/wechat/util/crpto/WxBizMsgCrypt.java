@@ -71,7 +71,7 @@ public class WxBizMsgCrypt {
     }
 
     // 生成4个字节的网络字节序
-    byte[] getNetworkBytesOrder(int sourceNumber) {
+    public static byte[] getNetworkBytesOrder(int sourceNumber) {
         byte[] orderBytes = new byte[4];
         orderBytes[3] = (byte) (sourceNumber & 0xFF);
         orderBytes[2] = (byte) (sourceNumber >> 8 & 0xFF);
@@ -81,7 +81,7 @@ public class WxBizMsgCrypt {
     }
 
     // 还原4个字节的网络字节序
-    int recoverNetworkBytesOrder(byte[] orderBytes) {
+    public static int recoverNetworkBytesOrder(byte[] orderBytes) {
         int sourceNumber = 0;
         for (int i = 0; i < 4; i++) {
             sourceNumber <<= 8;

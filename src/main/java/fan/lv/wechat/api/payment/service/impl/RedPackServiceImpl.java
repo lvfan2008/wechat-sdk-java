@@ -45,7 +45,9 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
         reqData.put("nonce_str", WxPayUtil.generateNonceStr());
         reqData.put("sub_mch_id", payConfig.getSubMchId());
         reqData.put("msgappid", payConfig.getSubAppId());
-        reqData.put("sign_type", payConfig.getSignType());
+        if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
+            reqData.put("sign_type", payConfig.getSignType());
+        }
         reqData = filterBlank(reqData);
         reqData.put("sign", WxPayUtil.generateSignature(reqData, payConfig.getKey(), signType));
         return reqData;
@@ -95,8 +97,11 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
             SimpleMap<String, String> map = SimpleMap.of("nonce_str", WxPayUtil.generateNonceStr())
                     .add("mch_billno", mchBillNo)
                     .add("mch_id", payConfig.getMchId())
-                    .add("appid", payConfig.getMchId())
+                    .add("appid", payConfig.getAppId())
                     .add("bill_type", billType);
+            if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
+                map.put("sign_type", payConfig.getSignType());
+            }
             map.add("sign", WxPayUtil.generateSignature(map, payConfig.getKey(), signType));
             return request("/mmpaymkttransfers/gethbinfo", defSslOpts().body(WxPayUtil.mapToXml(map))
                     .mimeType("application/xml"), WxGetRedPackResult.class);

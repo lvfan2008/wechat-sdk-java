@@ -38,18 +38,11 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
      */
     @Override
     protected Map<String, String> fullRequest(Map<String, String> reqData) throws Exception {
-        WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
-                : WxPayConstants.SignType.HMACSHA256;
         reqData.put("wxappid", payConfig.getAppId());
         reqData.put("mch_id", payConfig.getMchId());
         reqData.put("nonce_str", WxPayUtil.generateNonceStr());
         reqData.put("sub_mch_id", payConfig.getSubMchId());
         reqData.put("msgappid", payConfig.getSubAppId());
-        if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
-            reqData.put("sign_type", payConfig.getSignType());
-        }
-        reqData = filterBlank(reqData);
-        reqData.put("sign", WxPayUtil.generateSignature(reqData, payConfig.getKey(), signType));
         return reqData;
     }
 

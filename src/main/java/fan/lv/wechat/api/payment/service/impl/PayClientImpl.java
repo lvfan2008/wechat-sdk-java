@@ -140,6 +140,7 @@ public class PayClientImpl extends BaseClient {
         try {
             checkSandboxSignKey();
             reqData = fullRequest(reqData);
+            reqData = addSign(reqData);
             return request(uri, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
                     .mimeType("application/xml"), resultType);
         } catch (Exception e) {
@@ -167,6 +168,7 @@ public class PayClientImpl extends BaseClient {
             String xml = XmlUtil.toXml(object);
             Map<String, String> map = WxPayUtil.xmlToMap(xml);
             map = fullRequest(map);
+            map = addSign(map);
             return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(XmlUtil.toXml(map))
                     .mimeType("application/xml"), resultType);
         } catch (Exception e) {
@@ -191,15 +193,21 @@ public class PayClientImpl extends BaseClient {
      * @throws Exception 异常
      */
     protected Map<String, String> fullRequest(Map<String, String> reqData) throws Exception {
-        WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
-                : WxPayConstants.SignType.HMACSHA256;
         reqData.put("appid", payConfig.getAppId());
         reqData.put("mch_id", payConfig.getMchId());
         reqData.put("nonce_str", WxPayUtil.generateNonceStr());
         reqData.put("sub_mch_id", payConfig.getSubMchId());
         reqData.put("sub_appid", payConfig.getSubAppId());
-        reqData.put("sign_type", payConfig.getSignType());
+        return reqData;
+    }
+
+    protected Map<String, String> addSign(Map<String, String> reqData) throws Exception {
         reqData = filterBlank(reqData);
+        WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
+                : WxPayConstants.SignType.HMACSHA256;
+        if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
+            reqData.put("sign_type", payConfig.getSignType());
+        }
         String key = payConfig.getSandbox() ? payConfig.getSandboxSignKey() : payConfig.getKey();
         reqData.put("sign", WxPayUtil.generateSignature(reqData, key, signType));
         return reqData;
@@ -222,11 +230,11 @@ public class PayClientImpl extends BaseClient {
         return reqData;
     }
 
-    protected RequestOptions defOpts(){
+    protected RequestOptions defOpts() {
         return RequestOptions.defOpts();
     }
 
-    protected RequestOptions defSslOpts(){
+    protected RequestOptions defSslOpts() {
         return RequestOptions.defOpts().sslCert(new SslCert(payConfig.getMchId(), payConfig.getCertBytes()));
     }
 }

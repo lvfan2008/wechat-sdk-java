@@ -9,6 +9,7 @@ import fan.lv.wechat.util.XmlUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
 import java.util.regex.Matcher;
@@ -24,16 +25,6 @@ abstract public class BaseClient implements Client {
      * 下载文件名字匹配
      */
     static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
-
-    /**
-     * 校验结果是否合法，不合法则抛出异常
-     *
-     * @param result 结果字符串
-     * @throws Exception 异常
-     */
-    protected void verifyResult(String result) throws Exception {
-    }
-
 
     /**
      * 转换结果
@@ -67,36 +58,55 @@ abstract public class BaseClient implements Client {
             return errorResult(-1, httpResponse.getStatusLine().toString(), resultType);
         }
 
-        // 如果不是json类型，则为原始数据流
-        if (isRawStream(httpResponse)) {
-            T wxResult = rawResult(resultType, httpResponse);
-            log.debug("rawResult: {}", JsonUtil.toJson(wxResult));
-            return wxResult;
-        }
-
         String result = null;
         T wxResult;
         try {
-            result = EntityUtils.toString(httpResponse.getEntity());
-            verifyResult(result);
-            wxResult = convertResult(result, resultType);
+            String filename = getFileName(httpResponse);
+            byte[] bytes = EntityUtils.toByteArray(httpResponse.getEntity());
+            String charset = getCharset(httpResponse);
+            if (isSupportText(httpResponse)) {
+                charset = charset == null ? "UTF-8" : charset;
+                result = new String(bytes, charset).trim();
+                if (isXmlOrJson(result)) {
+                    log.debug("origin result: {}", result);
+                    wxResult = convertResult(result, resultType);
+                    wxResult.setCharset(charset);
+                    wxResult.setContent(bytes);
+                } else {
+                    log.debug("origin rawResult len: {}", result.length());
+                    wxResult = rawResult(resultType, filename, charset, bytes);
+                }
+            } else {
+                log.debug("origin rawResult len: {}", bytes.length);
+                wxResult = rawResult(resultType, filename, charset, bytes);
+            }
         } catch (Exception e) {
             log.error("errorResult: {}", e.getMessage());
             return errorResult(-1, e.getMessage(), resultType);
         }
-        log.debug("origin result: {}", result);
         log.debug("result: {}", JsonUtil.toJson(wxResult));
         return wxResult;
     }
 
-    private boolean isRawStream(HttpResponse httpResponse) {
-        if (getFileName(httpResponse) != null) {
-            return true;
+    private boolean isSupportText(HttpResponse httpResponse) {
+        ContentType contentType = ContentType.get(httpResponse.getEntity());
+        String filename = getFileName(httpResponse);
+        return filename == null && (contentType == null
+                || contentType.getMimeType().contains("json")
+                || contentType.getMimeType().contains("xml")
+                || contentType.getMimeType().contains("text"));
+    }
+
+    private boolean isXmlOrJson(String result) {
+        return result.startsWith("{") || result.startsWith("<xml");
+    }
+
+    private String getCharset(HttpResponse httpResponse) {
+        ContentType contentType = ContentType.get(httpResponse.getEntity());
+        if (contentType != null && contentType.getCharset() != null) {
+            return contentType.getCharset().name();
         }
-        Header header = httpResponse.getEntity().getContentType();
-        String contentType = header != null ? header.getValue() : null;
-        return contentType != null && !contentType.contains("application/json") && !contentType.contains("application/xml")
-                && !contentType.contains("text/plain");
+        return null;
     }
 
     /**
@@ -123,21 +133,21 @@ abstract public class BaseClient implements Client {
     /**
      * 原生结果
      *
-     * @param resultType   结果类型
-     * @param httpResponse http相应
-     * @param <T>          模板类型
+     * @param resultType 结果类型
+     * @param fileName   http相应
+     * @param charset    字符集
+     * @param content    内容
+     * @param <T>        模板类型
      * @return 原生结果
      */
-    protected <T extends WxResult> T rawResult(Class<T> resultType, HttpResponse httpResponse) {
+    protected <T extends WxResult> T rawResult(Class<T> resultType, String fileName, String charset, byte[] content) {
         T result;
         try {
-            Header header = httpResponse.getEntity().getContentType();
             result = resultType.getDeclaredConstructor().newInstance();
             result.setIsRawStream(true);
-            result.setFilename(getFileName(httpResponse));
-            result.setContentType(header != null ? header.getValue() : null);
-            result.setContent(httpResponse.getEntity().getContent());
-            result.setLength(httpResponse.getEntity().getContentLength());
+            result.setFilename(fileName);
+            result.setCharset(charset);
+            result.setContent(content);
             return result;
         } catch (Exception exception) {
             throw new RuntimeException(exception.getMessage());

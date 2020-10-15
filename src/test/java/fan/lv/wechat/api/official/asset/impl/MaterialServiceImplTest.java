@@ -9,6 +9,11 @@ import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
 import junit.framework.TestCase;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+
 /**
  * @author lv_fan2008
  */
@@ -27,7 +32,7 @@ public class MaterialServiceImplTest extends TestCase {
         assertTrue(result.success());
     }
 
-    public void testGetTemporaryMaterial() {
+    public void testGetTemporaryMaterial() throws IOException {
         WxAddTemporaryMaterialResult result = materialService.addTemporaryMaterial("image", Util.getProperty("mass.send.picture"));
         WxGetTemporaryMaterialResult result2 = materialService.getTemporaryMaterial(result.getMediaId());
         assertTrue(result2.success());

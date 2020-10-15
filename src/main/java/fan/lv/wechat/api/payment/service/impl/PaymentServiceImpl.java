@@ -215,7 +215,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
     @Override
     public String getNotifyReplyXml(String returnCode, String returnMsg) {
         WxBasePayResult result = new WxBasePayResult();
-        result.setResultCode(returnCode);
+        result.setReturnCode(returnCode);
         result.setReturnMsg(returnMsg);
         return XmlUtil.toXml(result);
     }

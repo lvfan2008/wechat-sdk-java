@@ -66,6 +66,28 @@ public class WxPayConfig {
 
     /**
      * 是否为沙盒环境
+     * 沙箱支持的API
+     * <p>
+     * <p>
+     * 沙箱支持如下api，具体需按验收用例规范来调式，其他接口不支持在沙箱测试
+     * <p>
+     * 〖付款码下单：https://api.mch.weixin.qq.com/sandboxnew/pay/micropay 〗
+     * <p>
+     * 〖公众号/扫码/APP支付下单：https://api.mch.weixin.qq.com/sandboxnew/pay/unifiedorder〗
+     * <p>
+     * 〖订单查询：https://api.mch.weixin.qq.com/sandboxnew/pay/orderquery〗
+     * <p>
+     * 〖退款：https://api.mch.weixin.qq.com/sandboxnew/pay/refund〗
+     * <p>
+     * 〖退款查询：https://api.mch.weixin.qq.com/sandboxnew/pay/refundquery〗
+     * <p>
+     * 〖下载对账单：https://api.mch.weixin.qq.com/sandboxnew/pay/downloadbill〗
+     * <p>
+     * 〖撤单：https://api.mch.weixin.qq.com/sandboxnew/pay/reverse〗
+     * <p>
+     * 〖关闭订单：https://api.mch.weixin.qq.com/sandboxnew/pay/closeorder〗
+     *
+     * @see <a href="https://mp.weixin.qq.com/s/Ze-bN91oOT1gEoozLwyHdQ" target="_blank">参考沙盒常见问题</a>
      */
     @Builder.Default
     Boolean sandbox = false;

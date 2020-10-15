@@ -67,14 +67,14 @@ public class WxBasePayResult extends WxResult {
      */
     @XStreamOmitField
     @JsonIgnore
-    Integer errorCode = 0;
+    Integer errorCode;
 
     /**
      * 错误消息，在WxBasePayResult无用
      */
     @XStreamOmitField
     @JsonIgnore
-    String errorMessage = "";
+    String errorMessage;
 
     /**
      * 是否为原始流
@@ -84,28 +84,23 @@ public class WxBasePayResult extends WxResult {
 
 
     /**
-     * 原始流的内容类型：Content-Type
-     */
-    @XStreamOmitField
-    String contentType;
-
-    /**
      * 原始流的文件名：Content-disposition:attachment; filename=xxxx.jpg
      */
     @XStreamOmitField
     String filename;
 
     /**
-     * 原始流
+     * 字符集
      */
     @XStreamOmitField
-    InputStream content;
+    String charset;
 
     /**
-     * 原始流长度
+     * 原始流，最大长度Integer.MAX_VALUE
      */
+    @JsonIgnore
     @XStreamOmitField
-    Long length;
+    byte[]  content;
 
     /**
      * 结果是否成功

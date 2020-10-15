@@ -1,5 +1,7 @@
 package fan.lv.wechat.api.payment.service;
 
+import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
+import fan.lv.wechat.entity.pay.coupon.WxQueryCouponStockResult;
 import fan.lv.wechat.entity.pay.coupon.WxSendCouponResult;
 
 import java.util.Map;
@@ -24,4 +26,24 @@ public interface CouponService {
      * @return 发放代金券结果
      */
     WxSendCouponResult sendCoupon(String couponStockId, String partnerTradeNo, String openId, Map<String, String> others);
+
+    /**
+     * 查询代金券批次
+     *
+     * @param couponStockId 代金券批次id
+     * @param others        其他参数
+     * @return 代金券批次
+     */
+    WxQueryCouponStockResult queryCouponStock(String couponStockId, Map<String, String> others);
+
+    /**
+     * 查询代金券信息
+     *
+     * @param openId   用户openid
+     * @param couponId 代金券id
+     * @param stockId  代金劵对应的批次号
+     * @param others   其他参数
+     * @return 代金券信息
+     */
+    WxCouponInfoResult queryCouponInfo(String openId, String couponId, String stockId, Map<String, String> others);
 }

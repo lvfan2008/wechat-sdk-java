@@ -37,7 +37,7 @@ public class WxSendCouponResult extends WxCommonPayResult {
     /**
      * 失败记录数
      */
-    @XStreamAlias("failed_count\t")
+    @XStreamAlias("failed_count")
     Integer failedCount;
 
 

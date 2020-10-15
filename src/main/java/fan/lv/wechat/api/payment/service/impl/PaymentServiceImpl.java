@@ -147,6 +147,27 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
     }
 
     @Override
+    public WxDownloadFundFlowResult downloadFundFlow(String billDate, String billType, String tarType) {
+        return postXml("/pay/downloadfundflow",
+                SimpleMap.of("bill_date", billDate,
+                        "bill_type", billType,
+                        "tar_type", tarType,
+                        "sign_type", "HMAC-SHA256"),
+                WxDownloadFundFlowResult.class, defSslOpts());
+    }
+
+    @Override
+    public WxBatchQueryCommentResult batchQueryComment(String beginTime, String endTime, Integer offset, Integer limit) {
+        return postXml("/billcommentsp/batchquerycomment",
+                SimpleMap.of("begin_time", beginTime,
+                        "end_time", endTime,
+                        "offset", offset.toString(),
+                        "limit", limit == null ? null : limit.toString(),
+                        "sign_type", "HMAC-SHA256"),
+                WxBatchQueryCommentResult.class, defSslOpts());
+    }
+
+    @Override
     public WxShortUrlResult shortUrl(String longUrl) {
         return postXml("/tools/shorturl", SimpleMap.of("long_url", longUrl), WxShortUrlResult.class, defOpts());
     }

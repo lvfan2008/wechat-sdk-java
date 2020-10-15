@@ -153,6 +153,38 @@ public interface PaymentService {
     WxDownloadBillResult downloadBill(String billDate, String billType, String tarType);
 
     /**
+     * 下载资金账单
+     * <p>
+     * 商户可以通过该接口下载自2017年6月1日起 的历史资金流水账单。
+     * <p>
+     * 说明：
+     * <p>
+     * 1、资金账单中的数据反映的是商户微信账户资金变动情况；
+     * <p>
+     * 2、当日账单在次日上午9点开始生成，建议商户在上午10点以后获取；
+     * <p>
+     * 3、资金账单中涉及金额的字段单位为“元”。
+     *
+     * @param billDate 下载对账单的日期，格式：20140603
+     * @param billType 账单的资金来源账户： Basic  基本账户 Operation 运营账户 Fees 手续费账户
+     * @param tarType  非必传参数，固定值：GZIP，返回格式为.gzip的压缩包账单。不传(null)则默认为数据流形式。
+     * @return 资金账单
+     */
+    WxDownloadFundFlowResult downloadFundFlow(String billDate, String billType, String tarType);
+
+    /**
+     * 拉取订单评价数据
+     *
+     * @param beginTime 按用户评论时间批量拉取的起始时间，格式为yyyyMMddHHmmss
+     * @param endTime   按用户评论时间批量拉取的结束时间，格式为yyyyMMddHHmmss
+     * @param offset    指定从某条记录的下一条开始返回记录。接口调用成功时，会返回本次查询最后一条数据的offset。
+     *                  商户需要翻页时，应该把本次调用返回的offset 作为下次调用的入参。注意offset是评论数据在微信支付后台保存的索引，未必是连续的
+     * @param limit     一次拉取的条数, 最大值是200，默认是200
+     * @return 订单评价数据
+     */
+    WxBatchQueryCommentResult batchQueryComment(String beginTime, String endTime, Integer offset, Integer limit);
+
+    /**
      * 解析退款通知结果
      *
      * @param longUrl 退款通知的xml

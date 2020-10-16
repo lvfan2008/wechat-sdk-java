@@ -144,10 +144,12 @@ public class PayClientImpl extends BaseClient implements PayClient {
 
     protected Map<String, String> addSign(Map<String, String> reqData) throws Exception {
         reqData = filterBlank(reqData);
-        WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
+        String signTypeName = reqData.get("sign_type");
+        signTypeName = signTypeName == null ? payConfig.getSignType(): signTypeName;
+        WxPayConstants.SignType signType = WxPayConstants.MD5.equals(signTypeName) ? WxPayConstants.SignType.MD5
                 : WxPayConstants.SignType.HMACSHA256;
         if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
-            reqData.put("sign_type", payConfig.getSignType());
+            reqData.put("sign_type", signTypeName);
         }
         String key = payConfig.getSandbox() ? payConfig.getSandboxSignKey() : payConfig.getKey();
         reqData.put("sign", WxPayUtil.generateSignature(reqData, key, signType));

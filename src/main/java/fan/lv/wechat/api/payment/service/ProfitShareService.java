@@ -84,7 +84,7 @@ public interface ProfitShareService {
     /**
      * 分账回退
      *
-     * @param transactionId     微信分账单号
+     * @param orderId           微信分账单号
      * @param outOrderNo        商户分账单号
      * @param outReturnNo       商户回退单号
      * @param returnAccountType 回退方类型
@@ -93,17 +93,17 @@ public interface ProfitShareService {
      * @param description       回退描述
      * @return 分账回退结果
      */
-    WxReturnProfitShareResult returnProfitShare(String transactionId, String outOrderNo, String outReturnNo,
-                                                String returnAccountType, String returnAccount, String returnAmount,
+    WxReturnProfitShareResult returnProfitShare(String orderId, String outOrderNo, String outReturnNo,
+                                                String returnAccountType, String returnAccount, Integer returnAmount,
                                                 String description);
 
     /**
      * 回退结果查询
      *
-     * @param transactionId 微信分账单号
+     * @param orderId 微信分账单号
      * @param outOrderNo    商户分账单号
      * @param outReturnNo   商户回退单号
      * @return 回退结果
      */
-    WxReturnProfitShareResult queryReturnProfitShare(String transactionId, String outOrderNo, String outReturnNo);
+    WxReturnProfitShareResult queryReturnProfitShare(String orderId, String outOrderNo, String outReturnNo);
 }

@@ -6,6 +6,7 @@ import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.profitshare.*;
 import fan.lv.wechat.util.JsonUtil;
 import fan.lv.wechat.util.SimpleMap;
+import fan.lv.wechat.util.pay.WxPayUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -44,10 +45,17 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
 
     @Override
     public WxQueryProfitShareResult queryProfitShare(String transactionId, String outOrderNo) {
-        SimpleMap<String, String> map = SimpleMap.of("transaction_id", transactionId,
+        SimpleMap<String, String> map = SimpleMap.of(
+                "transaction_id", transactionId,
                 "out_order_no", outOrderNo,
-                "sign_type", "HMAC-SHA256");
-        WxQueryProfitShareResult result = postXml("/pay/profitsharingquery", map, WxQueryProfitShareResult.class, defOpts());
+                "nonce_str", WxPayUtil.generateNonceStr(),
+                "mch_id", payConfig.getMchId(),
+                "sign_type", "HMAC-SHA256"
+        );
+
+        WxQueryProfitShareResult result = postXml("/pay/profitsharingquery", map, false,
+                WxQueryProfitShareResult.class, defOpts());
+
         if (result.success() && result.resultSuccess() && result.getReceivers() != null) {
             result.setDecodeReceivers(JsonUtil.parseJson(result.getReceivers(),
                     new TypeReference<List<WxReceiverForQuery>>() {
@@ -90,23 +98,23 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
     }
 
     @Override
-    public WxReturnProfitShareResult returnProfitShare(String transactionId, String outOrderNo, String outReturnNo,
-                                                       String returnAccountType, String returnAccount, String returnAmount,
+    public WxReturnProfitShareResult returnProfitShare(String orderId, String outOrderNo, String outReturnNo,
+                                                       String returnAccountType, String returnAccount, Integer returnAmount,
                                                        String description) {
-        SimpleMap<String, String> map = SimpleMap.of("transaction_id", transactionId)
+        SimpleMap<String, String> map = SimpleMap.of("order_id", orderId)
                 .add("out_order_no", outOrderNo)
                 .add("description", description)
                 .add("out_return_no", outReturnNo)
                 .add("sign_type", "HMAC-SHA256")
                 .add("return_account_type", returnAccountType)
                 .add("return_account", returnAccount)
-                .add("return_amount", returnAmount);
+                .add("return_amount", returnAmount.toString());
         return postXml("/secapi/pay/profitsharingreturn", map, WxReturnProfitShareResult.class, defSslOpts());
     }
 
     @Override
-    public WxReturnProfitShareResult queryReturnProfitShare(String transactionId, String outOrderNo, String outReturnNo) {
-        SimpleMap<String, String> map = SimpleMap.of("transaction_id", transactionId)
+    public WxReturnProfitShareResult queryReturnProfitShare(String orderId, String outOrderNo, String outReturnNo) {
+        SimpleMap<String, String> map = SimpleMap.of("order_id", orderId)
                 .add("out_order_no", outOrderNo)
                 .add("out_return_no", outReturnNo)
                 .add("sign_type", "HMAC-SHA256");

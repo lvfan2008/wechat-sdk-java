@@ -15,6 +15,19 @@ import lombok.EqualsAndHashCode;
 public class WxReturnProfitShareResult extends WxCommonPayResult {
 
     /**
+     * 如果返回状态码为FAIL，则本字段存在，且为失败的错误码
+     */
+    @XStreamAlias("error_code")
+    String returnErrorCode;
+
+    /**
+     * 如果返回状态码为FAIL，则本字段存在，且为失败的错误信息
+     */
+    @XStreamAlias("error_msg")
+    String returnErrorMsg;
+
+
+    /**
      * 调用接口提供的商户系统内部的分账单号
      */
     @XStreamAlias("out_order_no")

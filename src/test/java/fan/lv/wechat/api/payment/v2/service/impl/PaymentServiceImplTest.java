@@ -33,7 +33,7 @@ public class PaymentServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(true)
                 .build();
-        paymentService = new PaymentServiceImpl(new PayClientV2Impl(config),config);
+        paymentService = new PaymentServiceImpl(new PayClientImpl(config),config);
     }
 
     protected PaymentService getPay() {
@@ -50,7 +50,7 @@ public class PaymentServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(false)
                 .build();
-        return new PaymentServiceImpl(new PayClientV2Impl(config),config);
+        return new PaymentServiceImpl(new PayClientImpl(config),config);
     }
 
     public void testMicroPay1() {

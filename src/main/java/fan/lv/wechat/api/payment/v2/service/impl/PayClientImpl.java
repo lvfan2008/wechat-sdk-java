@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
 import fan.lv.wechat.entity.pay.base.WxPayResultUtil;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-public class PayClientV2Impl implements PayClientV2 {
+public class PayClientImpl implements PayClient {
 
     /**
      * 基础Url
@@ -24,7 +24,7 @@ public class PayClientV2Impl implements PayClientV2 {
 
     WxPayConfig payConfig;
 
-    public PayClientV2Impl(WxPayConfig payConfig) {
+    public PayClientImpl(WxPayConfig payConfig) {
         this.payConfig = payConfig;
     }
 
@@ -34,7 +34,7 @@ public class PayClientV2Impl implements PayClientV2 {
         try {
             checkSandboxSignKey(url);
             String key = isGetSandboxSignKeyUrl(url) || !payConfig.getSandbox() ? payConfig.getKey() : payConfig.getSandboxSignKey();
-            addSign(reqData, payConfig.getKey());
+            addSign(reqData, key);
             HttpResponse httpResponse = HttpUtils.httpRequest(url, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
                     .mimeType("application/xml"));
             SimpleHttpResp simpleHttpResp = HttpUtils.from(httpResponse);

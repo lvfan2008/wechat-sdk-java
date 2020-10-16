@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.api.payment.v2.service.ProfitShareService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.profitshare.*;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class ProfitShareServiceImpl extends BaseService implements ProfitShareService {
 
 
-    public ProfitShareServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+    public ProfitShareServiceImpl(PayClient client, WxPayConfig payConfig) {
         super(client, payConfig);
     }
 

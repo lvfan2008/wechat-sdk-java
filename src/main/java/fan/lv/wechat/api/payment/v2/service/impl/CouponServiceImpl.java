@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.api.payment.v2.service.CouponService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class CouponServiceImpl extends BaseService implements CouponService {
 
 
-    public CouponServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+    public CouponServiceImpl(PayClient client, WxPayConfig payConfig) {
         super(client, payConfig);
     }
 

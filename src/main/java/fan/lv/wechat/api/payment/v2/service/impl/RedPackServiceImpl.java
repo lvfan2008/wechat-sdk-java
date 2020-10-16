@@ -1,13 +1,12 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.api.payment.v2.service.RedPackService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.redpack.WxGetRedPackResult;
 import fan.lv.wechat.entity.pay.redpack.WxMpSendRedPackResult;
 import fan.lv.wechat.entity.pay.redpack.WxSendRedPackResult;
 import fan.lv.wechat.util.SimpleMap;
-import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,7 +19,7 @@ import java.util.Map;
 public class RedPackServiceImpl extends BaseService implements RedPackService {
 
 
-    public RedPackServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+    public RedPackServiceImpl(PayClient client, WxPayConfig payConfig) {
         super(client, payConfig);
     }
 

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-public interface PayClientV2 {
+public interface PayClient {
 
     /**
      * Post Xml请求

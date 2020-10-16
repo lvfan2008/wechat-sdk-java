@@ -27,7 +27,7 @@ public class EnterprisePayServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(false)
                 .build();
-        enterprisePayService = new EnterprisePayServiceImpl(new PayClientV2Impl(config),config);
+        enterprisePayService = new EnterprisePayServiceImpl(new PayClientImpl(config),config);
     }
 
     public void testEnterprisePay() {

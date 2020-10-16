@@ -1,6 +1,6 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.api.payment.v2.service.PaymentService;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
 import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public class PaymentServiceImpl extends BaseService implements PaymentService {
 
-    public PaymentServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+    public PaymentServiceImpl(PayClient client, WxPayConfig payConfig) {
         super(client, payConfig);
     }
 

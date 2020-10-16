@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
 import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.payment.v2.PayClientV2;
+import fan.lv.wechat.api.payment.v2.PayClient;
 import fan.lv.wechat.api.payment.v2.service.CouponService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
@@ -30,7 +30,7 @@ public class CouponServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(false)
                 .build();
-        PayClientV2 client = new PayClientV2Impl(config);
+        PayClient client = new PayClientImpl(config);
         couponService = new CouponServiceImpl(client, config);
     }
 

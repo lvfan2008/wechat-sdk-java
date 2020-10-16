@@ -28,7 +28,7 @@ public class RedPackServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(false)
                 .build();
-        redPackService = new RedPackServiceImpl(new PayClientV2Impl(config),config);
+        redPackService = new RedPackServiceImpl(new PayClientImpl(config),config);
     }
 
     public void testSendRedPack() {

@@ -2,8 +2,7 @@ package fan.lv.wechat.api.payment.service.impl;
 
 import fan.lv.wechat.api.payment.service.EnterprisePayService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
-import fan.lv.wechat.entity.pay.enterprisepay.WxEnterprisePayResult;
-import fan.lv.wechat.entity.pay.enterprisepay.WxQueryEnterprisePayResult;
+import fan.lv.wechat.entity.pay.enterprisepay.*;
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
@@ -54,5 +53,31 @@ public class EnterprisePayServiceImpl extends PayClientImpl implements Enterpris
                 .add("appid", payConfig.getAppId())
                 .add("mch_id", payConfig.getMchId());
         return postXml("/mmpaymkttransfers/promotion/transfers", map, WxQueryEnterprisePayResult.class, defSslOpts());
+    }
+
+    @Override
+    public WxEnterprisePayToBankCardResult enterprisePayToBankCard(String partnerTradeNo, String encBankNo, String encTrueName,
+                                                                   String bankCode, Integer amount, String desc) {
+        SimpleMap<String, String> map = SimpleMap.of("partner_trade_no", partnerTradeNo)
+                .add("mch_id", payConfig.getMchId())
+                .add("enc_bank_no", encBankNo)
+                .add("enc_true_name", encTrueName)
+                .add("bank_code", bankCode)
+                .add("amount", amount.toString())
+                .add("desc", desc);
+        return postXml("/mmpaysptrans/pay_bank", map, WxEnterprisePayToBankCardResult.class, defSslOpts());
+    }
+
+    @Override
+    public WxQueryPayToBankCardResult queryEnterprisePayToBankCard(String partnerTradeNo) {
+        SimpleMap<String, String> map = SimpleMap.of("partner_trade_no", partnerTradeNo)
+                .add("mch_id", payConfig.getMchId());
+        return postXml("/mmpaysptrans/query_bank", map, WxQueryPayToBankCardResult.class, defSslOpts());
+    }
+
+    @Override
+    public WxGetPubKeyResult getPubKey() {
+        SimpleMap<String, String> map = SimpleMap.of("mch_id", payConfig.getMchId());
+        return postXml("/risk/getpublickey", map, WxGetPubKeyResult.class, defSslOpts());
     }
 }

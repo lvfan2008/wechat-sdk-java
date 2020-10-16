@@ -2,10 +2,10 @@ package fan.lv.wechat.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_NULL_MAP_VALUES;
 
 /**
  * Json工具
@@ -44,6 +44,24 @@ public class JsonUtil {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             return mapper.readValue(json, resultType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Json转换为对象
+     *
+     * @param json          json字符串
+     * @param typeReference 转为类型，可以使用泛型，例：new TypeReference<List<String>>(){}
+     * @param <T>           类型模板
+     * @return Json对象
+     */
+    public static <T> T parseJson(String json, TypeReference<T> typeReference) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            return mapper.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

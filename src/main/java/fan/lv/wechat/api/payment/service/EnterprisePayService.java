@@ -1,8 +1,6 @@
 package fan.lv.wechat.api.payment.service;
 
-import fan.lv.wechat.entity.pay.enterprisepay.WxEnterprisePayResult;
-import fan.lv.wechat.entity.pay.enterprisepay.WxEnterprisePayToBankCardResult;
-import fan.lv.wechat.entity.pay.enterprisepay.WxQueryEnterprisePayResult;
+import fan.lv.wechat.entity.pay.enterprisepay.*;
 
 import java.util.Map;
 
@@ -38,14 +36,31 @@ public interface EnterprisePayService {
 
     /**
      * 企业付款到银行卡
+     *
      * @param partnerTradeNo 商户订单号，需保持唯一（只允许数字[0~9]或字母[A~Z]和[a~z]，最短8位，最长32位）
-     * @param encBankNo
-     * @param encTrueName
-     * @param bankCode
-     * @param amount
-     * @param desc
-     * @return
+     * @param encBankNo      收款方银行卡号（采用标准RSA算法，公钥由微信侧提供）
+     * @param encTrueName    收款方用户名（采用标准RSA算法，公钥由微信侧提供）
+     * @param bankCode       银行卡所在开户行编号
+     * @param amount         付款金额：RMB分
+     * @param desc           企业付款到银行卡付款说明,即订单备注
+     * @return 返回结果
      */
-    WxEnterprisePayToBankCardResult EnterprisePayToBankCard(String partnerTradeNo, String encBankNo, String encTrueName,
+    WxEnterprisePayToBankCardResult enterprisePayToBankCard(String partnerTradeNo, String encBankNo, String encTrueName,
                                                             String bankCode, Integer amount, String desc);
+
+
+    /**
+     * 用于对商户企业付款到银行卡操作进行结果查询，返回付款操作详细结果。
+     *
+     * @param partnerTradeNo 商户订单号，需保持唯一（只允许数字[0~9]或字母[A~Z]和[a~z]最短8位，最长32位）
+     * @return 查询付款结果
+     */
+    WxQueryPayToBankCardResult queryEnterprisePayToBankCard(String partnerTradeNo);
+
+    /**
+     * 获取RSA加密公钥
+     *
+     * @return RSA加密公钥
+     */
+    WxGetPubKeyResult getPubKey();
 }

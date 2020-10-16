@@ -95,10 +95,8 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                 .add("body", body)
                 .add("openid", openId)
                 .add("spbill_create_ip", spBillCreateIp)
-                .add("notify_url", payConfig.getNotifyUrl());
-        if (others != null) {
-            map.putAll(others);
-        }
+                .add("notify_url", payConfig.getNotifyUrl())
+                .addAll(others);
         return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, defOpts());
     }
 

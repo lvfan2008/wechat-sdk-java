@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.payment.service.impl;
 
 import fan.lv.wechat.api.kernel.impl.BaseClient;
+import fan.lv.wechat.api.payment.PayClient;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
@@ -24,7 +25,7 @@ import static fan.lv.wechat.util.pay.WxPayConstants.FIELD_SIGN_TYPE;
  * @author lv_fan2008
  */
 @Slf4j
-public class PayClientImpl extends BaseClient {
+public class PayClientImpl extends BaseClient implements PayClient {
 
     WxPayConfig payConfig;
 
@@ -43,18 +44,9 @@ public class PayClientImpl extends BaseClient {
      * @return 沙盒Key
      */
     protected String getSandboxSignKey() {
-        WxSandboxSignKeyResult result;
-        try {
-            WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
-                    : WxPayConstants.SignType.HMACSHA256;
-            Map<String, String> reqData = SimpleMap.of("mch_id", payConfig.getMchId(), "nonce_str", WxPayUtil.generateNonceStr());
-            reqData.put("sign", WxPayUtil.generateSignature(reqData, payConfig.getKey(), signType));
-            result = request("/pay/getsignkey", RequestOptions.defOpts().body(WxPayUtil.mapToXml(reqData))
-                    .mimeType("application/xml"), WxSandboxSignKeyResult.class);
-        } catch (Exception e) {
-            log.error("getSandboxSignKey errorResult {}", e.getMessage());
-            return "";
-        }
+        WxSandboxSignKeyResult result = this.postXml("/pay/getsignkey",
+                SimpleMap.of("mch_id", payConfig.getMchId(), "nonce_str", WxPayUtil.generateNonceStr()),
+                false, WxSandboxSignKeyResult.class, defOpts());
         return result.success() ? result.getSandboxSignKey() : "";
     }
 
@@ -126,57 +118,6 @@ public class PayClientImpl extends BaseClient {
     }
 
     /**
-     * Post Xml请求
-     *
-     * @param uri        uri地址
-     * @param reqData    请求Map
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    public <T extends WxResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
-
-        try {
-            checkSandboxSignKey();
-            reqData = fullRequest(reqData);
-            reqData = addSign(reqData);
-            return request(uri, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
-                    .mimeType("application/xml"), resultType);
-        } catch (Exception e) {
-            return errorResult(-1, e.getMessage(), resultType);
-        }
-    }
-
-    /**
-     * Post Xml请求
-     *
-     * @param uri        uri地址
-     * @param queryMap   get参数
-     * @param object     json参数对象
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    @Override
-    public <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object,
-                                          Class<T> resultType, RequestOptions defOpts) {
-
-        try {
-            checkSandboxSignKey();
-            String xml = XmlUtil.toXml(object);
-            Map<String, String> map = WxPayUtil.xmlToMap(xml);
-            map = fullRequest(map);
-            map = addSign(map);
-            return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(XmlUtil.toXml(map))
-                    .mimeType("application/xml"), resultType);
-        } catch (Exception e) {
-            return errorResult(-1, e.getMessage(), resultType);
-        }
-    }
-
-    /**
      * 检测沙盒模式下的密钥
      */
     protected void checkSandboxSignKey() {
@@ -236,5 +177,21 @@ public class PayClientImpl extends BaseClient {
 
     protected RequestOptions defSslOpts() {
         return RequestOptions.defOpts().sslCert(new SslCert(payConfig.getMchId(), payConfig.getCertBytes()));
+    }
+
+    @Override
+    public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData, Boolean useCommonData,
+                                                 Class<T> resultType, RequestOptions defOpts) {
+        try {
+            checkSandboxSignKey();
+            if (useCommonData) {
+                reqData = fullRequest(reqData);
+            }
+            reqData = addSign(reqData);
+            return request(uri, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
+                    .mimeType("application/xml"), resultType);
+        } catch (Exception e) {
+            return errorResult(-1, e.getMessage(), resultType);
+        }
     }
 }

@@ -28,7 +28,7 @@ public class ProfitShareServiceImplTest extends TestCase {
                 .notifyUrl("http://www.yunyicheng.cn/pay/callback")
                 .sandbox(false)
                 .build();
-        profitShareService = new ProfitShareServiceImpl(config);
+        profitShareService = new ProfitShareServiceImpl(new PayClientV2Impl(config),config);
     }
 
     public void testProfitShare() {

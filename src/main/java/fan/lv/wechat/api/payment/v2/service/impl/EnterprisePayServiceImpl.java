@@ -1,5 +1,6 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
+import fan.lv.wechat.api.payment.v2.PayClientV2;
 import fan.lv.wechat.api.payment.v2.service.EnterprisePayService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.enterprisepay.*;
@@ -13,23 +14,20 @@ import java.util.Map;
  * @author lv_fan2008
  */
 @Slf4j
-public class EnterprisePayServiceImpl extends PayClientImpl implements EnterprisePayService {
+public class EnterprisePayServiceImpl extends BaseService implements EnterprisePayService {
 
-    public EnterprisePayServiceImpl(WxPayConfig payConfig) {
-        super(payConfig);
+
+    public EnterprisePayServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+        super(client, payConfig);
     }
 
     /**
-     * 添加请求必要信息
+     * 默认初始化数据
      *
-     * @param reqData 请求数据
-     * @return 请求数据
-     * @throws Exception 异常
+     * @return 初始化数据
      */
-    @Override
-    protected Map<String, String> fullRequest(Map<String, String> reqData) throws Exception {
-        reqData.put("nonce_str", WxPayUtil.generateNonceStr());
-        return reqData;
+    protected SimpleMap<String, String> defData() {
+        return SimpleMap.of("nonce_str", WxPayUtil.generateNonceStr());
     }
 
     @Override
@@ -42,16 +40,16 @@ public class EnterprisePayServiceImpl extends PayClientImpl implements Enterpris
                 .add("desc", desc.toString())
                 .add("mch_appid", payConfig.getAppId())
                 .add("mchid", payConfig.getMchId())
-                .addAll(others);
-        return postXml("/mmpaymkttransfers/promotion/transfers", map, WxEnterprisePayResult.class, defSslOpts());
+                .addAll(others).addAll(defData());
+        return client.postXml("/mmpaymkttransfers/promotion/transfers", map, WxEnterprisePayResult.class, defSslOpts());
     }
 
     @Override
     public WxQueryEnterprisePayResult queryEnterprisePay(String partnerTradeNo) {
         SimpleMap<String, String> map = SimpleMap.of("partner_trade_no", partnerTradeNo)
                 .add("appid", payConfig.getAppId())
-                .add("mch_id", payConfig.getMchId());
-        return postXml("/mmpaymkttransfers/gettransferinfo", map, WxQueryEnterprisePayResult.class, defSslOpts());
+                .add("mch_id", payConfig.getMchId()).addAll(defData());
+        return client.postXml("/mmpaymkttransfers/gettransferinfo", map, WxQueryEnterprisePayResult.class, defSslOpts());
     }
 
     @Override
@@ -63,20 +61,21 @@ public class EnterprisePayServiceImpl extends PayClientImpl implements Enterpris
                 .add("enc_true_name", encTrueName)
                 .add("bank_code", bankCode)
                 .add("amount", amount.toString())
-                .add("desc", desc);
-        return postXml("/mmpaysptrans/pay_bank", map, WxEnterprisePayToBankCardResult.class, defSslOpts());
+                .add("desc", desc)
+                .addAll(defData());
+        return client.postXml("/mmpaysptrans/pay_bank", map, WxEnterprisePayToBankCardResult.class, defSslOpts());
     }
 
     @Override
     public WxQueryPayToBankCardResult queryEnterprisePayToBankCard(String partnerTradeNo) {
         SimpleMap<String, String> map = SimpleMap.of("partner_trade_no", partnerTradeNo)
-                .add("mch_id", payConfig.getMchId());
-        return postXml("/mmpaysptrans/query_bank", map, WxQueryPayToBankCardResult.class, defSslOpts());
+                .add("mch_id", payConfig.getMchId()).addAll(defData());
+        return client.postXml("/mmpaysptrans/query_bank", map, WxQueryPayToBankCardResult.class, defSslOpts());
     }
 
     @Override
     public WxGetPubKeyResult getPubKey() {
-        SimpleMap<String, String> map = SimpleMap.of("mch_id", payConfig.getMchId());
-        return postXml("https://fraud.mch.weixin.qq.com/risk/getpublickey", map, WxGetPubKeyResult.class, defSslOpts());
+        SimpleMap<String, String> map = SimpleMap.of("mch_id", payConfig.getMchId()).addAll(defData());
+        return client.postXml("https://fraud.mch.weixin.qq.com/risk/getpublickey", map, WxGetPubKeyResult.class, defSslOpts());
     }
 }

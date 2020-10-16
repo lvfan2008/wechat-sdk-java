@@ -20,6 +20,11 @@ public class WxRefundNotifyResult extends WxCommonPayResult {
     @XStreamAlias("req_info")
     String reqInfo;
 
+    /**
+     * 解码失败原因
+     */
+    String decodeFailReason;
+
     WxReqInfo decodeReqInfo;
 
     @Data

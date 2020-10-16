@@ -2,14 +2,12 @@ package fan.lv.wechat.api.payment.v2.service.impl;
 
 import fan.lv.wechat.api.payment.v2.PayClientV2;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
+import fan.lv.wechat.entity.pay.base.WxPayResultUtil;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
-import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.*;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.http.HttpResponse;
 
 import java.util.Map;
@@ -34,6 +32,8 @@ public class PayClientV2Impl implements PayClientV2 {
     public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
         String url = uri.contains("://") ? uri : baseUrl + uri;
         try {
+            checkSandboxSignKey(url);
+            String key = isGetSandboxSignKeyUrl(url) || !payConfig.getSandbox() ? payConfig.getKey() : payConfig.getSandboxSignKey();
             addSign(reqData, payConfig.getKey());
             HttpResponse httpResponse = HttpUtils.httpRequest(url, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
                     .mimeType("application/xml"));
@@ -48,19 +48,43 @@ public class PayClientV2Impl implements PayClientV2 {
                 return payResult;
             }
         } catch (Exception e) {
-            return errorResult(e.getMessage(), resultType);
+            return WxPayResultUtil.errorResult(e.getMessage(), resultType);
         }
     }
 
 
     /**
-     * 判断不是沙盒取签名密钥的Url
+     * 判断是否沙盒取签名密钥的Url
      *
      * @param url url
-     * @return 如果不是，则返回true，否则false
+     * @return 是否沙盒取签名密钥的Url
      */
-    protected boolean notGetSandboxSignKeyUrl(String url) {
+    protected boolean isGetSandboxSignKeyUrl(String url) {
         return url.contains("/pay/getsignkey");
+    }
+
+    /**
+     * 检查沙盒签名密钥
+     *
+     * @param url 当前url
+     */
+    protected void checkSandboxSignKey(String url) {
+        if (!isGetSandboxSignKeyUrl(url)) {
+            if (payConfig.getSandbox() && payConfig.getSandboxSignKey() == null) {
+                this.setSandboxSignKey();
+            }
+        }
+    }
+
+    /**
+     * 获取沙盒Key
+     */
+    protected void setSandboxSignKey() {
+        WxSandboxSignKeyResult result = this.postXml("/pay/getsignkey",
+                SimpleMap.of("mch_id", payConfig.getMchId(), "nonce_str", WxPayUtil.generateNonceStr()),
+                WxSandboxSignKeyResult.class, null);
+        String key = result.success() ? result.getSandboxSignKey() : "";
+        payConfig.setSandboxSignKey(key);
     }
 
     protected Map<String, String> addSign(Map<String, String> reqData, String key) throws Exception {
@@ -73,18 +97,5 @@ public class PayClientV2Impl implements PayClientV2 {
         }
         reqData.put("sign", WxPayUtil.generateSignature(reqData, key, signType));
         return reqData;
-    }
-
-
-    protected <T extends WxBasePayResult> T errorResult(String errorMessage, Class<T> resultType) {
-        T result;
-        try {
-            result = resultType.getDeclaredConstructor().newInstance();
-            result.setReturnCode("FAIL");
-            result.setErrorMessage(errorMessage);
-            return result;
-        } catch (Exception exception) {
-            throw new RuntimeException(exception.getMessage());
-        }
     }
 }

@@ -1,5 +1,6 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
+import fan.lv.wechat.api.payment.v2.PayClientV2;
 import fan.lv.wechat.api.payment.v2.service.RedPackService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.redpack.WxGetRedPackResult;
@@ -16,27 +17,24 @@ import java.util.Map;
  * @author lv_fan2008
  */
 @Slf4j
-public class RedPackServiceImpl extends PayClientImpl implements RedPackService {
+public class RedPackServiceImpl extends BaseService implements RedPackService {
 
-    public RedPackServiceImpl(WxPayConfig payConfig) {
-        super(payConfig);
+
+    public RedPackServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+        super(client, payConfig);
     }
 
     /**
-     * 添加请求必要信息
+     * 默认初始化数据
      *
-     * @param reqData 请求数据
-     * @return 请求数据
-     * @throws Exception 异常
+     * @return 初始化数据
      */
-    @Override
-    protected Map<String, String> fullRequest(Map<String, String> reqData) throws Exception {
-        reqData.put("wxappid", payConfig.getAppId());
-        reqData.put("mch_id", payConfig.getMchId());
-        reqData.put("nonce_str", WxPayUtil.generateNonceStr());
-        reqData.put("sub_mch_id", payConfig.getSubMchId());
-        reqData.put("msgappid", payConfig.getSubAppId());
-        return reqData;
+    protected SimpleMap<String, String> defData() {
+        return SimpleMap.of("wxappid", payConfig.getAppId())
+                .add("mch_id", payConfig.getMchId())
+                .add("nonce_str", WxPayUtil.generateNonceStr())
+                .add("sub_mch_id", payConfig.getSubMchId())
+                .add("msgappid", payConfig.getSubAppId());
     }
 
 
@@ -53,8 +51,9 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
                 .add("client_ip", clientIp)
                 .add("act_name", actName)
                 .add("remark", remark)
-                .addAll(others);
-        return postXml("/mmpaymkttransfers/sendredpack", map, WxSendRedPackResult.class, defSslOpts());
+                .addAll(others)
+                .addAll(defData());
+        return client.postXml("/mmpaymkttransfers/sendredpack", map, WxSendRedPackResult.class, defSslOpts());
     }
 
     @Override
@@ -71,29 +70,19 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
                 .add("client_ip", clientIp)
                 .add("act_name", actName)
                 .add("remark", remark)
-                .addAll(others);
-        return postXml("/mmpaymkttransfers/sendgroupredpack", map, WxSendRedPackResult.class, defSslOpts());
+                .addAll(others)
+                .addAll(defData());
+        return client.postXml("/mmpaymkttransfers/sendgroupredpack", map, WxSendRedPackResult.class, defSslOpts());
     }
 
     @Override
     public WxGetRedPackResult getRedPack(String mchBillNo, String billType) {
-        try {
-            WxPayConstants.SignType signType = WxPayConstants.MD5.equals(payConfig.getSignType()) ? WxPayConstants.SignType.MD5
-                    : WxPayConstants.SignType.HMACSHA256;
-            SimpleMap<String, String> map = SimpleMap.of("nonce_str", WxPayUtil.generateNonceStr())
-                    .add("mch_billno", mchBillNo)
-                    .add("mch_id", payConfig.getMchId())
-                    .add("appid", payConfig.getAppId())
-                    .add("bill_type", billType);
-            if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
-                map.put("sign_type", payConfig.getSignType());
-            }
-            map.add("sign", WxPayUtil.generateSignature(map, payConfig.getKey(), signType));
-            return request("/mmpaymkttransfers/gethbinfo", defSslOpts().body(WxPayUtil.mapToXml(map))
-                    .mimeType("application/xml"), WxGetRedPackResult.class);
-        } catch (Exception e) {
-            return errorResult(-1, e.getMessage(), WxGetRedPackResult.class);
-        }
+        SimpleMap<String, String> map = SimpleMap.of("nonce_str", WxPayUtil.generateNonceStr())
+                .add("mch_billno", mchBillNo)
+                .add("mch_id", payConfig.getMchId())
+                .add("appid", payConfig.getAppId())
+                .add("bill_type", billType);
+        return client.postXml("/mmpaymkttransfers/gethbinfo", map, WxGetRedPackResult.class, defSslOpts());
     }
 
     @Override
@@ -110,7 +99,8 @@ public class RedPackServiceImpl extends PayClientImpl implements RedPackService 
                 .add("act_name", actName)
                 .add("notify_way", notifyWay)
                 .add("remark", remark)
-                .addAll(others);
-        return postXml("/mmpaymkttransfers/sendminiprogramhb", map, WxMpSendRedPackResult.class, defSslOpts());
+                .addAll(others)
+                .addAll(defData());
+        return client.postXml("/mmpaymkttransfers/sendminiprogramhb", map, WxMpSendRedPackResult.class, defSslOpts());
     }
 }

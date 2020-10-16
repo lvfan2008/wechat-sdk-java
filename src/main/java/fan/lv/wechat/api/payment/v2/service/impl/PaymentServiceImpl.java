@@ -1,8 +1,10 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
+import fan.lv.wechat.api.payment.v2.PayClientV2;
 import fan.lv.wechat.api.payment.v2.service.PaymentService;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
 import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
+import fan.lv.wechat.entity.pay.base.WxPayResultUtil;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.*;
 import fan.lv.wechat.util.RequestOptions;
@@ -17,21 +19,34 @@ import java.util.Map;
  * @author lv_fan2008
  */
 @Slf4j
-public class PaymentServiceImpl extends PayClientImpl implements PaymentService {
+public class PaymentServiceImpl extends BaseService implements PaymentService {
 
-    public PaymentServiceImpl(WxPayConfig payConfig) {
-        super(payConfig);
+    public PaymentServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+        super(client, payConfig);
+    }
+
+    /**
+     * 默认初始化数据
+     *
+     * @return 初始化数据
+     */
+    protected SimpleMap<String, String> defData() {
+        return SimpleMap.of("appid", payConfig.getAppId())
+                .add("mch_id", payConfig.getMchId())
+                .add("nonce_str", WxPayUtil.generateNonceStr())
+                .add("sub_mch_id", payConfig.getSubMchId())
+                .add("sub_appid", payConfig.getSubAppId());
     }
 
     @Override
     public WxMicroPayResult microPay(String outTradeNo, Integer totalFee, String body, String authCode, String spBillCreateIp, Map<String, String> others) {
-        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo)
+        SimpleMap<String, String> map = defData().add("out_trade_no", outTradeNo)
                 .add("total_fee", totalFee.toString())
                 .add("body", body)
                 .add("auth_code", authCode)
                 .add("spbill_create_ip", spBillCreateIp)
                 .addAll(others);
-        return postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts());
+        return client.postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts());
     }
 
     @Override
@@ -50,11 +65,9 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
             RequestOptions defOpts = RequestOptions.defOpts().readTimeoutMs(readTimeoutMs).connectTimeoutMs(connectTimeoutMs);
             SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo)
                     .add("total_fee", totalFee.toString()).add("body", body)
-                    .add("auth_code", authCode).add("spbill_create_ip", spBillCreateIp);
-            if (others != null) {
-                map.putAll(others);
-            }
-            lastResult = postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts);
+                    .add("auth_code", authCode).add("spbill_create_ip", spBillCreateIp)
+                    .addAll(others);
+            lastResult = client.postXml("/pay/micropay", map, WxMicroPayResult.class, defOpts);
 
             // 支付成功或者支付业务成功则返回结果
             if (!lastResult.success() || lastResult.resultSuccess()) {
@@ -81,15 +94,16 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
 
     @Override
     public WxPayReverseResult reverse(String outTradeNo, String transactionId) {
-        return postXml("/secapi/pay/reverse",
-                SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
+        return client.postXml("/secapi/pay/reverse",
+                defData().add("out_trade_no", outTradeNo).add("transaction_id", transactionId),
                 WxPayReverseResult.class, defSslOpts());
     }
 
     @Override
     public WxUnifiedOrderResult unifiedOrder(String outTradeNo, Integer totalFee, String tradeType, String body, String openId,
                                              String spBillCreateIp, Map<String, String> others) {
-        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo)
+        SimpleMap<String, String> map = defData()
+                .add("out_trade_no", outTradeNo)
                 .add("trade_type", tradeType)
                 .add("total_fee", totalFee.toString())
                 .add("body", body)
@@ -97,108 +111,108 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
                 .add("spbill_create_ip", spBillCreateIp)
                 .add("notify_url", payConfig.getNotifyUrl())
                 .addAll(others);
-        return postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, defOpts());
+        return client.postXml("/pay/unifiedorder", map, WxUnifiedOrderResult.class, defOpts());
     }
 
     @Override
     public WxOrderQueryResult orderQuery(String outTradeNo, String transactionId) {
-        return postXml("/pay/orderquery",
-                SimpleMap.of("out_trade_no", outTradeNo, "transaction_id", transactionId),
+        return client.postXml("/pay/orderquery",
+                defData().add("out_trade_no", outTradeNo).add("transaction_id", transactionId),
                 WxOrderQueryResult.class, defOpts());
     }
 
     @Override
     public WxCommonPayResult closeOrder(String outTradeNo) {
-        return postXml("/pay/orderquery", SimpleMap.of("out_trade_no", outTradeNo),
+        return client.postXml("/pay/orderquery", defData().add("out_trade_no", outTradeNo),
                 WxOrderQueryResult.class, defOpts());
     }
 
     @Override
     public WxOrderRefundResult orderRefund(String outTradeNo, String transactionId, String outRefundNo, Integer totalFee,
                                            Integer refundFee, Map<String, String> others) {
-        SimpleMap<String, String> map = SimpleMap.of("out_trade_no", outTradeNo,
-                "transaction_id", transactionId,
-                "total_fee", totalFee.toString(),
-                "refund_fee", refundFee.toString())
+        SimpleMap<String, String> map = defData().add("out_trade_no", outTradeNo)
+                .add("transaction_id", transactionId)
+                .add("total_fee", totalFee.toString())
+                .add("refund_fee", refundFee.toString())
                 .addAll(others);
-        return postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defSslOpts());
+        return client.postXml("/secapi/pay/refund", map, WxOrderRefundResult.class, defSslOpts());
     }
 
     @Override
     public WxRefundQueryResult refundQuery(String outTradeNo, String transactionId, String outRefundNo, String refundId, Integer offset) {
-        return postXml("/pay/refundquery",
-                SimpleMap.of("out_trade_no", outTradeNo,
-                        "transaction_id", transactionId,
-                        "out_refund_no", outRefundNo,
-                        "refund_id", refundId,
-                        "offset", offset == null ? null : offset.toString()),
+        return client.postXml("/pay/refundquery",
+                defData().add("out_trade_no", outTradeNo)
+                        .add("transaction_id", transactionId)
+                        .add("out_refund_no", outRefundNo)
+                        .add("refund_id", refundId)
+                        .add("offset", offset == null ? null : offset.toString()),
                 WxRefundQueryResult.class, defOpts());
     }
 
     @Override
     public WxDownloadBillResult downloadBill(String billDate, String billType, String tarType) {
-        return postXml("/pay/downloadbill",
-                SimpleMap.of("bill_date", billDate,
-                        "bill_type", billType,
-                        "tar_type", tarType),
+        return client.postXml("/pay/downloadbill",
+                defData().add("bill_date", billDate)
+                        .add("bill_type", billType)
+                        .add("tar_type", tarType),
                 WxDownloadBillResult.class, defOpts());
     }
 
     @Override
     public WxDownloadFundFlowResult downloadFundFlow(String billDate, String billType, String tarType) {
-        return postXml("/pay/downloadfundflow",
-                SimpleMap.of("bill_date", billDate,
-                        "bill_type", billType,
-                        "tar_type", tarType,
-                        "sign_type", "HMAC-SHA256"),
+        return client.postXml("/pay/downloadfundflow",
+                defData().add("bill_date", billDate)
+                        .add("bill_type", billType)
+                        .add("tar_type", tarType)
+                        .add("sign_type", "HMAC-SHA256"),
                 WxDownloadFundFlowResult.class, defSslOpts());
     }
 
     @Override
     public WxBatchQueryCommentResult batchQueryComment(String beginTime, String endTime, Integer offset, Integer limit) {
-        return postXml("/billcommentsp/batchquerycomment",
-                SimpleMap.of("begin_time", beginTime,
-                        "end_time", endTime,
-                        "offset", offset.toString(),
-                        "limit", limit == null ? null : limit.toString(),
-                        "sign_type", "HMAC-SHA256"),
+        return client.postXml("/billcommentsp/batchquerycomment",
+                defData().add("begin_time", beginTime)
+                        .add("end_time", endTime)
+                        .add("offset", offset.toString())
+                        .add("limit", limit == null ? null : limit.toString())
+                        .add("sign_type", "HMAC-SHA256"),
                 WxBatchQueryCommentResult.class, defSslOpts());
     }
 
     @Override
     public WxShortUrlResult shortUrl(String longUrl) {
-        return postXml("/tools/shorturl", SimpleMap.of("long_url", longUrl), WxShortUrlResult.class, defOpts());
+        return client.postXml("/tools/shorturl", defData().add("long_url", longUrl), WxShortUrlResult.class, defOpts());
     }
 
     @Override
     public WxAuthCodeToOpenIdResult authCodeToOpenId(String authCode) {
-        return postXml("/tools/authcodetoopenid",
-                SimpleMap.of("auth_code", authCode),
+        return client.postXml("/tools/authcodetoopenid",
+                defData().add("auth_code", authCode),
                 WxAuthCodeToOpenIdResult.class, defOpts());
     }
 
     @Override
     public WxBasePayResult report(String interfaceUrl, Integer executeTime, String returnCode, String resultCode,
                                   String userIp, Map<String, String> others) {
-        Map<String, String> map = SimpleMap.of("auth_code", interfaceUrl,
-                "auth_code", executeTime.toString(),
-                "auth_code", returnCode,
-                "auth_code", resultCode,
-                "auth_code", userIp)
+        Map<String, String> map = defData().add("interface_url", interfaceUrl)
+                .add("execute_time_", executeTime.toString())
+                .add("return_code", returnCode)
+                .add("result_code", resultCode)
+                .add("user_ip", userIp)
                 .addAll(others);
-        return postXml("/payitil/report", map, WxBasePayResult.class, defOpts());
+        return client.postXml("/payitil/report", map, WxBasePayResult.class, defOpts());
     }
 
     @Override
     public WxRefundNotifyResult refundNotifyParse(String xml) {
-        WxRefundNotifyResult wxPayResult = this.convertResult(xml, WxRefundNotifyResult.class);
+        WxRefundNotifyResult wxPayResult = WxPayResultUtil.convertResult(xml, WxRefundNotifyResult.class);
         if (wxPayResult.getReqInfo() != null) {
             try {
                 String decodeXml = WxPayUtil.aesDecode(payConfig.getKey(), wxPayResult.getReqInfo());
                 WxRefundNotifyResult.WxReqInfo reqInfo = XmlUtil.parseXml(decodeXml, WxRefundNotifyResult.WxReqInfo.class, "root");
                 wxPayResult.setDecodeReqInfo(reqInfo);
             } catch (Exception e) {
-                wxPayResult.setErrorMessage("decode reqInfo failed: " + e.getMessage());
+                wxPayResult.setDecodeFailReason("decode reqInfo failed: " + e.getMessage());
             }
         }
         return wxPayResult;
@@ -207,7 +221,7 @@ public class PaymentServiceImpl extends PayClientImpl implements PaymentService 
 
     @Override
     public WxPayNotifyResult payNotifyParse(String xml) {
-        return this.convertResult(xml, WxPayNotifyResult.class);
+        return WxPayResultUtil.convertResult(xml, WxPayNotifyResult.class);
     }
 
     @Override

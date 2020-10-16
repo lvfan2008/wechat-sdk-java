@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.payment.v2.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import fan.lv.wechat.api.payment.v2.PayClientV2;
 import fan.lv.wechat.api.payment.v2.service.ProfitShareService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.profitshare.*;
@@ -16,10 +17,24 @@ import java.util.Map;
  * @author lv_fan2008
  */
 @Slf4j
-public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShareService {
+public class ProfitShareServiceImpl extends BaseService implements ProfitShareService {
 
-    public ProfitShareServiceImpl(WxPayConfig payConfig) {
-        super(payConfig);
+
+    public ProfitShareServiceImpl(PayClientV2 client, WxPayConfig payConfig) {
+        super(client, payConfig);
+    }
+
+    /**
+     * 默认初始化数据
+     *
+     * @return 初始化数据
+     */
+    protected SimpleMap<String, String> defData() {
+        return SimpleMap.of("appid", payConfig.getAppId())
+                .add("mch_id", payConfig.getMchId())
+                .add("nonce_str", WxPayUtil.generateNonceStr())
+                .add("sub_mch_id", payConfig.getSubMchId())
+                .add("sub_appid", payConfig.getSubAppId());
     }
 
     @Override
@@ -29,8 +44,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
                 "out_order_no", outOrderNo,
                 "receivers", JsonUtil.toJson(receivers),
                 "sign_type", "HMAC-SHA256")
-                .addAll(others);
-        return postXml("/secapi/pay/profitsharing", map, WxProfitShareResult.class, defSslOpts());
+                .addAll(others)
+                .addAll(defData());
+        return client.postXml("/secapi/pay/profitsharing", map, WxProfitShareResult.class, defSslOpts());
     }
 
     @Override
@@ -39,8 +55,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
                 "out_order_no", outOrderNo,
                 "receivers", JsonUtil.toJson(receivers),
                 "sign_type", "HMAC-SHA256")
-                .addAll(others);
-        return postXml("/secapi/pay/multiprofitsharing", map, WxProfitShareResult.class, defSslOpts());
+                .addAll(others)
+                .addAll(defData());
+        return client.postXml("/secapi/pay/multiprofitsharing", map, WxProfitShareResult.class, defSslOpts());
     }
 
     @Override
@@ -53,7 +70,7 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
                 "sign_type", "HMAC-SHA256"
         );
 
-        WxQueryProfitShareResult result = postXml("/pay/profitsharingquery", map, false,
+        WxQueryProfitShareResult result = client.postXml("/pay/profitsharingquery", map,
                 WxQueryProfitShareResult.class, defOpts());
 
         if (result.success() && result.resultSuccess() && result.getReceivers() != null) {
@@ -67,9 +84,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
     @Override
     public WxAddReceiversResult addReceivers(WxReceiverForAdd receiver) {
         SimpleMap<String, String> map = SimpleMap.of("receiver", JsonUtil.toJson(receiver),
-                "sign_type", "HMAC-SHA256");
+                "sign_type", "HMAC-SHA256").addAll(defData());
 
-        WxAddReceiversResult result = postXml("/pay/profitsharingaddreceiver", map, WxAddReceiversResult.class, defOpts());
+        WxAddReceiversResult result = client.postXml("/pay/profitsharingaddreceiver", map, WxAddReceiversResult.class, defOpts());
         if (result.success() && result.resultSuccess() && result.getReceiver() != null) {
             result.setDecodeReceiver(JsonUtil.parseJson(result.getReceiver(), WxReceiverForAdd.class));
         }
@@ -79,9 +96,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
     @Override
     public WxDeleteReceiverResult deleteReceivers(WxReceiverForDelete receiver) {
         SimpleMap<String, String> map = SimpleMap.of("receiver", JsonUtil.toJson(receiver),
-                "sign_type", "HMAC-SHA256");
+                "sign_type", "HMAC-SHA256").addAll(defData());
 
-        WxDeleteReceiverResult result = postXml("/pay/profitsharingaddreceiver", map, WxDeleteReceiverResult.class, defOpts());
+        WxDeleteReceiverResult result = client.postXml("/pay/profitsharingaddreceiver", map, WxDeleteReceiverResult.class, defOpts());
         if (result.success() && result.resultSuccess() && result.getReceiver() != null) {
             result.setDecodeReceiver(JsonUtil.parseJson(result.getReceiver(), WxReceiverForDelete.class));
         }
@@ -93,8 +110,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
         SimpleMap<String, String> map = SimpleMap.of("transaction_id", transactionId,
                 "out_order_no", outOrderNo,
                 "description", description,
-                "sign_type", "HMAC-SHA256");
-        return postXml("/secapi/pay/profitsharingfinish", map, WxProfitShareResult.class, defSslOpts());
+                "sign_type", "HMAC-SHA256")
+                .addAll(defData());
+        return client.postXml("/secapi/pay/profitsharingfinish", map, WxProfitShareResult.class, defSslOpts());
     }
 
     @Override
@@ -108,8 +126,9 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
                 .add("sign_type", "HMAC-SHA256")
                 .add("return_account_type", returnAccountType)
                 .add("return_account", returnAccount)
-                .add("return_amount", returnAmount.toString());
-        return postXml("/secapi/pay/profitsharingreturn", map, WxReturnProfitShareResult.class, defSslOpts());
+                .add("return_amount", returnAmount.toString())
+                .addAll(defData());
+        return client.postXml("/secapi/pay/profitsharingreturn", map, WxReturnProfitShareResult.class, defSslOpts());
     }
 
     @Override
@@ -117,7 +136,8 @@ public class ProfitShareServiceImpl extends PayClientImpl implements ProfitShare
         SimpleMap<String, String> map = SimpleMap.of("order_id", orderId)
                 .add("out_order_no", outOrderNo)
                 .add("out_return_no", outReturnNo)
-                .add("sign_type", "HMAC-SHA256");
-        return postXml("/pay/profitsharingreturnquery", map, WxReturnProfitShareResult.class, defOpts());
+                .add("sign_type", "HMAC-SHA256")
+                .addAll(defData());
+        return client.postXml("/pay/profitsharingreturnquery", map, WxReturnProfitShareResult.class, defOpts());
     }
 }

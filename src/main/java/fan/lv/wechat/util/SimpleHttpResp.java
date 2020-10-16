@@ -1,6 +1,8 @@
 package fan.lv.wechat.util;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.nio.charset.Charset;
 
@@ -8,6 +10,8 @@ import java.nio.charset.Charset;
  * @author lv_fan2008
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SimpleHttpResp {
     /**
      * 是否为原始流

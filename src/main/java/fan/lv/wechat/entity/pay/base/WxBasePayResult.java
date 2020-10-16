@@ -15,9 +15,8 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class WxBasePayResult extends WxResult {
+public class WxBasePayResult {
 
     /**
      * 支付Xml转为的map
@@ -70,51 +69,10 @@ public class WxBasePayResult extends WxResult {
 
 
     /**
-     * 错误码，在WxBasePayResult无用
-     */
-    @XStreamOmitField
-    @JsonIgnore
-    Integer errorCode;
-
-    /**
-     * 错误消息，在WxBasePayResult无用
-     */
-    @XStreamOmitField
-    @JsonIgnore
-    String errorMessage;
-
-    /**
-     * 是否为原始流
-     */
-    @XStreamOmitField
-    Boolean isRawStream = false;
-
-
-    /**
-     * 原始流的文件名：Content-disposition:attachment; filename=xxxx.jpg
-     */
-    @XStreamOmitField
-    String filename;
-
-    /**
-     * 字符集
-     */
-    @XStreamOmitField
-    String charset;
-
-    /**
-     * 原始流，最大长度Integer.MAX_VALUE
-     */
-    @JsonIgnore
-    @XStreamOmitField
-    byte[]  content;
-
-    /**
      * 结果是否成功
      *
      * @return 是否成功
      */
-    @Override
     public Boolean success() {
         return "SUCCESS".equals(getReturnCode());
     }

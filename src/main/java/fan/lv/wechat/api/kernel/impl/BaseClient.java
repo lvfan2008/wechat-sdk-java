@@ -98,7 +98,7 @@ abstract public class BaseClient implements Client {
     }
 
     private boolean isXmlOrJson(String result) {
-        return result.startsWith("{") || result.startsWith("<xml");
+        return result.startsWith("{") || result.startsWith("<xml") || result.startsWith("<?xml");
     }
 
     private String getCharset(HttpResponse httpResponse) {

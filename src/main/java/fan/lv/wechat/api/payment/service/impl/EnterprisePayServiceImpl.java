@@ -52,7 +52,7 @@ public class EnterprisePayServiceImpl extends PayClientImpl implements Enterpris
         SimpleMap<String, String> map = SimpleMap.of("partner_trade_no", partnerTradeNo)
                 .add("appid", payConfig.getAppId())
                 .add("mch_id", payConfig.getMchId());
-        return postXml("/mmpaymkttransfers/promotion/transfers", map, WxQueryEnterprisePayResult.class, defSslOpts());
+        return postXml("/mmpaymkttransfers/gettransferinfo", map, WxQueryEnterprisePayResult.class, defSslOpts());
     }
 
     @Override
@@ -78,6 +78,6 @@ public class EnterprisePayServiceImpl extends PayClientImpl implements Enterpris
     @Override
     public WxGetPubKeyResult getPubKey() {
         SimpleMap<String, String> map = SimpleMap.of("mch_id", payConfig.getMchId());
-        return postXml("/risk/getpublickey", map, WxGetPubKeyResult.class, defSslOpts());
+        return postXml("https://fraud.mch.weixin.qq.com/risk/getpublickey", map, WxGetPubKeyResult.class, defSslOpts());
     }
 }

@@ -1,7 +1,6 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
 import fan.lv.wechat.api.kernel.impl.BaseClient;
-import fan.lv.wechat.api.payment.PayClient;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
@@ -25,7 +24,7 @@ import static fan.lv.wechat.util.pay.WxPayConstants.FIELD_SIGN_TYPE;
  * @author lv_fan2008
  */
 @Slf4j
-public class PayClientImpl extends BaseClient implements PayClient {
+public class PayClientImpl extends BaseClient {
 
     WxPayConfig payConfig;
 
@@ -145,7 +144,7 @@ public class PayClientImpl extends BaseClient implements PayClient {
     protected Map<String, String> addSign(Map<String, String> reqData) throws Exception {
         reqData = filterBlank(reqData);
         String signTypeName = reqData.get("sign_type");
-        signTypeName = signTypeName == null ? payConfig.getSignType(): signTypeName;
+        signTypeName = signTypeName == null ? payConfig.getSignType() : signTypeName;
         WxPayConstants.SignType signType = WxPayConstants.MD5.equals(signTypeName) ? WxPayConstants.SignType.MD5
                 : WxPayConstants.SignType.HMACSHA256;
         if (signType.equals(WxPayConstants.SignType.HMACSHA256)) {
@@ -181,7 +180,11 @@ public class PayClientImpl extends BaseClient implements PayClient {
         return RequestOptions.defOpts().sslCert(new SslCert(payConfig.getMchId(), payConfig.getCertBytes()));
     }
 
-    @Override
+    public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData,
+                                                 Class<T> resultType, RequestOptions defOpts) {
+        return postXml(uri, reqData, true, resultType, defOpts);
+    }
+
     public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData, Boolean useCommonData,
                                                  Class<T> resultType, RequestOptions defOpts) {
         try {

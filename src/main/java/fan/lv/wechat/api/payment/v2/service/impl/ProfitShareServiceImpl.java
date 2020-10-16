@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import fan.lv.wechat.api.payment.service.ProfitShareService;
+import fan.lv.wechat.api.payment.v2.service.ProfitShareService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.profitshare.*;
 import fan.lv.wechat.util.JsonUtil;

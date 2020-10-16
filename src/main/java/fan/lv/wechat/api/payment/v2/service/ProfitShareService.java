@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.payment.service;
+package fan.lv.wechat.api.payment.v2.service;
 
 import fan.lv.wechat.entity.pay.profitshare.*;
 

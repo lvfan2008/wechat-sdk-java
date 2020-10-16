@@ -1,10 +1,9 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.service.EnterprisePayService;
+import fan.lv.wechat.api.payment.v2.service.EnterprisePayService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.enterprisepay.*;
 import fan.lv.wechat.util.SimpleMap;
-import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
 import lombok.extern.slf4j.Slf4j;
 

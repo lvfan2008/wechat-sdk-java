@@ -2,7 +2,11 @@ package fan.lv.wechat.util;
 
 import fan.lv.wechat.util.crpto.AesException;
 import fan.lv.wechat.util.crpto.SHA1;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -39,5 +43,22 @@ public class SignUtil {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 过滤空数据
+     *
+     * @param reqData 请求数据
+     * @return 过滤的书籍
+     */
+    public static Map<String, String> filterBlank(Map<String, String> reqData) {
+        List<String> removeKeys = new ArrayList<>();
+        for (Map.Entry<String, String> entry : reqData.entrySet()) {
+            if (StringUtils.isBlank(entry.getKey()) || StringUtils.isBlank(entry.getValue())) {
+                removeKeys.add(entry.getKey());
+            }
+        }
+        removeKeys.forEach(reqData::remove);
+        return reqData;
     }
 }

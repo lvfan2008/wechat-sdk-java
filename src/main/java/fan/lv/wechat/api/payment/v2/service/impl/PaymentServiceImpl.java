@@ -1,6 +1,6 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.service.PaymentService;
+import fan.lv.wechat.api.payment.v2.service.PaymentService;
 import fan.lv.wechat.entity.pay.base.WxBasePayResult;
 import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;

@@ -1,19 +1,11 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.service.CouponService;
-import fan.lv.wechat.api.payment.service.PaymentService;
-import fan.lv.wechat.entity.pay.base.WxBasePayResult;
-import fan.lv.wechat.entity.pay.base.WxCommonPayResult;
+import fan.lv.wechat.api.payment.v2.service.CouponService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
 import fan.lv.wechat.entity.pay.coupon.WxQueryCouponStockResult;
 import fan.lv.wechat.entity.pay.coupon.WxSendCouponResult;
-import fan.lv.wechat.entity.pay.payment.*;
-import fan.lv.wechat.util.RequestOptions;
 import fan.lv.wechat.util.SimpleMap;
-import fan.lv.wechat.util.SslCert;
-import fan.lv.wechat.util.XmlUtil;
-import fan.lv.wechat.util.pay.WxPayUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;

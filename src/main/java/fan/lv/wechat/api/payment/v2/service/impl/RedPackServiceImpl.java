@@ -1,17 +1,10 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
-import fan.lv.wechat.api.payment.service.CouponService;
-import fan.lv.wechat.api.payment.service.RedPackService;
+import fan.lv.wechat.api.payment.v2.service.RedPackService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
-import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
-import fan.lv.wechat.entity.pay.coupon.WxQueryCouponStockResult;
-import fan.lv.wechat.entity.pay.coupon.WxSendCouponResult;
-import fan.lv.wechat.entity.pay.payment.WxMicroPayResult;
-import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
 import fan.lv.wechat.entity.pay.redpack.WxGetRedPackResult;
 import fan.lv.wechat.entity.pay.redpack.WxMpSendRedPackResult;
 import fan.lv.wechat.entity.pay.redpack.WxSendRedPackResult;
-import fan.lv.wechat.util.RequestOptions;
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;

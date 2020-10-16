@@ -1,8 +1,7 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
 import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.payment.service.EnterprisePayService;
-import fan.lv.wechat.api.payment.service.RedPackService;
+import fan.lv.wechat.api.payment.v2.service.EnterprisePayService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.enterprisepay.*;
 import junit.framework.TestCase;

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import fan.lv.wechat.entity.result.WxResult;
+import fan.lv.wechat.util.SimpleHttpResp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -60,6 +61,12 @@ public class WxBasePayResult extends WxResult {
      */
     @XStreamOmitField
     Boolean validSignature = true;
+
+    /**
+     * Http应答
+     */
+    @XStreamOmitField
+    SimpleHttpResp httpResp;
 
 
     /**

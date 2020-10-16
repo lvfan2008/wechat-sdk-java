@@ -1,8 +1,7 @@
-package fan.lv.wechat.api.payment.service.impl;
+package fan.lv.wechat.api.payment.v2.service.impl;
 
 import fan.lv.wechat.api.official.Util;
-import fan.lv.wechat.api.payment.service.CouponService;
-import fan.lv.wechat.api.payment.service.PaymentService;
+import fan.lv.wechat.api.payment.v2.service.CouponService;
 import fan.lv.wechat.entity.pay.config.WxPayConfig;
 import fan.lv.wechat.entity.pay.coupon.WxCouponInfoResult;
 import fan.lv.wechat.entity.pay.coupon.WxQueryCouponStockResult;

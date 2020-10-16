@@ -2,6 +2,7 @@ package fan.lv.wechat.util;
 
 import org.apache.commons.codec.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
@@ -22,11 +23,13 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyStore;
@@ -34,6 +37,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author lv_fan2008
@@ -48,6 +53,11 @@ public class HttpUtils {
      * 读数据超时时间，单位毫秒
      */
     public static final int READ_TIMEOUT_MS = 8 * 1000;
+
+    /**
+     * 下载文件名字匹配
+     */
+    static final Pattern FILE_NAME_PATTERN = Pattern.compile("filename=[\"'](.*?)[\"']");
 
     /**
      * http请求类
@@ -93,6 +103,65 @@ public class HttpUtils {
                     ContentType.create(httpOptions.getMimeType(), httpOptions.getCharset())));
         }
         return httpClient.execute(httpUriRequest);
+    }
+
+    /**
+     * 转为简单Resp对象
+     *
+     * @param httpResponse Http回应
+     * @return Resp对象
+     */
+    public static SimpleHttpResp from(HttpResponse httpResponse) {
+        SimpleHttpResp resp = new SimpleHttpResp();
+        resp.setCharset(getCharset(httpResponse));
+        byte[] bytes = null;
+        try {
+            bytes = EntityUtils.toByteArray(httpResponse.getEntity());
+        } catch (IOException ignored) {
+        }
+        resp.setContent(bytes);
+        resp.setCharset(getCharset(httpResponse));
+        resp.setIsText(isText(httpResponse));
+        return resp;
+    }
+
+
+    private static boolean isText(HttpResponse httpResponse) {
+        ContentType contentType = ContentType.get(httpResponse.getEntity());
+        String filename = getFileName(httpResponse);
+        return filename == null && (contentType == null
+                || contentType.getMimeType().contains("json")
+                || contentType.getMimeType().contains("xml")
+                || contentType.getMimeType().contains("text"));
+    }
+
+    private static String getCharset(HttpResponse httpResponse) {
+        ContentType contentType = ContentType.get(httpResponse.getEntity());
+        if (contentType != null && contentType.getCharset() != null) {
+            return contentType.getCharset().name();
+        }
+        return null;
+    }
+
+    /**
+     * 获取http响应中的文件名字
+     *
+     * @param httpResponse http响应
+     * @return 文件名字
+     */
+    private static String getFileName(HttpResponse httpResponse) {
+        Header[] headers = httpResponse.getHeaders("Content-disposition");
+        if (headers == null) {
+            return null;
+        }
+        for (Header header : headers) {
+            String value = header.getValue();
+            Matcher matcher = FILE_NAME_PATTERN.matcher(value);
+            if (matcher.find()) {
+                return matcher.group(1);
+            }
+        }
+        return null;
     }
 
     /**

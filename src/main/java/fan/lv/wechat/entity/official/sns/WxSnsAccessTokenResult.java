@@ -1,6 +1,7 @@
 package fan.lv.wechat.entity.official.sns;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fan.lv.wechat.entity.official.base.WxAccessToken;
 import fan.lv.wechat.entity.result.WxResult;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class WxSnsAccessTokenResult extends WxSnsOpenIdResult {
+public class WxSnsAccessTokenResult extends WxSnsOpenIdResult implements WxAccessToken {
     /**
      * 获取到的凭证
      */

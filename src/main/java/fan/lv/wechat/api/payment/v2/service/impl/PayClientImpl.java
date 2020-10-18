@@ -8,6 +8,7 @@ import fan.lv.wechat.entity.pay.payment.WxSandboxSignKeyResult;
 import fan.lv.wechat.util.*;
 import fan.lv.wechat.util.pay.WxPayConstants;
 import fan.lv.wechat.util.pay.WxPayUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
 
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.Map;
 /**
  * @author lv_fan2008
  */
+@Slf4j
 public class PayClientImpl implements PayClient {
 
     /**
@@ -32,21 +34,19 @@ public class PayClientImpl implements PayClient {
     public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
         String url = uri.contains("://") ? uri : baseUrl + uri;
         try {
+            log.debug("request url: {}", url);
             checkSandboxSignKey(url);
             String key = isGetSandboxSignKeyUrl(url) || !payConfig.getSandbox() ? payConfig.getKey() : payConfig.getSandboxSignKey();
             addSign(reqData, key);
-            HttpResponse httpResponse = HttpUtils.httpRequest(url, RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
-                    .mimeType("application/xml"));
+            RequestOptions opts = RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
+                    .mimeType("application/xml");
+            log.debug("request opts: {}", opts.toString());
+            HttpResponse httpResponse = HttpUtils.httpRequest(url, opts);
             SimpleHttpResp simpleHttpResp = HttpUtils.from(httpResponse);
-            if (simpleHttpResp.isXml()) {
-                T payResult = XmlUtil.parseXml(simpleHttpResp.content(), resultType);
-                payResult.setHttpResp(simpleHttpResp);
-                return payResult;
-            } else {
-                T payResult = resultType.getDeclaredConstructor().newInstance();
-                payResult.setHttpResp(simpleHttpResp);
-                return payResult;
-            }
+            T payResult = WxPayResultUtil.convertResult(simpleHttpResp, resultType);
+            log.debug("origin result: {}", payResult.getHttpResp().getIsText() ? payResult.getHttpResp().content() : "raw Stream");
+            log.debug("response result: {}", XmlUtil.toXml(payResult));
+            return payResult;
         } catch (Exception e) {
             return WxPayResultUtil.errorResult(e.getMessage(), resultType);
         }
@@ -87,6 +87,14 @@ public class PayClientImpl implements PayClient {
         payConfig.setSandboxSignKey(key);
     }
 
+    /**
+     * 添加签名
+     *
+     * @param reqData 请求数据
+     * @param key     密钥
+     * @return 签名后到数据
+     * @throws Exception 异常
+     */
     protected Map<String, String> addSign(Map<String, String> reqData, String key) throws Exception {
         SignUtil.filterBlank(reqData);
         String signTypeName = reqData.get("sign_type") == null ? payConfig.getSignType() : reqData.get("sign_type");

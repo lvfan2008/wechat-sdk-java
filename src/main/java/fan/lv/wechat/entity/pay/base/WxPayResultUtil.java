@@ -1,5 +1,6 @@
 package fan.lv.wechat.entity.pay.base;
 
+import fan.lv.wechat.util.HttpUtils;
 import fan.lv.wechat.util.SimpleHttpResp;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.pay.WxPayUtil;
@@ -8,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 支付结果类工具
+ *
  * @author lv_fan2008
  */
 public class WxPayResultUtil {
@@ -31,6 +33,29 @@ public class WxPayResultUtil {
             return errorResult(e.getMessage(), resultType);
         }
     }
+
+    /**
+     * 转化http应答到结果类
+     *
+     * @param simpleHttpResp 应答
+     * @param resultType     结果类型
+     * @param <T>            模版变量
+     * @return 转化结果
+     * @throws Exception 异常
+     */
+    public static <T extends WxBasePayResult> T convertResult(SimpleHttpResp simpleHttpResp, Class<T> resultType) throws Exception {
+        if (simpleHttpResp.isXml()) {
+            T payResult = XmlUtil.parseXml(simpleHttpResp.content(), resultType);
+            payResult.setMapResult(WxPayUtil.xmlToMap(simpleHttpResp.content()));
+            payResult.setHttpResp(simpleHttpResp);
+            return payResult;
+        } else {
+            T payResult = resultType.getDeclaredConstructor().newInstance();
+            payResult.setHttpResp(simpleHttpResp);
+            return payResult;
+        }
+    }
+
 
     /**
      * 生成错误结果

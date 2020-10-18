@@ -36,7 +36,7 @@ public class BaseServiceImplTest extends TestCase {
     public void testCheckNetwork() {
         WxCheckParam param = new WxCheckParam("all", "DEFAULT");
         WxCheckResult checkResult = baseService.checkNetwork(param);
-        assertTrue(checkResult.getErrorCode() > 0);
+        assertTrue(checkResult.success());
     }
 
     public void testClearQuota() {

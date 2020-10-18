@@ -2,6 +2,7 @@ package fan.lv.wechat.api.official.sns.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
+import fan.lv.wechat.entity.official.base.WxAccessToken;
 import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.JsonUtil;
@@ -33,24 +34,7 @@ public class SnsClientImpl extends ClientImpl {
 
 
     @Override
-    protected boolean isGetAccessTokenUrl(String uri) {
-        return uri.contains("/sns/oauth2/access_token");
-    }
-
-    @Override
-    protected String getCacheToken() {
-        WxSnsAccessTokenResult token = (WxSnsAccessTokenResult) getAccessToken();
-        return token.getAccessToken();
-    }
-
-    @Override
-    protected String buildAccessTokenUrl(String url, String accessToken) {
-        return url + (url.contains("?") ? "&" : "?") + "access_token=" + accessToken;
-    }
-
-
-    @Override
-    public WxResult getAccessToken(boolean tryCache) {
+    public WxAccessToken getAccessToken(boolean tryCache) {
         if (tryCache) {
             String json = cache.get("sns-access-token-" + appId + "_" + code);
             if (!StringUtils.isEmpty(json)) {

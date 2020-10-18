@@ -1,18 +1,26 @@
 package fan.lv.wechat.api.official.base.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
-import fan.lv.wechat.api.kernel.impl.BaseAccessTokenClient;
+import fan.lv.wechat.api.kernel.Client;
+import fan.lv.wechat.entity.official.base.WxAccessToken;
 import fan.lv.wechat.entity.official.base.WxAccessTokenResult;
+import fan.lv.wechat.entity.official.base.WxResultUtil;
 import fan.lv.wechat.entity.result.WxResult;
-import fan.lv.wechat.util.JsonUtil;
+import fan.lv.wechat.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.HttpResponse;
 
 /**
  * @author lv_fan2008
  */
 @Slf4j
-public class ClientImpl extends BaseAccessTokenClient {
+public class ClientImpl implements Client {
+
+    /**
+     * token过期码
+     */
+    public static final int ERROR_CODE_ACCESS_TOKEN_TIMEOUT = 42001;
 
     /**
      * api base url
@@ -72,30 +80,13 @@ public class ClientImpl extends BaseAccessTokenClient {
 
     }
 
-    /**
-     * 得到缓存token
-     *
-     * @return token
-     */
-    @Override
-    protected String getCacheToken() {
-        String json = cache.get(getAccessTokenCacheKey());
-        if (StringUtils.isEmpty(json)) {
-            return null;
-        }
-        WxAccessTokenResult accessTokenResult = JsonUtil.parseJson(json, WxAccessTokenResult.class);
-        assert accessTokenResult != null;
-        return accessTokenResult.getAccessToken();
-    }
 
-    @Override
     protected String buildAccessTokenUrl(String url, String accessToken) {
         return url + (url.contains("?") ? "&" : "?") + "access_token=" + accessToken;
     }
 
 
-    @Override
-    public WxResult getAccessToken(boolean tryCache) {
+    public WxAccessToken getAccessToken(boolean tryCache) {
         if (tryCache) {
             String json = cache.get(getAccessTokenCacheKey());
             if (!StringUtils.isEmpty(json)) {
@@ -103,8 +94,10 @@ public class ClientImpl extends BaseAccessTokenClient {
             }
         }
 
-        String url = String.format("/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s", appId, appSecret);
-        WxAccessTokenResult accessTokenResult = this.get(url, WxAccessTokenResult.class);
+        WxAccessTokenResult accessTokenResult = request("/cgi-bin/token?grant_type=client_credential",
+                RequestOptions.defOpts().queryMap(SimpleMap.of("appid", appId, "secret", appSecret)),
+                WxAccessTokenResult.class, false);
+
         if (accessTokenResult.success()) {
             cacheToken(accessTokenResult);
         }
@@ -112,19 +105,34 @@ public class ClientImpl extends BaseAccessTokenClient {
     }
 
 
-    /**
-     * 是否为获取凭据uri
-     *
-     * @param uri uri
-     * @return 是否获取凭据uri
-     */
-    @Override
-    protected boolean isGetAccessTokenUrl(String uri) {
-        return uri.startsWith("/cgi-bin/token?grant_type=client_credential&appid=");
-    }
-
     @Override
     public String getBaseUrl() {
         return BASE_URL;
+    }
+
+    @Override
+    public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType, Boolean needAccessToken) {
+        String url = uri.contains("://") ? uri : getBaseUrl() + uri;
+        try {
+            if (needAccessToken) {
+                WxAccessToken tokenResult = getAccessToken(true);
+                url = HttpUtils.buildUrlQuery(url, SimpleMap.of("access_token", tokenResult.getAccessToken()));
+            }
+            log.debug("request url: {}", url);
+            log.debug("request opt: {}", httpOptions.toString());
+            HttpResponse httpResponse = HttpUtils.httpRequest(url, httpOptions);
+            SimpleHttpResp simpleHttpResp = HttpUtils.from(httpResponse);
+            T wxResult = WxResultUtil.convertResult(simpleHttpResp, resultType);
+            if (needAccessToken && wxResult.getErrorCode() == ERROR_CODE_ACCESS_TOKEN_TIMEOUT) {
+                getAccessToken(false);
+                return request(uri, httpOptions, resultType, true);
+            }
+            log.debug("origin result: {}", wxResult.getHttpResp().getIsText() ? wxResult.getHttpResp().content() : "raw Stream");
+            log.debug("response result: {}", JsonUtil.toJson(wxResult));
+            return wxResult;
+        } catch (Exception e) {
+            log.debug("error result: {}", e.getMessage());
+            return WxResultUtil.errorResult(e.getMessage(), resultType);
+        }
     }
 }

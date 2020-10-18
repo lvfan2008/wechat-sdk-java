@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class WxAccessTokenResult extends WxResult {
+public class WxAccessTokenResult extends WxResult implements WxAccessToken {
     /**
      * 获取到的凭证
      */
@@ -24,4 +24,9 @@ public class WxAccessTokenResult extends WxResult {
      */
     @JsonProperty("expires_in")
     Integer expiresIn;
+
+    @Override
+    public String getAccessToken() {
+        return accessToken;
+    }
 }

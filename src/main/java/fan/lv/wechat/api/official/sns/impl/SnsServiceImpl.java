@@ -1,14 +1,13 @@
 package fan.lv.wechat.api.official.sns.impl;
 
-import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.api.kernel.Cache;
-import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.sns.SnsService;
 import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
 import fan.lv.wechat.entity.official.sns.WxSnsOpenIdResult;
 import fan.lv.wechat.entity.official.sns.WxSnsUserInfoResult;
 import fan.lv.wechat.util.HttpUtils;
 import fan.lv.wechat.util.SignUtil;
+import fan.lv.wechat.util.SimpleMap;
 
 /**
  * @author lv_fan2008
@@ -55,7 +54,7 @@ public class SnsServiceImpl implements SnsService {
     @Override
     public WxSnsOpenIdResult getAuthToken(String code) {
         SnsClientImpl client = new SnsClientImpl(appId, appSecret, cache, code);
-        WxSnsAccessTokenResult result = (WxSnsAccessTokenResult) client.getAccessToken();
+        WxSnsAccessTokenResult result = (WxSnsAccessTokenResult) client.getAccessToken(true);
         if (result.success()) {
             cache.put("sns-code-openid-" + appId + "_" + result.getOpenid(), code, 30 * 24 * 3600 - 10);
         }

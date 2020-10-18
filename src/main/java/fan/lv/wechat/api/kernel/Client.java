@@ -72,7 +72,6 @@ public interface Client {
         return uploadFile(uri, SimpleMap.of(), formData, filePathMap, resultType);
     }
 
-
     /**
      * Get请求
      *
@@ -83,7 +82,7 @@ public interface Client {
      * @return 返回结果
      */
     default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType) {
-        return get(uri, queryMap, resultType, null);
+        return request(uri, RequestOptions.defOpts().queryMap(queryMap), resultType);
     }
 
     /**
@@ -96,23 +95,11 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
-        return postJson(uri, queryMap, object, resultType, null);
+    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object,
+                                            Class<T> resultType) {
+        return request(uri, RequestOptions.defOpts().queryMap(queryMap).body(JsonUtil.toJson(object)), resultType);
     }
 
-    /**
-     * Post Xml请求
-     *
-     * @param uri        uri地址
-     * @param queryMap   get参数
-     * @param object     json参数对象
-     * @param resultType 返回类型
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object, Class<T> resultType) {
-        return postXml(uri, queryMap, object, resultType, null);
-    }
 
     /**
      * Post表单
@@ -124,8 +111,9 @@ public interface Client {
      * @param <T>        模板变量
      * @return 返回结果
      */
-    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData, Class<T> resultType) {
-        return postForm(uri, queryMap, formData, resultType, null);
+    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData,
+                                            Class<T> resultType) {
+        return request(uri, RequestOptions.defOpts().queryMap(queryMap).formData(formData), resultType);
     }
 
     /**
@@ -141,87 +129,7 @@ public interface Client {
      */
     default <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
                                               Map<String, String> filePathMap, Class<T> resultType) {
-        return uploadFile(uri, queryMap, formData, filePathMap, resultType, null);
-    }
-
-    /**
-     * Get请求
-     *
-     * @param uri        uri地址，不包含主域名部分
-     * @param queryMap   get参数
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    default <T extends WxResult> T get(String uri, Map<String, String> queryMap, Class<T> resultType, RequestOptions defOpts) {
-        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap), resultType);
-    }
-
-    /**
-     * Post请求
-     *
-     * @param uri        uri地址
-     * @param queryMap   get参数
-     * @param object     json参数对象
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    default <T extends WxResult> T postJson(String uri, Map<String, String> queryMap, Object object,
-                                            Class<T> resultType, RequestOptions defOpts) {
-        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(JsonUtil.toJson(object)), resultType);
-    }
-
-    /**
-     * Post Xml请求
-     *
-     * @param uri        uri地址
-     * @param queryMap   get参数
-     * @param object     json参数对象
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    default <T extends WxResult> T postXml(String uri, Map<String, String> queryMap, Object object,
-                                           Class<T> resultType, RequestOptions defOpts) {
-        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).body(XmlUtil.toXml(object))
-                .mimeType("application/xml"), resultType);
-    }
-
-    /**
-     * Post表单
-     *
-     * @param uri        uri地址
-     * @param queryMap   get参数
-     * @param formData   form表单
-     * @param resultType 返回类型
-     * @param defOpts    默认选项
-     * @param <T>        模板变量
-     * @return 返回结果
-     */
-    default <T extends WxResult> T postForm(String uri, Map<String, String> queryMap, Map<String, String> formData,
-                                            Class<T> resultType, RequestOptions defOpts) {
-        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).formData(formData), resultType);
-    }
-
-    /**
-     * 上传文件
-     *
-     * @param uri         uri地址
-     * @param queryMap    get参数
-     * @param formData    form表单
-     * @param filePathMap 上传文件map，key为上传名，value为上传文件路径
-     * @param resultType  返回类型
-     * @param defOpts     默认选项
-     * @param <T>         模板类型
-     * @return 返回结果
-     */
-    default <T extends WxResult> T uploadFile(String uri, Map<String, String> queryMap, Map<String, String> formData,
-                                              Map<String, String> filePathMap, Class<T> resultType, RequestOptions defOpts) {
-        return request(uri, RequestOptions.defOpts(defOpts).queryMap(queryMap).uploadFiles(filePathMap).formData(formData),
+        return request(uri, RequestOptions.defOpts().queryMap(queryMap).uploadFiles(filePathMap).formData(formData),
                 resultType);
     }
 
@@ -234,6 +142,19 @@ public interface Client {
      * @param <T>         模板类型
      * @return 返回结果
      */
-    <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType);
+    default <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType) {
+        return request(uri, httpOptions, resultType, true);
+    }
 
+    /**
+     * Http请求
+     *
+     * @param uri             uri地址
+     * @param httpOptions     http选项
+     * @param resultType      返回类型
+     * @param needAccessToken 请求是否需要令牌
+     * @param <T>             模板类型
+     * @return 返回结果
+     */
+    <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType, Boolean needAccessToken);
 }

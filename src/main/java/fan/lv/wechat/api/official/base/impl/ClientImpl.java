@@ -42,10 +42,6 @@ public class ClientImpl implements Client {
      */
     protected Cache cache;
 
-    /**
-     * 缓存token键值
-     */
-    protected String accessTokenCacheKey = "official-access-token-";
 
     /**
      * @param appId     公众号appId
@@ -56,7 +52,6 @@ public class ClientImpl implements Client {
         this.appId = appId;
         this.appSecret = appSecret;
         this.cache = cache;
-        this.accessTokenCacheKey = "official-access-token-" + this.appId;
     }
 
 
@@ -66,7 +61,7 @@ public class ClientImpl implements Client {
      * @return 缓存token关键字
      */
     protected String getAccessTokenCacheKey() {
-        return this.accessTokenCacheKey;
+        return "official-access-token-" + appId;
     }
 
     /**
@@ -79,12 +74,6 @@ public class ClientImpl implements Client {
         cache.put(getAccessTokenCacheKey(), json, 3600 * 2 - 10);
 
     }
-
-
-    protected String buildAccessTokenUrl(String url, String accessToken) {
-        return url + (url.contains("?") ? "&" : "?") + "access_token=" + accessToken;
-    }
-
 
     public WxAccessToken getAccessToken(boolean tryCache) {
         if (tryCache) {
@@ -110,13 +99,22 @@ public class ClientImpl implements Client {
         return BASE_URL;
     }
 
+    /**
+     * url中令牌key值
+     *
+     * @return url中令牌key值
+     */
+    protected String getUrlAccessTokenKey() {
+        return "access_token";
+    }
+
     @Override
     public <T extends WxResult> T request(String uri, RequestOptions httpOptions, Class<T> resultType, Boolean needAccessToken) {
         String url = uri.contains("://") ? uri : getBaseUrl() + uri;
         try {
             if (needAccessToken) {
                 WxAccessToken tokenResult = getAccessToken(true);
-                url = HttpUtils.buildUrlQuery(url, SimpleMap.of("access_token", tokenResult.getAccessToken()));
+                url = HttpUtils.buildUrlQuery(url, SimpleMap.of(getUrlAccessTokenKey(), tokenResult.getAccessToken()));
             }
             log.debug("request url: {}", url);
             log.debug("request opt: {}", httpOptions.toString());

@@ -1,7 +1,8 @@
 package fan.lv.wechat.api.kernel.impl;
 
 import fan.lv.wechat.api.kernel.Cache;
-import fan.lv.wechat.api.kernel.Container;
+import fan.lv.wechat.api.kernel.container.Container;
+import fan.lv.wechat.api.kernel.container.impl.ContainerImpl;
 import junit.framework.TestCase;
 
 /**

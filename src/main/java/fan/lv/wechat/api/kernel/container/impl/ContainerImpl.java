@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.kernel.impl;
+package fan.lv.wechat.api.kernel.container.impl;
 
-import fan.lv.wechat.api.kernel.Container;
-import fan.lv.wechat.api.kernel.Implement;
+import fan.lv.wechat.api.kernel.container.Container;
+import fan.lv.wechat.api.kernel.container.Implement;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;

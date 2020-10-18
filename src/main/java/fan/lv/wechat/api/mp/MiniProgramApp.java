@@ -2,7 +2,7 @@ package fan.lv.wechat.api.mp;
 
 import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.kernel.impl.ContainerImpl;
+import fan.lv.wechat.api.kernel.container.impl.ContainerImpl;
 import fan.lv.wechat.api.mp.service.MpServiceProvider;
 import fan.lv.wechat.api.mp.service.impl.MpClientImpl;
 import fan.lv.wechat.entity.mp.config.MiniProgramConfig;

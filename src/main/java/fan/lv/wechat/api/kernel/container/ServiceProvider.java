@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.kernel;
+package fan.lv.wechat.api.kernel.container;
 
 /**
  * 服务提供接口，用户提供服务配置的入口

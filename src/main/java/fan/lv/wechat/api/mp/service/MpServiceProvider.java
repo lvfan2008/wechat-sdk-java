@@ -1,8 +1,8 @@
 package fan.lv.wechat.api.mp.service;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.kernel.Container;
-import fan.lv.wechat.api.kernel.ServiceProvider;
+import fan.lv.wechat.api.kernel.container.Container;
+import fan.lv.wechat.api.kernel.container.ServiceProvider;
 import fan.lv.wechat.api.mp.service.impl.*;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;

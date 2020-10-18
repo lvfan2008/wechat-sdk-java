@@ -1,8 +1,8 @@
 package fan.lv.wechat.api.official.official;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.kernel.Container;
-import fan.lv.wechat.api.kernel.ServiceProvider;
+import fan.lv.wechat.api.kernel.container.Container;
+import fan.lv.wechat.api.kernel.container.ServiceProvider;
 import fan.lv.wechat.api.official.Intelligence.AiService;
 import fan.lv.wechat.api.official.Intelligence.impl.AiServiceImpl;
 import fan.lv.wechat.api.official.account.AccountService;

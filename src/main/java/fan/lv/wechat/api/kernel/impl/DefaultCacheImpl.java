@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -39,16 +40,13 @@ public class DefaultCacheImpl implements Cache {
 
     @Override
     public void remove(String key) {
-        String filePath = null;
         try {
-            filePath = getKeyFilePath(key, true);
+            String filePath = getKeyFilePath(key, true);
+            if (filePath != null && Files.exists(Paths.get(filePath))) {
+                Files.delete(Paths.get(filePath));
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        if (filePath != null) {
-            if (!new File(filePath).delete()) {
-                new File(filePath).deleteOnExit();
-            }
         }
     }
 
@@ -62,11 +60,10 @@ public class DefaultCacheImpl implements Cache {
      */
     private void filePutContent(String key, String content, int ttl) throws IOException {
         String filePath = getKeyFilePath(key, true);
-        assert filePath != null;
-        BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
-        CacheObject object = new CacheObject(content, (int) (System.currentTimeMillis() / 1000 + ttl));
-        out.write(JsonUtil.toJson(object));
-        out.close();
+        if (filePath != null) {
+            CacheObject object = new CacheObject(content, (int) (System.currentTimeMillis() / 1000 + ttl));
+            Files.write(Paths.get(filePath), JsonUtil.toJson(object).getBytes(StandardCharsets.UTF_8));
+        }
     }
 
     /**
@@ -100,27 +97,17 @@ public class DefaultCacheImpl implements Cache {
      */
     private String fileGetContent(String key) throws IOException {
         String filePath = getKeyFilePath(key, false);
-        if (filePath == null) {
+        if (filePath == null || !Files.exists(Paths.get(filePath))) {
             return null;
         }
-        if (!new File(filePath).exists()) {
-            return null;
-        }
-
-        BufferedReader in = new BufferedReader(new FileReader(filePath));
-        StringBuffer buf = new StringBuffer();
-        String str;
-        while ((str = in.readLine()) != null) {
-            buf.append(str);
-        }
-
-        CacheObject object = JsonUtil.parseJson(buf.toString(), CacheObject.class);
-        assert object != null;
+        byte[] bytes = Files.readAllBytes(Paths.get(filePath));
+        CacheObject object = JsonUtil.parseJson(new String(bytes, StandardCharsets.UTF_8), CacheObject.class);
         if (object.expireTimestamp > System.currentTimeMillis() / 1000) {
             return object.content;
+        } else {
+            Files.delete(Paths.get(filePath));
+            return null;
         }
-        new File(filePath).delete();
-        return null;
     }
 
     @Data

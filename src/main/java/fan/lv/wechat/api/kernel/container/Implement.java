@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.kernel;
+package fan.lv.wechat.api.kernel.container;
 
 /**
  * @author lv_fan2008

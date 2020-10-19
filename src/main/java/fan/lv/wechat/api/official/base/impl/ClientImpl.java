@@ -5,6 +5,7 @@ import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.entity.official.base.WxAccessToken;
 import fan.lv.wechat.entity.official.base.WxAccessTokenResult;
 import fan.lv.wechat.entity.official.base.WxResultUtil;
+import fan.lv.wechat.entity.pay.base.WxPayResultUtil;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.*;
 import lombok.extern.slf4j.Slf4j;
@@ -119,6 +120,11 @@ public class ClientImpl implements Client {
             log.debug("request url: {}", url);
             log.debug("request opt: {}", httpOptions.toString());
             HttpResponse httpResponse = HttpUtils.httpRequest(url, httpOptions);
+            if (httpResponse.getStatusLine().getStatusCode() >= 300) {
+                T wxResult = WxResultUtil.errorResult(httpResponse.getStatusLine().toString(), resultType);
+                log.debug("response result: {}", JsonUtil.toJson(wxResult));
+                return wxResult;
+            }
             SimpleHttpResp simpleHttpResp = HttpUtils.from(httpResponse);
             T wxResult = WxResultUtil.convertResult(simpleHttpResp, resultType);
             if (needAccessToken && wxResult.getErrorCode() == ERROR_CODE_ACCESS_TOKEN_TIMEOUT) {

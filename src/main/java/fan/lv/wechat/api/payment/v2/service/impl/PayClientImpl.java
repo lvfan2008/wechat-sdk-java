@@ -32,7 +32,7 @@ public class PayClientImpl implements PayClient {
 
     @Override
     public <T extends WxBasePayResult> T postXml(String uri, Map<String, String> reqData, Class<T> resultType, RequestOptions defOpts) {
-        String url = uri.contains("://") ? uri : baseUrl + uri;
+        String url = uri.contains("://") ? uri : baseUrl + (payConfig.getSandbox() ? "/sandboxnew" : "") + uri;
         try {
             log.debug("request url: {}", url);
             checkSandboxSignKey(url);
@@ -42,6 +42,11 @@ public class PayClientImpl implements PayClient {
                     .mimeType("application/xml");
             log.debug("request opts: {}", opts.toString());
             HttpResponse httpResponse = HttpUtils.httpRequest(url, opts);
+            if (httpResponse.getStatusLine().getStatusCode() >= 300) {
+                T payResult = WxPayResultUtil.errorResult(httpResponse.getStatusLine().toString(), resultType);
+                log.debug("response result: {}", XmlUtil.toXml(payResult));
+                return payResult;
+            }
             SimpleHttpResp simpleHttpResp = HttpUtils.from(httpResponse);
             T payResult = WxPayResultUtil.convertResult(simpleHttpResp, resultType);
             log.debug("origin result: {}", payResult.getHttpResp().getIsText() ? payResult.getHttpResp().content() : "raw Stream");

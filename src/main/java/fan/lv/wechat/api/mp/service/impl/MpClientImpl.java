@@ -15,6 +15,5 @@ public class MpClientImpl extends ClientImpl {
      */
     public MpClientImpl(String appId, String appSecret, Cache cache) {
         super(appId, appSecret, cache);
-        this.accessTokenCacheKey = "mini-program-access-token-" + this.appId;
     }
 }

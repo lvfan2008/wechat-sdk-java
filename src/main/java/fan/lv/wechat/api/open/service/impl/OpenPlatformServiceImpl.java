@@ -116,27 +116,41 @@ public class OpenPlatformServiceImpl implements OpenPlatformService {
 
     @Override
     public WxAuthorizerInfoResult getAuthorizerInfo(String authorizerAppId) {
-        return null;
+        return client.postJson("/cgi-bin/component/api_get_authorizer_info",
+                defData().add("authorizer_appid", authorizerAppId),
+                WxAuthorizerInfoResult.class);
     }
 
     @Override
     public WxAuthorizerOptionResult getAuthorizerOption(String authorizerAppId, String optionName) {
-        return null;
+        return client.postJson("/cgi-bin/component/api_get_authorizer_option",
+                defData().add("authorizer_appid", authorizerAppId)
+                        .add("option_name", optionName),
+                WxAuthorizerOptionResult.class);
     }
 
     @Override
     public WxResult setAuthorizerOption(String authorizerAppId, String optionName, String optionValue) {
-        return null;
+        return client.postJson("/cgi-bin/component/api_set_authorizer_option",
+                defData().add("authorizer_appid", authorizerAppId)
+                        .add("option_name", optionName)
+                        .add("option_value", optionValue),
+                WxAuthorizerOptionResult.class);
     }
 
     @Override
     public WxAuthorizerListResult getAuthorizerList(Integer offset, Integer count) {
-        return null;
+        return client.postJson("/cgi-bin/component/api_get_authorizer_list",
+                defData().add("offset", offset.toString())
+                        .add("count", count.toString()),
+                WxAuthorizerListResult.class);
     }
 
     @Override
     public WxOpenAccountResult createOpenAccount(String appId) {
-        return null;
+        return client.postJson("/cgi-bin/open/create?",
+                defData().add("appId", appId),
+                WxOpenAccountResult.class);
     }
 
     @Override

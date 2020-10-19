@@ -19,6 +19,16 @@ public class OpenPlatformConfig {
     String componentSecret;
 
     /**
+     * 消息加解密Key
+     */
+    String aesKey;
+
+    /**
+     * 消息校验Token
+     */
+    String token;
+
+    /**
      * 缓存接口
      */
     Cache cache;

@@ -5,9 +5,9 @@ package fan.lv.wechat.entity.official.base;
  */
 public interface WxAccessToken {
     /**
-     * 获取token结果
+     * 获取token
      *
-     * @return
+     * @return token
      */
     String getAccessToken();
 }

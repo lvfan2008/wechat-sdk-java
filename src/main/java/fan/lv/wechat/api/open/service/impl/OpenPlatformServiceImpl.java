@@ -1,6 +1,8 @@
 package fan.lv.wechat.api.open.service.impl;
 
 import fan.lv.wechat.api.kernel.Client;
+import fan.lv.wechat.api.open.OpenMpApp;
+import fan.lv.wechat.api.open.OpenOfficialApp;
 import fan.lv.wechat.api.open.service.OpenPlatformService;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.*;
@@ -147,24 +149,19 @@ public class OpenPlatformServiceImpl implements OpenPlatformService {
     }
 
     @Override
-    public WxOpenAccountResult createOpenAccount(String appId) {
-        return client.postJson("/cgi-bin/open/create?",
-                defData().add("appId", appId),
-                WxOpenAccountResult.class);
+    public WxResult clearQuota() {
+        return client.postJson("/cgi-bin/component/clear_quota",
+                defData(),
+                WxResult.class);
     }
 
     @Override
-    public WxResult bindOpenAccount(String appId, String openAppId) {
-        return null;
+    public OpenMpApp getMpApp(String appId) {
+        return new OpenMpApp(this, config, appId);
     }
 
     @Override
-    public WxResult unbindOpenAccount(String appId, String openAppId) {
-        return null;
-    }
-
-    @Override
-    public WxOpenAccountResult getOpenAccount(String appId) {
-        return null;
+    public OpenOfficialApp getOfficialApp(String appId) {
+        return new OpenOfficialApp(this, config, appId);
     }
 }

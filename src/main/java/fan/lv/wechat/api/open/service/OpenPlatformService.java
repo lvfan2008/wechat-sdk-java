@@ -1,5 +1,7 @@
 package fan.lv.wechat.api.open.service;
 
+import fan.lv.wechat.api.open.OpenMpApp;
+import fan.lv.wechat.api.open.OpenOfficialApp;
 import fan.lv.wechat.entity.open.open.*;
 import fan.lv.wechat.entity.result.WxResult;
 
@@ -91,36 +93,25 @@ public interface OpenPlatformService {
     WxAuthorizerListResult getAuthorizerList(Integer offset, Integer count);
 
     /**
-     * 创建开放平台帐号并绑定公众号/小程序
+     * 第三方平台对其所有 API 调用次数清零,（只与第三方平台相关）
      *
-     * @param appId 授权公众号或小程序的 appid
-     * @return 开放平台帐号
+     * @return 返回结果
      */
-    WxOpenAccountResult createOpenAccount(String appId);
+    WxResult clearQuota();
 
     /**
-     * 将公众号/小程序绑定到开放平台帐号下
+     * 得到小程序appId的服务
      *
-     * @param appId     授权公众号或小程序的 appid
-     * @param openAppId 开放平台帐号 appid，由创建开发平台帐号接口返回
-     * @return 绑定结果
+     * @param appId 小程序appId
+     * @return 小程序appId的服务
      */
-    WxResult bindOpenAccount(String appId, String openAppId);
+    OpenMpApp getMpApp(String appId);
 
     /**
-     * 将公众号/小程序从开放平台帐号下解绑
+     * 得到公众号appId的服务
      *
-     * @param appId     授权公众号或小程序的 appid
-     * @param openAppId 开放平台帐号 appid，由创建开发平台帐号接口返回
-     * @return 解绑结果
+     * @param appId 公众号appId
+     * @return 公众号appId的服务
      */
-    WxResult unbindOpenAccount(String appId, String openAppId);
-
-    /**
-     * 获取公众号/小程序所绑定的开放平台帐号
-     *
-     * @param appId 授权公众号或小程序的 appid
-     * @return 开放平台帐号
-     */
-    WxOpenAccountResult getOpenAccount(String appId);
+    OpenOfficialApp getOfficialApp(String appId);
 }

@@ -38,5 +38,6 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(SoterService.class, () -> new SoterServiceImpl(client));
         this.bind(OperationService.class, () -> new OperationServiceImpl(client));
         this.bind(OpenAccountService.class, () -> new OpenAccountServiceImpl(appId, client));
+        this.bind(ServerService.class, () -> new AuthorizerClientImpl(open, config, appId));
     }
 }

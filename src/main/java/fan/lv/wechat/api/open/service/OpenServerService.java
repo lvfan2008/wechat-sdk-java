@@ -36,4 +36,5 @@ public interface OpenServerService {
      * @return 开放平台服务端
      */
     OpenServerService registerMessageType(String infoType, Class<? extends WxBaseMessage> messageClassType);
+
 }

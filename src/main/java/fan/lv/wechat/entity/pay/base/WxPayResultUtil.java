@@ -1,9 +1,7 @@
 package fan.lv.wechat.entity.pay.base;
 
-import fan.lv.wechat.util.HttpUtils;
 import fan.lv.wechat.util.SimpleHttpResp;
 import fan.lv.wechat.util.XmlUtil;
-import fan.lv.wechat.util.pay.WxPayUtil;
 
 import java.nio.charset.StandardCharsets;
 
@@ -26,7 +24,7 @@ public class WxPayResultUtil {
 
         try {
             T payResult = XmlUtil.parseXml(xml, resultType);
-            payResult.setMapResult(WxPayUtil.xmlToMap(xml));
+            payResult.setMapResult(XmlUtil.xmlToMap(xml));
             payResult.setHttpResp(new SimpleHttpResp(true, null, "UTF-8", xml.getBytes(StandardCharsets.UTF_8)));
             return payResult;
         } catch (Exception e) {
@@ -46,7 +44,7 @@ public class WxPayResultUtil {
     public static <T extends WxBasePayResult> T convertResult(SimpleHttpResp simpleHttpResp, Class<T> resultType) throws Exception {
         if (simpleHttpResp.isXml()) {
             T payResult = XmlUtil.parseXml(simpleHttpResp.content(), resultType);
-            payResult.setMapResult(WxPayUtil.xmlToMap(simpleHttpResp.content()));
+            payResult.setMapResult(XmlUtil.xmlToMap(simpleHttpResp.content()));
             payResult.setHttpResp(simpleHttpResp);
             return payResult;
         } else {

@@ -38,7 +38,7 @@ public class PayClientImpl implements PayClient {
             checkSandboxSignKey(url);
             String key = isGetSandboxSignKeyUrl(url) || !payConfig.getSandbox() ? payConfig.getKey() : payConfig.getSandboxSignKey();
             addSign(reqData, key);
-            RequestOptions opts = RequestOptions.defOpts(defOpts).body(WxPayUtil.mapToXml(reqData))
+            RequestOptions opts = RequestOptions.defOpts(defOpts).body(XmlUtil.mapToXml(reqData))
                     .mimeType("application/xml");
             log.debug("request opts: {}", opts.toString());
             HttpResponse httpResponse = HttpUtils.httpRequest(url, opts);

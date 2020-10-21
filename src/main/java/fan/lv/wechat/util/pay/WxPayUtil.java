@@ -2,6 +2,7 @@ package fan.lv.wechat.util.pay;
 
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.thoughtworks.xstream.XStream;
+import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.crpto.AesException;
 import fan.lv.wechat.util.crpto.PKCS7Encoder;
 import org.slf4j.Logger;
@@ -38,104 +39,6 @@ public class WxPayUtil {
     private static final Random RANDOM = new SecureRandom();
 
     /**
-     * XML格式字符串转换为Map,不支持数组
-     *
-     * @param strXml XML字符串
-     * @return XML数据转换后的Map
-     * @throws Exception 异常
-     */
-    public static Map<String, String> xmlToMap(String strXml) throws Exception {
-        try {
-            Map<String, String> data = new HashMap<>();
-            DocumentBuilder documentBuilder = WxPayXmlUtil.newDocumentBuilder();
-            InputStream stream = new ByteArrayInputStream(strXml.getBytes(StandardCharsets.UTF_8));
-            org.w3c.dom.Document doc = documentBuilder.parse(stream);
-            doc.getDocumentElement().normalize();
-            NodeList nodeList = doc.getDocumentElement().getChildNodes();
-            nodeToMap(nodeList, new Stack<>(), data);
-            try {
-                stream.close();
-            } catch (Exception ex) {
-                // do nothing
-            }
-            return data;
-        } catch (Exception ex) {
-            WxPayUtil.getLogger().warn("Invalid XML, can not convert to map. Error message: {}. XML content: {}", ex.getMessage(), strXml);
-            throw ex;
-        }
-
-    }
-
-    /**
-     * 用点分开父节点名字，对应存入map
-     *
-     * @param nodeList 节点列表
-     * @param data     保存Map
-     */
-    protected static void nodeToMap(NodeList nodeList, Stack<String> parentNames, Map<String, String> data) {
-        for (int idx = 0; idx < nodeList.getLength(); ++idx) {
-            Node node = nodeList.item(idx);
-            if (node.hasChildNodes()) {
-                parentNames.push(node.getNodeName());
-                nodeToMap(node.getChildNodes(), parentNames, data);
-                parentNames.pop();
-            } else {
-                if (node.getParentNode().getNodeType() == Node.ELEMENT_NODE && parentNames.size() > 0) {
-                    data.put(String.join(".", parentNames), node.getNodeValue());
-                }
-            }
-        }
-    }
-
-    protected static String getDotNodeName(Node node) {
-        List<String> names = new ArrayList<>();
-        while (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
-            names.add(node.getNodeName());
-            node = node.getParentNode();
-        }
-        Collections.reverse(names);
-        return String.join(".", names);
-    }
-
-    /**
-     * 将Map转换为XML格式的字符串
-     *
-     * @param data Map类型数据
-     * @return XML格式的字符串
-     * @throws Exception 异常
-     */
-    public static String mapToXml(Map<String, String> data) throws Exception {
-        org.w3c.dom.Document document = WxPayXmlUtil.newDocument();
-        org.w3c.dom.Element root = document.createElement("xml");
-        document.appendChild(root);
-        for (String key : data.keySet()) {
-            String value = data.get(key);
-            if (value == null || value.trim().length() == 0) {
-                continue;
-            }
-            value = value.trim();
-            org.w3c.dom.Element filed = document.createElement(key);
-            filed.appendChild(document.createTextNode(value));
-            root.appendChild(filed);
-        }
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        DOMSource source = new DOMSource(document);
-        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        StringWriter writer = new StringWriter();
-        StreamResult result = new StreamResult(writer);
-        transformer.transform(source, result);
-        String output = writer.getBuffer().toString();
-        try {
-            writer.close();
-        } catch (Exception ignored) {
-        }
-        return output;
-    }
-
-
-    /**
      * 生成带有 sign 的 XML 格式字符串
      *
      * @param data Map类型数据
@@ -157,7 +60,7 @@ public class WxPayUtil {
     public static String generateSignedXml(final Map<String, String> data, String key, WxPayConstants.SignType signType) throws Exception {
         String sign = generateSignature(data, key, signType);
         data.put(WxPayConstants.FIELD_SIGN, sign);
-        return mapToXml(data);
+        return XmlUtil.mapToXml(data);
     }
 
 
@@ -170,7 +73,7 @@ public class WxPayUtil {
      * @throws Exception 异常
      */
     public static boolean isSignatureValid(String xmlStr, String key) throws Exception {
-        Map<String, String> data = xmlToMap(xmlStr);
+        Map<String, String> data = XmlUtil.xmlToMap(xmlStr);
         if (!data.containsKey(WxPayConstants.FIELD_SIGN)) {
             return false;
         }

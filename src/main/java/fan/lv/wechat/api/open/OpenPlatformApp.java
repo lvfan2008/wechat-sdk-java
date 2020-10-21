@@ -26,7 +26,7 @@ public class OpenPlatformApp extends ContainerImpl {
         this.bind(Client.class, () -> client);
         this.bind(OpenPlatformService.class, () -> new OpenPlatformServiceImpl(client, config));
         this.bind(ServerService.class, () -> new ServerServiceImpl(config.getAesKey(), config.getToken(), config.getComponentAppId()));
-        this.bind(OpenServerService.class, () -> new OpenServerServiceImpl(config.getAesKey(), config.getToken(), config.getComponentAppId()));
+        this.bind(OpenServerService.class, () -> new OpenServerServiceImpl(config));
     }
 
     /**

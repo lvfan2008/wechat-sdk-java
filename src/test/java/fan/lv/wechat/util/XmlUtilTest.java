@@ -7,11 +7,24 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 /**
  * @author lv_fan2008
  */
 @Slf4j
 public class XmlUtilTest extends TestCase {
+
+    public void testMapToXml() throws Exception {
+        Map<String,String> map = SimpleMap.of("Label.A1","测试1","Label.A2","测试2","MsgId","21989232");
+        String xml = XmlUtil.mapToXml(map);
+        log.debug("xml: {}",xml);
+        assertTrue(xml.contains("<Label>"));
+        assertTrue(xml.contains("<A1>"));
+        Map<String,String> map2 = XmlUtil.xmlToMap(xml);
+        assertTrue(map2.containsKey("Label.A1"));
+        assertTrue(map2.containsKey("Label.A2"));
+    }
 
     @Data
     @AllArgsConstructor

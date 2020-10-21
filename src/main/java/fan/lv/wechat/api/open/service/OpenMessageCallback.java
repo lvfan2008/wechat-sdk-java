@@ -12,7 +12,6 @@ public interface OpenMessageCallback {
      * 处理消息
      *
      * @param message 收到的消息
-     * @return 返回回复消息
      */
-    String handle(WxBaseMessage message);
+    void handle(WxBaseMessage message);
 }

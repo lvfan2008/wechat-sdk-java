@@ -65,6 +65,6 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(UserService.class, () -> new UserServiceImpl(client));
         this.bind(UserTagService.class, () -> new UserTagServiceImpl(client));
         this.bind(OpenAccountService.class, () -> new OpenAccountServiceImpl(appId, client));
-
+        this.bind(ServerService.class, () -> new AuthorizerClientImpl(open, config, appId));
     }
 }

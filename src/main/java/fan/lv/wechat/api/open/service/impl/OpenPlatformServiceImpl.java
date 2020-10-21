@@ -1,6 +1,7 @@
 package fan.lv.wechat.api.open.service.impl;
 
 import fan.lv.wechat.api.kernel.Client;
+import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.OpenMpApp;
 import fan.lv.wechat.api.open.OpenOfficialApp;
 import fan.lv.wechat.api.open.service.OpenPlatformService;

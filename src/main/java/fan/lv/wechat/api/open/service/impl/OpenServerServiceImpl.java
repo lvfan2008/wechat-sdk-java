@@ -1,16 +1,14 @@
 package fan.lv.wechat.api.open.service.impl;
 
-import fan.lv.wechat.api.official.server.ServerService;
-import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
 import fan.lv.wechat.api.open.service.OpenMessageCallback;
 import fan.lv.wechat.api.open.service.OpenServerService;
+import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.message.*;
 import fan.lv.wechat.util.SignUtil;
 import fan.lv.wechat.util.SimpleMap;
 import fan.lv.wechat.util.XmlUtil;
 import fan.lv.wechat.util.crpto.AesException;
 import fan.lv.wechat.util.crpto.WxBizMsgCrypt;
-import fan.lv.wechat.util.pay.WxPayUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
@@ -26,19 +24,9 @@ import java.util.Map;
 public class OpenServerServiceImpl implements OpenServerService {
 
     /**
-     * 加密Aes密钥
+     * 开放平台配置
      */
-    protected String encodingAesKey;
-
-    /**
-     * 凭证
-     */
-    protected String token;
-
-    /**
-     * appId
-     */
-    protected String appId;
+    OpenPlatformConfig config;
 
     /**
      * 是否数据格式为Json格式，默认为Xml格式
@@ -63,14 +51,10 @@ public class OpenServerServiceImpl implements OpenServerService {
     /**
      * 构造函数
      *
-     * @param encodingAesKey 加密Aes密钥
-     * @param token          凭证
-     * @param appId          公众号标识
+     * @param config 开放平台配置
      */
-    public OpenServerServiceImpl(String encodingAesKey, String token, String appId) {
-        this.encodingAesKey = encodingAesKey;
-        this.token = token;
-        this.appId = appId;
+    public OpenServerServiceImpl(OpenPlatformConfig config) {
+        this.config = config;
     }
 
 
@@ -80,9 +64,9 @@ public class OpenServerServiceImpl implements OpenServerService {
         WxBizMsgCrypt crypt;
         String reply = null;
         try {
-            crypt = new WxBizMsgCrypt(token, encodingAesKey, appId);
-            Map<String, String> map = WxPayUtil.xmlToMap(body);
-            if (!SignUtil.sha1(token, timestamp, nonce, map.get("Encrypt")).equals(signature)) {
+            crypt = new WxBizMsgCrypt(config.getToken(), config.getAesKey(), config.getComponentAppId());
+            Map<String, String> map = XmlUtil.xmlToMap(body);
+            if (!SignUtil.sha1(config.getToken(), timestamp, nonce, map.get("Encrypt")).equals(signature)) {
                 throw new AesException(AesException.VALIDATE_SIGNATURE_ERROR);
             }
             String message = crypt.decrypt(map.get("Encrypt"));
@@ -119,7 +103,7 @@ public class OpenServerServiceImpl implements OpenServerService {
      */
     protected void processMessage(String message) throws Exception {
         WxBaseMessage msg = XmlUtil.parseXml(message, WxBaseMessage.class);
-        msg.setMapResult(WxPayUtil.xmlToMap(message));
+        msg.setMapResult(XmlUtil.xmlToMap(message));
         Class<? extends WxBaseMessage> type = getMessageTypeValue(msg.getInfoType());
         WxBaseMessage realMessage = msg;
         if (type != null) {

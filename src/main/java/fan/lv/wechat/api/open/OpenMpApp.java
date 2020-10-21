@@ -4,6 +4,8 @@ import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.kernel.container.impl.ContainerImpl;
 import fan.lv.wechat.api.mp.service.*;
 import fan.lv.wechat.api.mp.service.impl.*;
+import fan.lv.wechat.api.official.server.ServerService;
+import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
 import fan.lv.wechat.api.open.service.OpenAccountService;
 import fan.lv.wechat.api.open.service.OpenPlatformService;
 import fan.lv.wechat.api.open.service.impl.AuthorizerClientImpl;
@@ -31,7 +33,6 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(QrCodeService.class, () -> new QrCodeServiceImpl(client));
         this.bind(SecurityService.class, () -> new SecurityServiceImpl(client));
         this.bind(SubscribeService.class, () -> new SubscribeServiceImpl(client));
-//        this.bind(ServerService.class, () -> new ServerServiceImpl(config.getEncodingAesKey(), config.getToken(), config.getAppId()));
         this.bind(MpImageOcrService.class, () -> new MpImageOcrServiceImpl(client));
         this.bind(MarketService.class, () -> new MarketServiceImpl(client));
         this.bind(SoterService.class, () -> new SoterServiceImpl(client));

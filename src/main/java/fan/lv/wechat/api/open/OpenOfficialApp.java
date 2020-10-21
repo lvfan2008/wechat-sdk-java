@@ -18,6 +18,8 @@ import fan.lv.wechat.api.official.message.MassSendService;
 import fan.lv.wechat.api.official.message.TemplateService;
 import fan.lv.wechat.api.official.message.impl.MassSendServiceImpl;
 import fan.lv.wechat.api.official.message.impl.TemplateServiceImpl;
+import fan.lv.wechat.api.official.server.ServerService;
+import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
 import fan.lv.wechat.api.official.statics.*;
 import fan.lv.wechat.api.official.statics.impl.*;
 import fan.lv.wechat.api.official.user.UserService;
@@ -53,7 +55,7 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(MenuService.class, () -> new MenuServiceImpl(client));
         this.bind(MassSendService.class, () -> new MassSendServiceImpl(client));
         this.bind(TemplateService.class, () -> new TemplateServiceImpl(client));
-        //this.bind(ServerService.class, () -> new ServerServiceImpl(config.getEncodingAesKey(), config.getToken(), config.getAppId()));
+        this.bind(ServerService.class, () -> new ServerServiceImpl(config.getAesKey(), config.getToken(), config.getComponentAppId()));
         //this.bind(SnsService.class, () -> new SnsServiceImpl(config.getAppId(), config.getAppSecret(), config.getCache()));
         this.bind(ArticleStaticService.class, () -> new ArticleStaticServiceImpl(client));
         this.bind(PublisherAdStaticService.class, () -> new PublisherAdStaticServiceImpl(client));

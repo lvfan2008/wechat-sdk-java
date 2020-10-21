@@ -38,7 +38,7 @@ public class WxPayUtil {
     private static final Random RANDOM = new SecureRandom();
 
     /**
-     * XML格式字符串转换为Map
+     * XML格式字符串转换为Map,不支持数组
      *
      * @param strXml XML字符串
      * @return XML数据转换后的Map
@@ -52,13 +52,7 @@ public class WxPayUtil {
             org.w3c.dom.Document doc = documentBuilder.parse(stream);
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getDocumentElement().getChildNodes();
-            for (int idx = 0; idx < nodeList.getLength(); ++idx) {
-                Node node = nodeList.item(idx);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    org.w3c.dom.Element element = (org.w3c.dom.Element) node;
-                    data.put(element.getNodeName(), element.getTextContent());
-                }
-            }
+            nodeToMap(nodeList, new Stack<>(), data);
             try {
                 stream.close();
             } catch (Exception ex) {
@@ -70,6 +64,37 @@ public class WxPayUtil {
             throw ex;
         }
 
+    }
+
+    /**
+     * 用点分开父节点名字，对应存入map
+     *
+     * @param nodeList 节点列表
+     * @param data     保存Map
+     */
+    protected static void nodeToMap(NodeList nodeList, Stack<String> parentNames, Map<String, String> data) {
+        for (int idx = 0; idx < nodeList.getLength(); ++idx) {
+            Node node = nodeList.item(idx);
+            if (node.hasChildNodes()) {
+                parentNames.push(node.getNodeName());
+                nodeToMap(node.getChildNodes(), parentNames, data);
+                parentNames.pop();
+            } else {
+                if (node.getParentNode().getNodeType() == Node.ELEMENT_NODE && parentNames.size() > 0) {
+                    data.put(String.join(".", parentNames), node.getNodeValue());
+                }
+            }
+        }
+    }
+
+    protected static String getDotNodeName(Node node) {
+        List<String> names = new ArrayList<>();
+        while (node != null && node.getNodeType() == Node.ELEMENT_NODE) {
+            names.add(node.getNodeName());
+            node = node.getParentNode();
+        }
+        Collections.reverse(names);
+        return String.join(".", names);
     }
 
     /**

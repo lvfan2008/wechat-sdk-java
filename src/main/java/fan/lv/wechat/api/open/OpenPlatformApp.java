@@ -71,7 +71,7 @@ public class OpenPlatformApp extends ContainerImpl {
      * @param appId 小程序appId
      * @return 小程序appId的服务
      */
-    OpenMpApp getMpApp(String appId) {
+    OpenMpApp miniProgram(String appId) {
         return open().getMpApp(appId);
     }
 
@@ -81,8 +81,17 @@ public class OpenPlatformApp extends ContainerImpl {
      * @param appId 公众号appId
      * @return 公众号appId的服务
      */
-    OpenOfficialApp getOfficialApp(String appId) {
+    OpenOfficialApp officialAccount(String appId) {
         return open().getOfficialApp(appId);
     }
 
+    /**
+     * 授权公众号或小程序的消息处理服务端
+     *
+     * @param appId 公众号或小程序appId
+     * @return 公众号或小程序的消息处理服务端
+     */
+    ServerService authorizerServer(String appId) {
+        return officialAccount(appId).get(ServerService.class);
+    }
 }

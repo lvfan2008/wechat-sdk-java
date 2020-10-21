@@ -29,8 +29,10 @@ import fan.lv.wechat.api.official.user.UserService;
 import fan.lv.wechat.api.official.user.UserTagService;
 import fan.lv.wechat.api.official.user.impl.UserServiceImpl;
 import fan.lv.wechat.api.official.user.impl.UserTagServiceImpl;
+import fan.lv.wechat.api.open.service.ofiicial.FastRegisterMpService;
 import fan.lv.wechat.api.open.service.ofiicial.MpLinkService;
 import fan.lv.wechat.api.open.service.authorizer.OpenAccountService;
+import fan.lv.wechat.api.open.service.ofiicial.impl.FastRegisterMpServiceImpl;
 import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.api.open.service.authorizer.impl.AuthorizerClientImpl;
 import fan.lv.wechat.api.open.service.ofiicial.impl.SnsServiceImpl;
@@ -73,5 +75,6 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(OpenAccountService.class, () -> new OpenAccountServiceImpl(appId, client));
         this.bind(ServerService.class, () -> new AuthorizerClientImpl(open, config, appId));
         this.bind(MpLinkService.class, () -> new MpLinkServiceImpl(client));
+        this.bind(FastRegisterMpService.class, () -> new FastRegisterMpServiceImpl(client, config, appId));
     }
 }

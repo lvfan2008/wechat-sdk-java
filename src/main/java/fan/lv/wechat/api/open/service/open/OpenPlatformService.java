@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.open.service;
+package fan.lv.wechat.api.open.service.open;
 
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.OpenMpApp;

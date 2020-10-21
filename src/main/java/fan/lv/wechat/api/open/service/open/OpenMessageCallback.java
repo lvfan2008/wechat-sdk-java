@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.open.service;
+package fan.lv.wechat.api.open.service.open;
 
 import fan.lv.wechat.entity.open.open.message.WxBaseMessage;
 

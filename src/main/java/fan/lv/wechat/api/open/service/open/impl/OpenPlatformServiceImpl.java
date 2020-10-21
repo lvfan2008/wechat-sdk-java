@@ -1,11 +1,9 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.open.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.OpenMpApp;
 import fan.lv.wechat.api.open.OpenOfficialApp;
-import fan.lv.wechat.api.open.service.OpenPlatformService;
-import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
+import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.*;
 import fan.lv.wechat.entity.result.WxResult;

@@ -4,11 +4,11 @@ import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.kernel.container.impl.ContainerImpl;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
-import fan.lv.wechat.api.open.service.OpenPlatformService;
-import fan.lv.wechat.api.open.service.OpenServerService;
-import fan.lv.wechat.api.open.service.impl.OpenClientImpl;
-import fan.lv.wechat.api.open.service.impl.OpenPlatformServiceImpl;
-import fan.lv.wechat.api.open.service.impl.OpenServerServiceImpl;
+import fan.lv.wechat.api.open.service.open.OpenPlatformService;
+import fan.lv.wechat.api.open.service.open.OpenServerService;
+import fan.lv.wechat.api.open.service.open.impl.OpenClientImpl;
+import fan.lv.wechat.api.open.service.open.impl.OpenPlatformServiceImpl;
+import fan.lv.wechat.api.open.service.open.impl.OpenServerServiceImpl;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 
 /**

@@ -1,9 +1,9 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.authorizer.impl;
 
 import fan.lv.wechat.api.official.customer.CustomerService;
 import fan.lv.wechat.api.official.server.MessageCallback;
 import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
-import fan.lv.wechat.api.open.service.OpenPlatformService;
+import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.entity.official.customer.message.TextKfMessage;
 import fan.lv.wechat.entity.official.server.message.BaseReceiveMessage;
 import fan.lv.wechat.entity.official.server.message.BaseReplyMessage;

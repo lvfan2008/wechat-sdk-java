@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.ofiicial.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.open.service.MpLinkService;
+import fan.lv.wechat.api.open.service.ofiicial.MpLinkService;
 import fan.lv.wechat.entity.open.official.WxMpLinkResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.SimpleMap;

@@ -1,17 +1,10 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.authorizer.impl;
 
-import fan.lv.wechat.api.kernel.Cache;
 import fan.lv.wechat.api.official.base.impl.ClientImpl;
-import fan.lv.wechat.api.open.service.OpenPlatformService;
+import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.entity.official.base.WxAccessToken;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
-import fan.lv.wechat.entity.open.open.WxOpenAccessTokenResult;
-import fan.lv.wechat.util.JsonUtil;
-import fan.lv.wechat.util.RequestOptions;
-import fan.lv.wechat.util.SimpleMap;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.Map;
 
 /**
  * @author lv_fan2008

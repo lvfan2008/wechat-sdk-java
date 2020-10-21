@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.authorizer.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.open.service.OpenAccountService;
+import fan.lv.wechat.api.open.service.authorizer.OpenAccountService;
 import fan.lv.wechat.entity.open.open.WxOpenAccountResult;
 import fan.lv.wechat.entity.result.WxResult;
 import fan.lv.wechat.util.SimpleMap;

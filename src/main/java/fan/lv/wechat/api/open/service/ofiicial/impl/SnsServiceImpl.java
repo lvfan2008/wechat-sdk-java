@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.ofiicial.impl;
 
 import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.official.sns.SnsService;
@@ -11,7 +11,7 @@ import fan.lv.wechat.util.*;
 /**
  * @author lv_fan2008
  */
-public class AuthorizerSnsServiceImpl implements SnsService {
+public class SnsServiceImpl implements SnsService {
 
     /**
      * 公众号appId
@@ -28,7 +28,7 @@ public class AuthorizerSnsServiceImpl implements SnsService {
      */
     OpenPlatformConfig config;
 
-    public AuthorizerSnsServiceImpl(Client openClient, OpenPlatformConfig config, String appId) {
+    public SnsServiceImpl(Client openClient, OpenPlatformConfig config, String appId) {
         this.openClient = openClient;
         this.config = config;
         this.appId = appId;

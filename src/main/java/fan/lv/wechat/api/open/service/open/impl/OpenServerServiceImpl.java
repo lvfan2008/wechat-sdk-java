@@ -1,7 +1,7 @@
-package fan.lv.wechat.api.open.service.impl;
+package fan.lv.wechat.api.open.service.open.impl;
 
-import fan.lv.wechat.api.open.service.OpenMessageCallback;
-import fan.lv.wechat.api.open.service.OpenServerService;
+import fan.lv.wechat.api.open.service.open.OpenMessageCallback;
+import fan.lv.wechat.api.open.service.open.OpenServerService;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.message.*;
 import fan.lv.wechat.util.SignUtil;

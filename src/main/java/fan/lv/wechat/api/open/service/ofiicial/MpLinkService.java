@@ -1,4 +1,4 @@
-package fan.lv.wechat.api.open.service;
+package fan.lv.wechat.api.open.service.ofiicial;
 
 import fan.lv.wechat.entity.open.official.WxMpLinkResult;
 import fan.lv.wechat.entity.result.WxResult;

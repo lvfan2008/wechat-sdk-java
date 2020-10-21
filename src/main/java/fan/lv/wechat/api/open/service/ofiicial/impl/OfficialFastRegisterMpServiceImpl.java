@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.open.service.ofiicial.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.open.service.ofiicial.FastRegisterMpService;
+import fan.lv.wechat.api.open.service.ofiicial.OfficialFastRegisterMpService;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.official.WxFastRegisterResult;
 import fan.lv.wechat.entity.result.WxResult;
@@ -11,7 +11,7 @@ import fan.lv.wechat.util.SimpleMap;
 /**
  * @author lv_fan2008
  */
-public class FastRegisterMpServiceImpl implements FastRegisterMpService {
+public class OfficialFastRegisterMpServiceImpl implements OfficialFastRegisterMpService {
 
     /**
      * 公众号appId
@@ -28,7 +28,7 @@ public class FastRegisterMpServiceImpl implements FastRegisterMpService {
      */
     OpenPlatformConfig config;
 
-    public FastRegisterMpServiceImpl(Client client, OpenPlatformConfig config, String appId) {
+    public OfficialFastRegisterMpServiceImpl(Client client, OpenPlatformConfig config, String appId) {
         this.client = client;
         this.config = config;
         this.appId = appId;

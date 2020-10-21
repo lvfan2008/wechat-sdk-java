@@ -7,8 +7,9 @@ import fan.lv.wechat.entity.result.WxResult;
  * 复用公众号主体快速注册小程序
  *
  * @author lv_fan2008
+ * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Official_Accounts/fast_registration_of_mini_program.html" target="_blank">微信官方接口文档</a>
  */
-public interface FastRegisterMpService {
+public interface OfficialFastRegisterMpService {
     /**
      * 跳转到微信公众平台授权页面链接
      *

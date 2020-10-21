@@ -7,6 +7,7 @@ import fan.lv.wechat.entity.result.WxResult;
  * 公众号下，小程序管理权限集
  *
  * @author lv_fan2008
+ * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Official_Accounts/Mini_Program_Management_Permission.html" target="_blank">微信官方接口文档</a>
  */
 public interface MpLinkService {
 

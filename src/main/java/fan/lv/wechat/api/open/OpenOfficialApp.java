@@ -12,6 +12,8 @@ import fan.lv.wechat.api.official.comment.CommentService;
 import fan.lv.wechat.api.official.comment.impl.CommentServiceImpl;
 import fan.lv.wechat.api.official.customer.CustomerService;
 import fan.lv.wechat.api.official.customer.impl.CustomerServiceImpl;
+import fan.lv.wechat.api.official.jssdk.JsSdkService;
+import fan.lv.wechat.api.official.jssdk.imp.JsSdkServiceImpl;
 import fan.lv.wechat.api.official.menu.MenuService;
 import fan.lv.wechat.api.official.menu.impl.MenuServiceImpl;
 import fan.lv.wechat.api.official.message.MassSendService;
@@ -27,10 +29,12 @@ import fan.lv.wechat.api.official.user.UserService;
 import fan.lv.wechat.api.official.user.UserTagService;
 import fan.lv.wechat.api.official.user.impl.UserServiceImpl;
 import fan.lv.wechat.api.official.user.impl.UserTagServiceImpl;
+import fan.lv.wechat.api.open.service.MpLinkService;
 import fan.lv.wechat.api.open.service.OpenAccountService;
 import fan.lv.wechat.api.open.service.OpenPlatformService;
 import fan.lv.wechat.api.open.service.impl.AuthorizerClientImpl;
 import fan.lv.wechat.api.open.service.impl.AuthorizerSnsServiceImpl;
+import fan.lv.wechat.api.open.service.impl.MpLinkServiceImpl;
 import fan.lv.wechat.api.open.service.impl.OpenAccountServiceImpl;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 
@@ -53,7 +57,7 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(CommentService.class, () -> new CommentServiceImpl(client));
         this.bind(CustomerService.class, () -> new CustomerServiceImpl(client));
         this.bind(AiService.class, () -> new AiServiceImpl(client));
-        //this.bind(JsSdkService.class, () -> new JsSdkServiceImpl(config.getAppId(), client, config.getCache()));
+        this.bind(JsSdkService.class, () -> new JsSdkServiceImpl(appId, client, config.getCache()));
         this.bind(MenuService.class, () -> new MenuServiceImpl(client));
         this.bind(MassSendService.class, () -> new MassSendServiceImpl(client));
         this.bind(TemplateService.class, () -> new TemplateServiceImpl(client));
@@ -68,5 +72,6 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(UserTagService.class, () -> new UserTagServiceImpl(client));
         this.bind(OpenAccountService.class, () -> new OpenAccountServiceImpl(appId, client));
         this.bind(ServerService.class, () -> new AuthorizerClientImpl(open, config, appId));
+        this.bind(MpLinkService.class, () -> new MpLinkServiceImpl(client));
     }
 }

@@ -5,6 +5,7 @@ import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.OpenMpApp;
 import fan.lv.wechat.api.open.OpenOfficialApp;
 import fan.lv.wechat.api.open.service.OpenPlatformService;
+import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.*;
 import fan.lv.wechat.entity.result.WxResult;
@@ -163,6 +164,6 @@ public class OpenPlatformServiceImpl implements OpenPlatformService {
 
     @Override
     public OpenOfficialApp getOfficialApp(String appId) {
-        return new OpenOfficialApp(this, config, appId);
+        return new OpenOfficialApp(this, client, config, appId);
     }
 }

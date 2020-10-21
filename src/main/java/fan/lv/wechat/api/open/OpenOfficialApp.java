@@ -20,6 +20,7 @@ import fan.lv.wechat.api.official.message.impl.MassSendServiceImpl;
 import fan.lv.wechat.api.official.message.impl.TemplateServiceImpl;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
+import fan.lv.wechat.api.official.sns.SnsService;
 import fan.lv.wechat.api.official.statics.*;
 import fan.lv.wechat.api.official.statics.impl.*;
 import fan.lv.wechat.api.official.user.UserService;
@@ -29,6 +30,7 @@ import fan.lv.wechat.api.official.user.impl.UserTagServiceImpl;
 import fan.lv.wechat.api.open.service.OpenAccountService;
 import fan.lv.wechat.api.open.service.OpenPlatformService;
 import fan.lv.wechat.api.open.service.impl.AuthorizerClientImpl;
+import fan.lv.wechat.api.open.service.impl.AuthorizerSnsServiceImpl;
 import fan.lv.wechat.api.open.service.impl.OpenAccountServiceImpl;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 
@@ -42,7 +44,7 @@ public class OpenOfficialApp extends ContainerImpl {
     /**
      * @param config 公众号配置
      */
-    public OpenOfficialApp(OpenPlatformService open, OpenPlatformConfig config, String appId) {
+    public OpenOfficialApp(OpenPlatformService open, Client openClient, OpenPlatformConfig config, String appId) {
         Client client = new AuthorizerClientImpl(open, config, appId);
         this.bind(OpenPlatformConfig.class, () -> config);
         this.bind(Client.class, () -> client);
@@ -56,7 +58,7 @@ public class OpenOfficialApp extends ContainerImpl {
         this.bind(MassSendService.class, () -> new MassSendServiceImpl(client));
         this.bind(TemplateService.class, () -> new TemplateServiceImpl(client));
         this.bind(ServerService.class, () -> new ServerServiceImpl(config.getAesKey(), config.getToken(), config.getComponentAppId()));
-        //this.bind(SnsService.class, () -> new SnsServiceImpl(config.getAppId(), config.getAppSecret(), config.getCache()));
+        this.bind(SnsService.class, () -> new AuthorizerSnsServiceImpl(openClient, config, appId));
         this.bind(ArticleStaticService.class, () -> new ArticleStaticServiceImpl(client));
         this.bind(PublisherAdStaticService.class, () -> new PublisherAdStaticServiceImpl(client));
         this.bind(UserStaticService.class, () -> new UserStaticServiceImpl(client));

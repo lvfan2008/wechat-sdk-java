@@ -1,4 +1,4 @@
-package fan.lv.wechat.entity.open.mp.code;
+package fan.lv.wechat.entity.open.mp.codetemplate;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fan.lv.wechat.entity.result.WxResult;

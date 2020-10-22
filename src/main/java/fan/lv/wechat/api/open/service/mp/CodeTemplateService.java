@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.open.service.mp;
 
-import fan.lv.wechat.entity.open.mp.code.WxGetTemplateDraftListResult;
-import fan.lv.wechat.entity.open.mp.code.WxGetTemplateListResult;
+import fan.lv.wechat.entity.open.mp.codetemplate.WxGetTemplateDraftListResult;
+import fan.lv.wechat.entity.open.mp.codetemplate.WxGetTemplateListResult;
 import fan.lv.wechat.entity.result.WxResult;
 
 /**

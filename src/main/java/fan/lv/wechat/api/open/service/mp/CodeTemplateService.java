@@ -9,7 +9,7 @@ import fan.lv.wechat.entity.result.WxResult;
  *
  * @author lv_fan2008
  */
-public interface CodeService {
+public interface CodeTemplateService {
     /**
      * 获取代码草稿列表
      *

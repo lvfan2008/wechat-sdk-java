@@ -1,7 +1,7 @@
 package fan.lv.wechat.api.open.service.mp.impl;
 
 import fan.lv.wechat.api.kernel.Client;
-import fan.lv.wechat.api.open.service.mp.CodeService;
+import fan.lv.wechat.api.open.service.mp.CodeTemplateService;
 import fan.lv.wechat.entity.open.mp.code.WxGetTemplateDraftListResult;
 import fan.lv.wechat.entity.open.mp.code.WxGetTemplateListResult;
 import fan.lv.wechat.entity.result.WxResult;
@@ -10,7 +10,7 @@ import fan.lv.wechat.util.SimpleMap;
 /**
  * @author lv_fan2008
  */
-public class CodeServiceImpl implements CodeService {
+public class CodeTemplateServiceImpl implements CodeTemplateService {
     /**
      * 请求客户端
      */
@@ -19,7 +19,7 @@ public class CodeServiceImpl implements CodeService {
     /**
      * @param client 请求客户端
      */
-    public CodeServiceImpl(Client client) {
+    public CodeTemplateServiceImpl(Client client) {
         this.client = client;
     }
 

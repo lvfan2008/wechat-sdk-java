@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 /**
  * @author lv_fan2008
  */
-public class QrCodeServiceImplTest extends TestCase {
+public class QrCodeTemplateServiceImplTest extends TestCase {
 
     QrCodeService qrCodeService;
 

@@ -41,7 +41,8 @@ public class OpenServerServiceImpl implements OpenServerService {
                     .add("authorized", WxAuthorizedMessage.class)
                     .add("component_verify_ticket", WxComponentVerifyTicketMessage.class)
                     .add("unauthorized", WxUnAuthorizedMessage.class)
-                    .add("updateauthorized", WxUpdateAuthorizedMessage.class);
+                    .add("updateauthorized", WxUpdateAuthorizedMessage.class)
+                    .add("notify_third_fasteregister", WxNotifyThirdFastRegisterMessage.class);
 
     /**
      * 消息回调列表
@@ -102,13 +103,12 @@ public class OpenServerServiceImpl implements OpenServerService {
      * @param message 原始Message
      */
     protected void processMessage(String message) throws Exception {
-        WxBaseMessage msg = XmlUtil.parseXml(message, WxBaseMessage.class);
-        msg.setMapResult(XmlUtil.xmlToMap(message));
-        Class<? extends WxBaseMessage> type = getMessageTypeValue(msg.getInfoType());
-        WxBaseMessage realMessage = msg;
-        if (type != null) {
-            realMessage = XmlUtil.parseXml(message, type);
-        }
+        Map<String, String> map = XmlUtil.xmlToMap(message);
+        Class<? extends WxBaseMessage> type = getMessageTypeValue(map.get("InfoType"));
+        WxBaseMessage realMessage;
+        type = type == null ? WxBaseMessage.class : type;
+        realMessage = XmlUtil.parseXml(message, type);
+        realMessage.setMapResult(map);
         for (OpenMessageCallback callback : callbackList) {
             callback.handle(realMessage);
         }

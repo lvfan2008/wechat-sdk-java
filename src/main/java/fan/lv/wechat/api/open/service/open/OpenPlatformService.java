@@ -3,6 +3,7 @@ package fan.lv.wechat.api.open.service.open;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.OpenMpApp;
 import fan.lv.wechat.api.open.OpenOfficialApp;
+import fan.lv.wechat.entity.mp.user.WxSessionResult;
 import fan.lv.wechat.entity.official.sns.WxSnsAccessTokenResult;
 import fan.lv.wechat.entity.open.open.*;
 import fan.lv.wechat.entity.result.WxResult;
@@ -100,6 +101,21 @@ public interface OpenPlatformService {
      * @return 返回结果
      */
     WxResult clearQuota();
+
+    /**
+     * 小程序登录
+     * <p>
+     * 第三方平台开发者的服务器使用登录凭证（code）以及第三方平台的 component_access_token
+     * 可以代替小程序实现登录功能
+     * 获取 session_key 和 openid。其中 session_key 是对用户数据进行加密签名的密钥。
+     * 为了自身应用安全，session_key 不应该在网络上传输。
+     *
+     * @param appId 小程序的 AppID
+     * @param jsCode wx.login 获取的 code
+     * @return 返回结果
+     */
+    WxSessionResult codeToSession(String appId, String jsCode);
+
 
     /**
      * 得到小程序appId的服务

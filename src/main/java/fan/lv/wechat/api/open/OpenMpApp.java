@@ -6,6 +6,8 @@ import fan.lv.wechat.api.mp.service.*;
 import fan.lv.wechat.api.mp.service.impl.*;
 import fan.lv.wechat.api.official.server.ServerService;
 import fan.lv.wechat.api.open.service.authorizer.OpenAccountService;
+import fan.lv.wechat.api.open.service.mp.*;
+import fan.lv.wechat.api.open.service.mp.impl.*;
 import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.api.open.service.authorizer.impl.AuthorizerClientImpl;
 import fan.lv.wechat.api.open.service.authorizer.impl.OpenAccountServiceImpl;
@@ -38,5 +40,14 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(OperationService.class, () -> new OperationServiceImpl(client));
         this.bind(OpenAccountService.class, () -> new OpenAccountServiceImpl(appId, client));
         this.bind(ServerService.class, () -> new AuthorizerClientImpl(open, config, appId));
+        this.bind(BasicInfoService.class, () -> new BasicInfoServiceImpl(client));
+        this.bind(CategoryService.class, () -> new CategoryServiceImpl(client));
+        this.bind(CodeService.class, () -> new CodeServiceImpl(client));
+        this.bind(CodeTemplateService.class, () -> new CodeTemplateServiceImpl(client));
+        this.bind(OpenQrCodeService.class, () -> new OpenQrCodeServiceImpl(client));
+        this.bind(ScanSubscribeService.class, () -> new ScanSubscribeServiceImpl(client));
+        this.bind(TesterService.class, () -> new TesterServiceImpl(client));
+        this.bind(PaidUnionIdService.class, () -> new PaidUnionIdServiceImpl(client));
+        this.bind(AuthService.class, () -> new OpenAuthServiceImpl(appId, client, open));
     }
 }

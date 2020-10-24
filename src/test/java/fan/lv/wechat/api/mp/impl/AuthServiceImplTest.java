@@ -5,7 +5,7 @@ import junit.framework.TestCase;
 /**
  * @author lv_fan2008
  */
-public class UserServiceImplTest extends TestCase {
+public class AuthServiceImplTest extends TestCase {
 
     public void testCodeToSession() {
     }

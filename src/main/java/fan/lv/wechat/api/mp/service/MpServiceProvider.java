@@ -17,7 +17,7 @@ public class MpServiceProvider implements ServiceProvider {
         MiniProgramConfig config = container.get(MiniProgramConfig.class);
         Client client = container.get(Client.class);
         container.bind(DataAnalysisService.class, () -> new DataAnalysisServiceImpl(client));
-        container.bind(UserService.class, () -> new UserServiceImpl(config.getAppId(), config.getAppSecret(), client));
+        container.bind(AuthService.class, () -> new AuthServiceImpl(config.getAppId(), config.getAppSecret(), client));
         container.bind(NearByPoiService.class, () -> new NearByPoiServiceImpl(client));
         container.bind(PluginService.class, () -> new PluginServiceImpl(client));
         container.bind(QrCodeService.class, () -> new QrCodeServiceImpl(client));
@@ -28,5 +28,6 @@ public class MpServiceProvider implements ServiceProvider {
         container.bind(MarketService.class, () -> new MarketServiceImpl(client));
         container.bind(SoterService.class, () -> new SoterServiceImpl(client));
         container.bind(OperationService.class, () -> new OperationServiceImpl(client));
+        container.bind(PaidUnionIdService.class, () -> new PaidUnionIdServiceImpl(client));
     }
 }

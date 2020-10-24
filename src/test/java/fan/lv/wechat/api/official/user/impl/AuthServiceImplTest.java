@@ -13,7 +13,7 @@ import java.util.Collections;
 /**
  * @author lv_fan2008
  */
-public class UserServiceImplTest extends TestCase {
+public class AuthServiceImplTest extends TestCase {
 
     UserService userService;
 

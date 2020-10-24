@@ -4,6 +4,7 @@ import fan.lv.wechat.api.kernel.Client;
 import fan.lv.wechat.api.open.OpenMpApp;
 import fan.lv.wechat.api.open.OpenOfficialApp;
 import fan.lv.wechat.api.open.service.open.OpenPlatformService;
+import fan.lv.wechat.entity.mp.user.WxSessionResult;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 import fan.lv.wechat.entity.open.open.*;
 import fan.lv.wechat.entity.result.WxResult;
@@ -153,6 +154,14 @@ public class OpenPlatformServiceImpl implements OpenPlatformService {
         return client.postJson("/cgi-bin/component/clear_quota",
                 defData(),
                 WxResult.class);
+    }
+
+    @Override
+    public WxSessionResult codeToSession(String appId, String jsCode) {
+        return client.get("/sns/component/jscode2session",
+                SimpleMap.of("appid", appId, "js_code", jsCode, "grant_type", "authorization_code")
+                        .addAll(defData()),
+                WxSessionResult.class);
     }
 
     @Override

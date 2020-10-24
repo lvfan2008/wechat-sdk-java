@@ -7,10 +7,7 @@ import fan.lv.wechat.api.official.server.impl.ServerServiceImpl;
 import fan.lv.wechat.api.open.service.open.OpenFastRegisterMpService;
 import fan.lv.wechat.api.open.service.open.OpenPlatformService;
 import fan.lv.wechat.api.open.service.open.OpenServerService;
-import fan.lv.wechat.api.open.service.open.impl.OpenClientImpl;
-import fan.lv.wechat.api.open.service.open.impl.OpenFastRegisterMpServiceImpl;
-import fan.lv.wechat.api.open.service.open.impl.OpenPlatformServiceImpl;
-import fan.lv.wechat.api.open.service.open.impl.OpenServerServiceImpl;
+import fan.lv.wechat.api.open.service.open.impl.*;
 import fan.lv.wechat.entity.open.config.OpenPlatformConfig;
 
 /**

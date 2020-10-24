@@ -49,5 +49,6 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(TesterService.class, () -> new TesterServiceImpl(client));
         this.bind(PaidUnionIdService.class, () -> new PaidUnionIdServiceImpl(client));
         this.bind(AuthService.class, () -> new OpenAuthServiceImpl(appId, client, open));
+        this.bind(OpenPluginService.class, () -> new OpenPluginServiceImpl(client));
     }
 }

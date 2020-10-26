@@ -30,6 +30,20 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
     }
 
     @Override
+    public WxWeeklyRetainInfoResult getWeeklyRetainInfo(String beginDate, String endDate) {
+        return client.postJson("/datacube/getweanalysisappidweeklyretaininfo",
+                SimpleMap.of("begin_date", beginDate, "end_date", endDate),
+                WxWeeklyRetainInfoResult.class);
+    }
+
+    @Override
+    public WxMonthlyRetainInfoResult getMonthlyRetainInfo(String beginDate, String endDate) {
+        return client.postJson("/datacube/getweanalysisappidmonthlyretaininfo",
+                SimpleMap.of("begin_date", beginDate, "end_date", endDate),
+                WxMonthlyRetainInfoResult.class);
+    }
+
+    @Override
     public WxDailySummaryTrendResult getDailySummaryTrend(String beginDate, String endDate) {
         return client.postJson("/datacube/getweanalysisappiddailysummarytrend",
                 SimpleMap.of("begin_date", beginDate, "end_date", endDate),

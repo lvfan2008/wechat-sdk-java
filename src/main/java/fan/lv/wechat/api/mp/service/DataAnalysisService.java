@@ -16,6 +16,26 @@ public interface DataAnalysisService {
      */
     WxDailyRetainInfoResult getDailyRetainInfo(String beginDate, String endDate);
 
+    /**
+     * 获取用户访问小程序周留存
+     *
+     * @param beginDate 开始日期，为周一日期。格式为 yyyymmdd
+     * @param endDate   结束日期，为周日日期，限定查询一周数据。格式为 yyyymmdd
+     * @return 获取用户访问小程序周留存
+     * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Mini_Programs/data_analysis/visit-retain/analysis.getWeeklyRetain.html" target="_blank">官方接口文档</a>
+     */
+    WxWeeklyRetainInfoResult getWeeklyRetainInfo(String beginDate, String endDate);
+
+    /**
+     * 获取用户访问小程序月留存
+     *
+     * @param beginDate 开始日期，为自然月第一天。格式为 yyyymmdd
+     * @param endDate   结束日期，为自然月最后一天，限定查询一个月数据。格式为 yyyymmdd
+     * @return 用户访问小程序月留存
+     * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Mini_Programs/data_analysis/visit-retain/analysis.getMonthlyRetain.html" target="_blank">官方接口文档</a>
+     */
+    WxMonthlyRetainInfoResult getMonthlyRetainInfo(String beginDate, String endDate);
+
 
     /**
      * 获取用户访问小程序数据概况

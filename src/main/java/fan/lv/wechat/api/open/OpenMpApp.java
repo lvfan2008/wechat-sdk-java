@@ -28,7 +28,6 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(OpenPlatformConfig.class, () -> config);
         this.bind(Client.class, () -> client);
         this.bind(DataAnalysisService.class, () -> new DataAnalysisServiceImpl(client));
-//        this.bind(UserService.class, () -> new UserServiceImpl(config.getAppId(), config.getAppSecret(), client));
         this.bind(NearByPoiService.class, () -> new NearByPoiServiceImpl(client));
         this.bind(PluginService.class, () -> new PluginServiceImpl(client));
         this.bind(QrCodeService.class, () -> new QrCodeServiceImpl(client));

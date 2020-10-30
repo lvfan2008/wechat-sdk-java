@@ -124,4 +124,12 @@ public interface LiveService {
      * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Mini_Programs/live_player/commodity-api.html" target="_blank">官方接口文档</a>
      */
     WxGoodsAuditInfoResult getGoodsList(Integer offset, Integer limit, Integer status);
+
+    /**
+     * 申请开通直播
+     *
+     * @return 申请结果
+     * @see <a href="https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/Mini_Programs/live_player/applyliveinfo.html" target="_blank">官方接口文档</a>
+     */
+    WxApplyLiveInfoResult applyLiveInfo();
 }

@@ -53,7 +53,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public WxAddLiveGoodsResult addLiveGoods(WxLiveGoodsParam param) {
-        return client.postJson("/wxaapi/broadcast/goods/add",param,WxAddLiveGoodsResult.class);
+        return client.postJson("/wxaapi/broadcast/goods/add", param, WxAddLiveGoodsResult.class);
     }
 
     @Override
@@ -94,7 +94,14 @@ public class LiveServiceImpl implements LiveService {
     @Override
     public WxGoodsAuditInfoResult getGoodsList(Integer offset, Integer limit, Integer status) {
         return client.postJson("/wxaapi/broadcast/goods/getapproved",
-                SimpleMap.of("offset", offset,"limit", limit,"status", status),
+                SimpleMap.of("offset", offset, "limit", limit, "status", status),
                 WxGoodsAuditInfoResult.class);
+    }
+
+    @Override
+    public WxApplyLiveInfoResult applyLiveInfo() {
+        return client.postJson("/wxa/business/applyliveinfo",
+                SimpleMap.of("action", "apply"),
+                WxApplyLiveInfoResult.class);
     }
 }

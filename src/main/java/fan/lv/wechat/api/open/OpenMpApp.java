@@ -43,11 +43,14 @@ public class OpenMpApp extends ContainerImpl {
         this.bind(CategoryService.class, () -> new CategoryServiceImpl(client));
         this.bind(CodeService.class, () -> new CodeServiceImpl(client));
         this.bind(CodeTemplateService.class, () -> new CodeTemplateServiceImpl(client));
+        this.bind(LiveService.class, () -> new LiveServiceImpl(client));
+        this.bind(OpenPluginService.class, () -> new OpenPluginServiceImpl(client));
         this.bind(OpenQrCodeService.class, () -> new OpenQrCodeServiceImpl(client));
         this.bind(ScanSubscribeService.class, () -> new ScanSubscribeServiceImpl(client));
         this.bind(TesterService.class, () -> new TesterServiceImpl(client));
         this.bind(PaidUnionIdService.class, () -> new PaidUnionIdServiceImpl(client));
         this.bind(AuthService.class, () -> new OpenAuthServiceImpl(appId, client, open));
-        this.bind(OpenPluginService.class, () -> new OpenPluginServiceImpl(client));
+        this.bind(MpMessageService.class, () -> new MpMessageServiceImpl(client));
+        this.bind(SearchService.class, () -> new SearchServiceImpl(client));
     }
 }

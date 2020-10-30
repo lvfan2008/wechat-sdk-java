@@ -46,6 +46,4 @@ public class EventWxaLiveApplyEventMessage extends BaseEventMessage {
         @JsonProperty("open_time")
         String openTime;
     }
-
-
 }

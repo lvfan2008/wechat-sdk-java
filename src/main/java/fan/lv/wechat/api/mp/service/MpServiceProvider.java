@@ -29,5 +29,7 @@ public class MpServiceProvider implements ServiceProvider {
         container.bind(SoterService.class, () -> new SoterServiceImpl(client));
         container.bind(OperationService.class, () -> new OperationServiceImpl(client));
         container.bind(PaidUnionIdService.class, () -> new PaidUnionIdServiceImpl(client));
+        container.bind(MpMessageService.class, () -> new MpMessageServiceImpl(client));
+        container.bind(SearchService.class, () -> new SearchServiceImpl(client));
     }
 }

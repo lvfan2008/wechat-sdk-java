@@ -8,7 +8,7 @@ import lombok.Data;
  * @author lv_fan2018
  */
 @Data
-public class WxCreateLiveRootParam {
+public class WxCreateLiveRoomParam {
     /**
      * 直播间名字，最短3个汉字，最长17个汉字，1个汉字相当于2个字符
      */
